@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, username, ... }:
 
 {
   imports = [
+    ./nvidia.nix
     ./hardware-configuration.nix
     ../../modules/system.nix
   ];
@@ -38,6 +39,14 @@
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
+
+  # Enable seatd
+  services.seatd = {
+    enable = true;
+    user = username;
+  };
+
+  security.polkit.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
