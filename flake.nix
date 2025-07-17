@@ -38,6 +38,31 @@
           }
         ];
       };
+      notebook = let
+        username = "wtchrs";
+        specialArgs = { inherit username; };
+      in nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        system = "x86_64-linux";
+
+        modules = [
+          ./hosts/notebook
+          ./users/${username}/nixos.nix
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+
+            home-manager.extraSpecialArgs = inputs // specialArgs;
+            # home-manager.users.${username} = import ./users/${username}/home.nix;
+            home-manager.users.${username} = nixpkgs.lib.mkMerge (builtins.map import [
+              ./home/core.nix
+              ./users/${username}/home.nix
+            ]);
+          }
+        ];
+      };
     };
   };
 }
