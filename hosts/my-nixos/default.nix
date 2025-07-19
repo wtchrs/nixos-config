@@ -39,6 +39,10 @@
   # services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
+  environment.systemPackages = with pkgs; [
+    neovim vim git curl tmux htop
+  ];
+
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
@@ -53,10 +57,6 @@
   programs.firefox.enable = true;
   programs.zsh.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    neovim vim git curl tmux htop
-  ];
-
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
@@ -68,29 +68,6 @@
     settings = {
       PasswordAuthentication = true;
     };
-  };
-
-  # services.kmscon = {
-  #   enable = true;
-  #   fonts = [
-  #     { name = "Iosevka Nerd Font"; package = pkgs.nerd-fonts.iosevka; }
-  #   ];
-  # };
-
-  fonts = {
-    enableDefaultPackages = true;
-    packages = with pkgs; [ 
-      nerd-fonts.iosevka
-      liberation_ttf
-    ];
-
-    # fontconfig = {
-    #   defaultFonts = {
-    #     serif = [  "Liberation Serif" ];
-    #     sansSerif = [ "Ubuntu" ];
-    #     monospace = [ "Ubuntu Mono" ];
-    #   };
-    # };
   };
 
   # Do not change after installation.

@@ -15,7 +15,6 @@
 
   time.timeZone = "Asia/Seoul";
 
-  i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
   #   keyMap = "us";
@@ -33,12 +32,18 @@
   networking.firewall.allowedTCPPorts = [];
   networking.firewall.allowedUDPPorts = [];
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
+  environment.systemPackages = with pkgs; [
+    neovim
+    vim
+    git
+    curl
+    tmux
+    htop
+    fcitx5
+    fcitx5-gtk
+    fcitx5-hangul
+    fcitx5-configtool
+  ];
 
   # Enable seatd
   services.seatd = {
@@ -62,10 +67,6 @@
   programs.firefox.enable = true;
   programs.zsh.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    neovim vim git curl tmux htop
-  ];
-
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
@@ -86,20 +87,37 @@
   #   ];
   # };
 
+  # i18n = {
+  #   defaultLocale = "en_US.UTF-8";
+
+  #   inputMethod = {
+  #     type = "fcitx5";
+  #     fcitx5.addons = with pkgs; [ fcitx5-hangul ];
+  #   };
+  # };
+
   fonts = {
     enableDefaultPackages = true;
-    packages = with pkgs; [ 
+    packages = with pkgs; [
       nerd-fonts.iosevka
-      liberation_ttf
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-emoji
+      source-code-pro
+      source-han-mono
+      source-han-sans
+      source-han-serif
     ];
 
-    # fontconfig = {
-    #   defaultFonts = {
-    #     serif = [  "Liberation Serif" ];
-    #     sansSerif = [ "Ubuntu" ];
-    #     monospace = [ "Ubuntu Mono" ];
-    #   };
-    # };
+    fontDir.enable = true;
+  #   fontconfig.enable = true;
+
+  #   fontconfig.defaultFonts = {
+  #     emoji = [ "Noto Color Emoji" ];
+  #     monospace = [ "Source Han Mono" "Iosevka Nerd Font" ];
+  #     sansSerif = [ "Noto Sans CJK SC" ];
+  #     serif = [ "Source Han Serif" ];
+  #   };
   };
 
   # Do not change after installation.
