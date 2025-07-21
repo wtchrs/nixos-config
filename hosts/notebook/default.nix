@@ -39,10 +39,6 @@
     curl
     tmux
     htop
-    fcitx5
-    fcitx5-gtk
-    fcitx5-hangul
-    fcitx5-configtool
   ];
 
   # Enable seatd
