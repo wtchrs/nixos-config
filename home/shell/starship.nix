@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   programs.starship = {
@@ -7,14 +7,14 @@
     settings = {
       format = let
         start = "[ ](bg:#445167)[ ](bg:#62708a)[ ](bg:#808eaf)";
-	split1 = "[](bg:#769ff0 fg:#a3aed2)";
-	split2 = "[](fg:#769ff0 bg:#394260)";
-	split3 = "[](fg:#394260 bg:#212736)";
-	split4 = "[](fg:#212736 bg:#1d2230)";
-	split5 = "[ ](fg:#1d2230)\n";
+        split1 = "[](bg:#769ff0 fg:#a3aed2)";
+        split2 = "[](fg:#769ff0 bg:#394260)";
+        split3 = "[](fg:#394260 bg:#212736)";
+        split4 = "[](fg:#212736 bg:#1d2230)";
+        split5 = "[ ](fg:#1d2230)\n";
       in
         start + ''$os$shell'' + split1 + ''$directory'' + split2 +
-        ''$git_branch$git_status'' + split3 + ''$nodejs$rust$golang$php'' +
+        ''$git_branch$git_status'' + split3 + ''$nix_shell$nodejs$rust$golang$php'' +
         split4 + ''$time'' + split5 + ''$character'';
 
       continuation_prompt = "[ ](#62708a)";
@@ -101,6 +101,15 @@
       git_status = {
         style = "bg:#394260";
         format = ''[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'';
+      };
+
+      nix_shell = {
+        disabled = false;
+        style = "bg:#212736";
+        impure_msg = "[impure](fg:bold red bg:#212736)";
+        pure_msg = "[pure](fg:bold green bg:#212736)";
+        unknown_msg = "[unknown](fg:bold yellow bg:#212736)";
+        format = "[ via [ $state( \($name\))](fg:bold blue bg:#212736)](bg:#212736)";
       };
 
       nodejs = {
