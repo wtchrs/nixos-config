@@ -38,6 +38,7 @@
           }
         ];
       };
+
       notebook = let
         username = "wtchrs";
         specialArgs = { inherit username; };
@@ -55,7 +56,6 @@
             home-manager.useUserPackages = true;
 
             home-manager.extraSpecialArgs = inputs // specialArgs;
-            # home-manager.users.${username} = import ./users/${username}/home.nix;
             home-manager.users.${username} = nixpkgs.lib.mkMerge (builtins.map import [
               ./home/core.nix
               ./home/graphics.nix

@@ -63,6 +63,14 @@
   programs.firefox.enable = true;
   programs.zsh.enable = true;
 
+  programs.thunar = {
+    enable = true;
+    plugins = with pkgs.xfce; [
+      thunar-volman
+      thunar-archive-plugin
+    ];
+  };
+
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
@@ -76,20 +84,16 @@
     };
   };
 
+  # Mount, trash, and other functionalities
+  services.gvfs.enable = true;
+  # Thumbnail support for images
+  services.tumbler.enable = true;
+
   # services.kmscon = {
   #   enable = true;
   #   fonts = [
   #     { name = "Iosevka Nerd Font"; package = pkgs.nerd-fonts.iosevka; }
   #   ];
-  # };
-
-  # i18n = {
-  #   defaultLocale = "en_US.UTF-8";
-
-  #   inputMethod = {
-  #     type = "fcitx5";
-  #     fcitx5.addons = with pkgs; [ fcitx5-hangul ];
-  #   };
   # };
 
   fonts = {
@@ -106,14 +110,6 @@
     ];
 
     fontDir.enable = true;
-  #   fontconfig.enable = true;
-
-  #   fontconfig.defaultFonts = {
-  #     emoji = [ "Noto Color Emoji" ];
-  #     monospace = [ "Source Han Mono" "Iosevka Nerd Font" ];
-  #     sansSerif = [ "Noto Sans CJK SC" ];
-  #     serif = [ "Source Han Serif" ];
-  #   };
   };
 
   # Do not change after installation.

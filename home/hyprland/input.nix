@@ -2,17 +2,17 @@
 
 {
   wayland.windowManager.hyprland.settings = {
-    exec-once = [
-      "fcitx5 -d --replace"
-    ];
+    # exec-once = [
+    #   "fcitx5 -d --replace"
+    # ];
 
-    env = [
-      # "QT_IM_MODULE,fcitx"
-      # "QT4_IM_MODULE,fcitx"
-      # "QT5_IM_MODULE,fcitx"
-      # "XMODIFIERS,@im=fcitx"
-      # "SDL_IM_MODULE,fcitx"
-    ];
+    # env = [
+    #   "QT_IM_MODULE,fcitx"
+    #   "QT4_IM_MODULE,fcitx"
+    #   "QT5_IM_MODULE,fcitx"
+    #   "XMODIFIERS,@im=fcitx"
+    #   "SDL_IM_MODULE,fcitx"
+    # ];
 
     input = {
       kb_layout = "kr";

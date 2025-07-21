@@ -1,10 +1,14 @@
-{ config, pkgs, username, ... } :
+{ pkgs, ... } :
 
 {
   imports = [
-    ./programs
     ./hyprland
+    ./programs/alacritty.nix
     ./misc/fonts.nix
-    ./misc/i18n.nix
+    ./misc/input.nix
+  ];
+
+  home.packages = with pkgs; [
+    hyprshot
   ];
 }
