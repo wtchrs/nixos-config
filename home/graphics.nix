@@ -3,6 +3,7 @@
 {
   imports = [
     ./hyprland
+    ./waybar
     ./programs/alacritty.nix
     ./misc/fonts.nix
     ./misc/input.nix

@@ -27,7 +27,7 @@
 
     settings  = {
       exec-once = [
-        # "waybar"
+        "waybar"
         # "hyprpaper"
         # "dunst"
         # "systemctl --user start hyprpolkitagent"

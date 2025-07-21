@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-killall -9 wayber
+pkill wayber
 sleep 1
 waybar &
