@@ -71,6 +71,11 @@
     ];
   };
 
+  # Mount, trash, and other functionalities
+  services.gvfs.enable = true;
+  # Thumbnail support for images
+  services.tumbler.enable = true;
+
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
@@ -84,20 +89,26 @@
     };
   };
 
-  # Mount, trash, and other functionalities
-  services.gvfs.enable = true;
-  # Thumbnail support for images
-  services.tumbler.enable = true;
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    config.common.default = "xdg-desktop-portal-gtk";
+  };
 
-  # services.kmscon = {
-  #   enable = true;
-  #   fonts = [
-  #     { name = "Iosevka Nerd Font"; package = pkgs.nerd-fonts.iosevka; }
-  #   ];
-  # };
+  # Enable Flatpak
+  services.flatpak.enable = true;
+  systemd.services.flatpak-repo = {
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.flatpak ];
+    script = ''
+      flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    '';
+  };
 
   fonts = {
     enableDefaultPackages = true;
+    fontDir.enable = true;
+
     packages = with pkgs; [
       nerd-fonts.iosevka
       noto-fonts
@@ -111,8 +122,6 @@
       fira-sans
       fira-code
     ];
-
-    fontDir.enable = true;
   };
 
   # Do not change after installation.
