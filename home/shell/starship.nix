@@ -11,11 +11,12 @@
         split2 = "[](fg:#769ff0 bg:#394260)";
         split3 = "[](fg:#394260 bg:#212736)";
         split4 = "[](fg:#212736 bg:#1d2230)";
-        split5 = "[ ](fg:#1d2230)\n";
+        split5 = "[](fg:#1d2230)";
+        new_line = "\n";
       in
         start + ''$os$shell'' + split1 + ''$directory'' + split2 +
-        ''$git_branch$git_status'' + split3 + ''$nix_shell$nodejs$rust$golang$php'' +
-        split4 + ''$time'' + split5 + ''$character'';
+        ''$git_branch$git_status'' + split3 + ''$nodejs$rust$golang$php'' +
+        split4 + ''$time'' + split5 + ''$nix_shell'' + new_line + ''$character'';
 
       continuation_prompt = "[ ](#62708a)";
 
@@ -106,10 +107,10 @@
       nix_shell = {
         disabled = false;
         style = "bg:#212736";
-        impure_msg = "[impure](fg:bold red bg:#212736)";
-        pure_msg = "[pure](fg:bold green bg:#212736)";
-        unknown_msg = "[unknown](fg:bold yellow bg:#212736)";
-        format = "[ via [ $state( \($name\))](fg:bold blue bg:#212736)](bg:#212736)";
+        impure_msg = "[impure](fg:bold red)";
+        pure_msg = "[pure](fg:bold green)";
+        unknown_msg = "[unknown](fg:bold yellow)";
+        format = " via [ $state( \($name\))](fg:bold blue)";
       };
 
       nodejs = {
