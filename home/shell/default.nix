@@ -6,6 +6,13 @@
     ./tmux.nix
   ];
 
+  # Enable `command-not-found`
+  programs.nix-index = {
+    enable = true;
+    enableBashIntegration = true;
+    enableZshIntegration = true;
+  };
+
   programs.bash = {
     enable = true;
     enableCompletion = true;
@@ -39,7 +46,6 @@
       enable = true;
       plugins = [
         "git"
-        "command-not-found"
         "sudo"
       ];
     };
