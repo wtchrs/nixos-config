@@ -17,9 +17,24 @@
     executable = true;
   };
 
-  xdg.portal = {
+  services.hyprpaper = {
     enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
+    settings = {
+      splash = false;
+      preload = [
+        "~/Pictures/wallpapers/wallpaper.jpg"
+      ];
+      wallpaper = [
+        ",~/Pictures/wallpapers/wallpaper.jpg"
+      ];
+    };
+  };
+
+  # services.hyprpolkitagent.enable = true;
+
+  xdg.portal = {
+    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+    config.common.default = "gtk";
   };
 
   wayland.windowManager.hyprland = {
@@ -28,9 +43,6 @@
     settings  = {
       exec-once = [
         "waybar"
-        # "hyprpaper"
-        # "dunst"
-        # "systemctl --user start hyprpolkitagent"
       ];
 
       gestures = {
@@ -61,18 +73,5 @@
     extraConfig = ''
       monitor = ,1920x1080,auto,1.2
     '';
-  };
-
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      splash = false;
-      preload = [
-        "~/Pictures/wallpapers/wallpaper.jpg"
-      ];
-      wallpaper = [
-        ",~/Pictures/wallpapers/wallpaper.jpg"
-      ];
-    };
   };
 }

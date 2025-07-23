@@ -7,10 +7,10 @@
     bind = [
       "$mod, RETURN, exec, alacritty"
       "$mod, Q, killactive"
-      "$mod, f, exec, firefox"
+      "$mod, F, exec, firefox"
       "$mod, E, exec, thunar" # Open the filemanager
       "$mod, T, togglefloating"
-      "$mod, F, fullscreen"
+      # "$mod, F, fullscreen"
       "$mod, SPACE, exec, rofi -show drun"
       "$mod, P, pin"
       "$mod CTRL, P, pseudo"

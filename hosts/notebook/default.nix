@@ -40,6 +40,8 @@
     curl
     tmux
     htop
+    glib.bin
+    flatpak-xdg-utils
   ];
 
   # Enable seatd
@@ -49,6 +51,7 @@
   };
 
   security.polkit.enable = true;
+  security.rtkit.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -92,8 +95,9 @@
 
   xdg.portal = {
     enable = true;
+    wlr.enable = true;
     extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
-    config.common.default = "xdg-desktop-portal-gtk";
+    config.common.default = "gtk";
   };
 
   # Enable Flatpak
