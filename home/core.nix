@@ -1,11 +1,17 @@
-{ config, pkgs, username, ... }:
+{ config
+, pkgs
+, lib
+, username
+, enableGraphics ? false
+, ...
+}:
 
 {
   imports = [
     ./shell
     ./neovim
     ./programs/fastfetch
-  ];
+  ] ++ (lib.optional enableGraphics ./graphics.nix);
 
   home = {
     inherit username;

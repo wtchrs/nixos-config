@@ -11,26 +11,29 @@
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, ... }: {
-    nixosConfigurations = {
-      # FIX please change the hostname and username to your own
-      my-nixos = let
-        username = "wtchrs";
+    # FIX please change the hostname and username to your own
+    nixosConfigurations = let
+      system = "x86_64-linux";
+      username = "wtchrs";
+      overlays = [ ];
+
+      mkHost = { hostname, enableGraphics ? false } : nixpkgs.lib.nixosSystem {
+        inherit system;
+
         specialArgs = { inherit username; };
-      in nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        system = "x86_64-linux";
 
         modules = [
-          ./hosts/my-nixos
+          ./hosts/${hostname}
           ./users/${username}/nixos.nix
+
+          { nixpkgs.overlays = overlays; }
 
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
 
-            home-manager.extraSpecialArgs = inputs // specialArgs;
-            # home-manager.users.${username} = import ./users/${username}/home.nix;
+            home-manager.extraSpecialArgs = inputs // { inherit username enableGraphics; };
             home-manager.users.${username} = nixpkgs.lib.mkMerge (builtins.map import [
               ./home/core.nix
               ./users/${username}/home.nix
@@ -38,31 +41,15 @@
           }
         ];
       };
+    in {
+      my-nixos = mkHost {
+        hostname = "my-nixos";
+        enableGraphics = false;
+      };
 
-      notebook = let
-        username = "wtchrs";
-        specialArgs = { inherit username; };
-      in nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        system = "x86_64-linux";
-
-        modules = [
-          ./hosts/notebook
-          ./users/${username}/nixos.nix
-
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            home-manager.extraSpecialArgs = inputs // specialArgs;
-            home-manager.users.${username} = nixpkgs.lib.mkMerge (builtins.map import [
-              ./home/core.nix
-              ./home/graphics.nix
-              ./users/${username}/home.nix
-            ]);
-          }
-        ];
+      notebook = mkHost {
+        hostname = "notebook";
+        enableGraphics = true;
       };
     };
   };
