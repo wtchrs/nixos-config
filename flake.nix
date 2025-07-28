@@ -15,11 +15,12 @@
     nixosConfigurations = let
       system = "x86_64-linux";
       username = "wtchrs";
-      overlays = [ ];
+      overlays = [
+        # (import ./overlays/filename.nix)
+      ];
 
-      mkHost = { hostname, enableGraphics ? false } : nixpkgs.lib.nixosSystem {
+      mkHost = { hostname, enableGraphics ? false, enableGames ? false } : nixpkgs.lib.nixosSystem {
         inherit system;
-
         specialArgs = { inherit username; };
 
         modules = [
@@ -39,17 +40,17 @@
               ./users/${username}/home.nix
             ]);
           }
-        ];
+        ] ++ (nixpkgs.lib.optional enableGames ./modules/steam.nix);
       };
     in {
       my-nixos = mkHost {
         hostname = "my-nixos";
-        enableGraphics = false;
       };
 
       notebook = mkHost {
         hostname = "notebook";
         enableGraphics = true;
+        enableGames = true;
       };
     };
   };
