@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     waybar-mpris
+    playerctl
   ];
 
   programs.waybar = {
