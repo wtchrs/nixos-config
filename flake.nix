@@ -19,29 +19,39 @@
         # (import ./overlays/filename.nix)
       ];
 
-      mkHost = { hostname, enableGraphics ? false, enableGames ? false } : nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit username; };
+      mkHost =
+        { hostname
+        , enableGraphics ? false
+        , enableGames ? false
+        # Neovim configuration is not perfect.
+        # You can use your own neovim config if you do not enable this option
+        , enableNeovimConfig ? false
+        } :
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit username; };
 
-        modules = [
-          ./hosts/${hostname}
-          ./users/${username}/nixos.nix
+          modules =
+            [
+              ./hosts/${hostname}
+              ./users/${username}/nixos.nix
 
-          { nixpkgs.overlays = overlays; }
+              { nixpkgs.overlays = overlays; }
 
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
 
-            home-manager.extraSpecialArgs = inputs // { inherit username enableGraphics; };
-            home-manager.users.${username} = nixpkgs.lib.mkMerge (builtins.map import [
-              ./home/core.nix
-              ./users/${username}/home.nix
-            ]);
-          }
-        ] ++ (nixpkgs.lib.optional enableGames ./modules/steam.nix);
-      };
+                home-manager.extraSpecialArgs = inputs // { inherit username enableGraphics enableNeovimConfig; };
+                home-manager.users.${username} = nixpkgs.lib.mkMerge (builtins.map import [
+                  ./home/core.nix
+                  ./users/${username}/home.nix
+                ]);
+              }
+            ]
+            ++ (nixpkgs.lib.optional enableGames ./modules/steam.nix);
+        };
     in {
       my-nixos = mkHost {
         hostname = "my-nixos";

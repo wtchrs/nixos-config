@@ -2,16 +2,19 @@
 , pkgs
 , lib
 , username
-, enableGraphics ? false
+, enableGraphics
+, enableNeovimConfig
 , ...
 }:
 
 {
-  imports = [
-    ./shell
-    ./neovim
-    ./programs/fastfetch
-  ] ++ (lib.optional enableGraphics ./graphics.nix);
+  imports =
+    [
+      ./shell
+      ./programs/fastfetch
+    ]
+    ++ (lib.optional enableGraphics ./graphics.nix)
+    ++ (lib.optional enableNeovimConfig ./neovim);
 
   home = {
     inherit username;
@@ -106,6 +109,8 @@
     ethtool
     pciutils # lspci
     usbutils # lsusb
+
+    gcc
   ];
 
   programs.git.enable = true;
