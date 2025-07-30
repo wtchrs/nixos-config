@@ -23,9 +23,6 @@
         { hostname
         , enableGraphics ? false
         , enableGames ? false
-        # Neovim configuration is not perfect.
-        # You can use your own neovim config if you do not enable this option
-        , enableNeovimConfig ? false
         } :
         nixpkgs.lib.nixosSystem {
           inherit system;
@@ -43,7 +40,7 @@
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
 
-                home-manager.extraSpecialArgs = inputs // { inherit username enableGraphics enableNeovimConfig; };
+                home-manager.extraSpecialArgs = inputs // { inherit username enableGraphics; };
                 home-manager.users.${username} = nixpkgs.lib.mkMerge (builtins.map import [
                   ./home/core.nix
                   ./users/${username}/home.nix
