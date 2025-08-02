@@ -118,20 +118,20 @@
         };
 
         cpu = {
-          format = " CPU {usage}% ";
+          format = "    {usage}%";
           on-click = "alacritty -e htop";
           interval = 2;
         };
 
         memory = {
-          format = " MEM {}% ";
+          format = "    {}%";
           on-click = "alacritty -e htop";
           interval = 5;
         };
 
         disk = {
-          interval = 20;
-          format = "DISK {percentage_used}% ";
+          interval = 10;
+          format = "  {percentage_used}% ";
           path = "/";
           on-click = "btrfs-assistant-launcher";
         };
