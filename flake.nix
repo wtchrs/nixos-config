@@ -3,21 +3,18 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
-      # home-manager.inputs.nixpkgs inherits "nixpkgs"
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, ... }: {
-    # FIX please change the hostname and username to your own
     nixosConfigurations = let
       system = "x86_64-linux";
+      # FIX please change the username to your own
       username = "wtchrs";
-      overlays = [
-        # (import ./overlays/filename.nix)
-      ];
 
       mkHost =
         { hostname
@@ -32,8 +29,6 @@
             [
               ./hosts/${hostname}
               ./users/${username}/nixos.nix
-
-              { nixpkgs.overlays = overlays; }
 
               home-manager.nixosModules.home-manager
               {
@@ -51,6 +46,7 @@
             ++ (nixpkgs.lib.optional enableGames ./modules/steam.nix);
         };
     in {
+      # FIX please change the hostnames to your own
       my-nixos = mkHost {
         hostname = "my-nixos";
       };

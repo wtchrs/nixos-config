@@ -10,7 +10,7 @@
       "$mod, E, exec, thunar" # Open the filemanager
       "$mod, T, togglefloating"
       "$mod, F, fullscreen"
-      "$mod, SPACE, exec, rofi -show drun"
+      "$mod, SPACE, exec, walker"
       "$mod, P, pin"
       "$mod CTRL, P, pseudo"
       "$mod SHIFT, code:47, togglesplit" # semicolon

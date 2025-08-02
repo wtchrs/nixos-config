@@ -1,9 +1,9 @@
 { lib, pkgs, ... }:
 let
-  parsers = pkgs.symlinkJoin {
-    name = "treesitter-parsers";
-    paths = (pkgs.vimPlugins.nvim-treesitter.withAllGrammars.dependencies);
-  };
+  # parsers = pkgs.symlinkJoin {
+  #   name = "treesitter-parsers";
+  #   paths = (pkgs.vimPlugins.nvim-treesitter.withAllGrammars.dependencies);
+  # };
 
   plugins = with pkgs.vimPlugins; [
     # LazyVim
@@ -36,7 +36,7 @@ let
     nvim-lspconfig
     nvim-notify
     nvim-spectre
-    nvim-treesitter
+    # nvim-treesitter
     nvim-treesitter-context
     nvim-treesitter-textobjects
     nvim-ts-autotag
@@ -93,7 +93,7 @@ in
   };
 
   # https://github.com/nvim-treesitter/nvim-treesitter#i-get-query-error-invalid-node-type-at-position
-  xdg.configFile."nvim/parser".source = "${parsers}/parser";
+  # xdg.configFile."nvim/parser".source = "${parsers}/parser";
 
   # Normal LazyVim config here, see https://github.com/LazyVim/starter/tree/main/lua
   xdg.configFile."nvim/lua".source = ./lua;

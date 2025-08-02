@@ -100,9 +100,8 @@
 
         "custom/appmenu" = {
           format = "Apps";
-          tooltip-format = "Left: Open the application launcher\nRight: Show all keybindings";
-          on-click = "rofi -show drun -replace";
-          on-click-right = "~/.config/ml4w/scripts/keybindings.sh";
+          tooltip-format = "Open the application launcher";
+          on-click = "walker";
           tooltip = false;
         };
 
