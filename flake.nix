@@ -47,6 +47,7 @@
                 ]);
               }
             ]
+            ++ (nixpkgs.lib.optional enableGraphics ./modules/sddm.nix)
             ++ (nixpkgs.lib.optional enableGames ./modules/steam.nix);
         };
     in {
