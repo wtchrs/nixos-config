@@ -6,6 +6,7 @@
     ./hardware-configuration.nix
     ./nix-ld.nix
     ../../modules/system.nix
+    ../../modules/xkb.nix
   ];
 
   # Use systemd-boot
@@ -18,16 +19,11 @@
 
   console = {
     font = "Lat2-Terminus16";
-  #   keyMap = "us";
-    useXkbConfig = true; # use xkb.options in tty.
+    useXkbConfig = true;
   };
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [];

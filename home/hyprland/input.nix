@@ -2,20 +2,8 @@
 
 {
   wayland.windowManager.hyprland.settings = {
-    # exec-once = [
-    #   "fcitx5 -d --replace"
-    # ];
-
-    # env = [
-    #   "QT_IM_MODULE,fcitx"
-    #   "QT4_IM_MODULE,fcitx"
-    #   "QT5_IM_MODULE,fcitx"
-    #   "XMODIFIERS,@im=fcitx"
-    #   "SDL_IM_MODULE,fcitx"
-    # ];
-
     input = {
-      kb_layout = "kr";
+      # kb_layout = "kr";
       # kb_variant =
       # kb_model =
       kb_options = "ctrl:nocaps"; # Remap caps-lock to ctrl

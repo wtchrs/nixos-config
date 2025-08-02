@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/system.nix
+    ../../modules/xkb.nix
   ];
 
   # Use systemd-boot
@@ -16,28 +17,16 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-    useXkbConfig = true; # use xkb.options in tty.
+    font = "Lat2-Terminus16";
+    useXkbConfig = true;
   };
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [];
   networking.firewall.allowedUDPPorts = [];
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
   environment.systemPackages = with pkgs; [
     neovim vim git curl tmux htop
