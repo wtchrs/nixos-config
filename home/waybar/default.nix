@@ -117,13 +117,13 @@
         };
 
         cpu = {
-          format = "    {usage}%";
+          format = "  {usage}%";
           on-click = "alacritty -e htop";
           interval = 2;
         };
 
         memory = {
-          format = "    {}%";
+          format = "  {}%";
           on-click = "alacritty -e htop";
           interval = 5;
         };
@@ -141,7 +141,7 @@
         };
 
         pulseaudio = {
-          format = "{icon}  {volume}%";
+          format = "{icon} {volume}%";
           format-bluetooth = "{volume}% {icon} {format_source}";
           format-bluetooth-muted = " {icon} {format_source}";
           format-muted = " {format_source}";
@@ -161,12 +161,12 @@
 
         network = {
           format = "{ifname}";
-          format-wifi = "   {signalStrength}%";
-          format-ethernet = "  {ipaddr}";
+          format-wifi = " {signalStrength}%";
+          format-ethernet = " {ipaddr}";
           format-disconnected = "Not connected";
           tooltip-format = " {ifname} via {gwaddri}";
-          tooltip-format-wifi = "   {essid} ({signalStrength}%)";
-          tooltip-format-ethernet = "  {ifname} ({ipaddr}/{cidr})";
+          tooltip-format-wifi = " {essid} ({signalStrength}%)";
+          tooltip-format-ethernet = " {ifname} ({ipaddr}/{cidr})";
           tooltip-format-disconnected = "Disconnected";
           max-length = 50;
           on-click = "alacritty -e nmtui";
@@ -177,15 +177,15 @@
             warning = 30;
             critical = 15;
           };
-          format = "{icon}  {capacity}%";
-          format-charging = "  {capacity}%";
-          format-plugged = "  {capacity}%";
-          format-alt = "{icon}  {time}";
+          format = "{icon}{capacity}%";
+          format-charging = " {capacity}%";
+          format-plugged = " {capacity}%";
+          format-alt = "{icon} {time}";
           format-icons = [ " " " " " " " " " " ];
         };
 
         mpris = {
-          format = "{player_icon} {title} [{position}/{length}]";
+          format = "{player_icon}{title}[{position}/{length}]";
           format-paused = "{status_icon} {title}";
           player-icons.default = "▶";
           player-icons.mpv = "🎵";

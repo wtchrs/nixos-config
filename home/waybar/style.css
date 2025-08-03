@@ -50,6 +50,12 @@ window#waybar {
  * Children
  * ----------------------------------------------------- */
 
+#cpu, #memory, #disk,
+#pulseaudio, #network, #battery,
+#clock {
+    font-family: "Iosevka Nerd Font";
+}
+
 #pulseaudio, #network, #battery {
     padding: 0;
     margin: 0 2px;
@@ -133,7 +139,7 @@ window#waybar.empty #window {
     margin-left: 20px;
 }
 
-#custom-browser, 
+#custom-browser,
 #custom-filemanager
 {
     margin: 10px 5px 10px 0px;
@@ -193,26 +199,6 @@ window#waybar.empty #window {
     background-color: @backgroundlight;
     color: @textcolor1;
 }
-
-/* -----------------------------------------------------
- * Network
- * ----------------------------------------------------- */
-
-/*
-#network.ethernet {
-    background-color: @backgroundlight;
-    color: @textcolor2;
-}
-
-#network.wifi {
-    background-color: @backgroundlight;
-    color: @textcolor2;
-}
-
-#network.disconnected {
-    background-color: #f53c3c;
-}
-*/
 
 /* -----------------------------------------------------
  * Bluetooth
