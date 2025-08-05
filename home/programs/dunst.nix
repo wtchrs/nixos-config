@@ -35,7 +35,10 @@
         hide_duplicate_count = true;
         show_indicators = false;
 
-        icon_position = "off";
+        icon_position = "left";
+        min_icon_size = 32;
+        max_icon_size = 100;
+        icon_corner_radius = 10;
 
         history_length = 20;
 

@@ -27,6 +27,7 @@
 
           modules =
             [
+              { nixpkgs.config.allowUnfree = true; }
               ./hosts/${hostname}
               ./users/${username}/nixos.nix
 
