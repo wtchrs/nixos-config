@@ -10,7 +10,7 @@
     [
       ./shell
       ./neovim
-      ./programs/fastfetch
+      ./programs/fastfetch.nix
     ]
     ++ (lib.optional enableGraphics ./graphics.nix);
 

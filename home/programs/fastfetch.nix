@@ -1,21 +1,10 @@
 { ... } :
 
 {
-  xdg.configFile."fastfetch/NixOS.txt".source = ./NixOS.txt;
-
   programs.fastfetch = {
     enable = true;
 
     settings = {
-      logo = {
-        source = "~/.config/fastfetch/NixOS.txt";
-        type = "file";
-        padding = {
-          top = 2;
-          left = 2;
-        };
-      };
-
       modules = [
         "break"
 
