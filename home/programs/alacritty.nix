@@ -1,7 +1,7 @@
 { config, pkgs, ... } :
 
 let
-  font = "Iosevka Nerd Font";
+  font = "Sarasa Mono K Nerd Font";
 in {
   programs.alacritty = {
     enable = true;

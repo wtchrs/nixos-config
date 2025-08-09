@@ -16,6 +16,10 @@
       # FIX please change the username to your own
       username = "wtchrs";
 
+      overlays = [
+        (import ./overlays/sarasa-mono-k-nerd-font.nix)
+      ];
+
       mkHost =
         { hostname
         , enableGraphics ? false
@@ -28,6 +32,7 @@
           modules =
             [
               { nixpkgs.config.allowUnfree = true; }
+              { nixpkgs.overlays = overlays; }
               ./hosts/${hostname}
               ./users/${username}/nixos.nix
 

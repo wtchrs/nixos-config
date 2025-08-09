@@ -6,7 +6,7 @@
 
     fontconfig.defaultFonts = {
       emoji = [ "Noto Color Emoji" ];
-      monospace = [ "Source Han Mono" "Iosevka Nerd Font" ];
+      monospace = [ "Sarasa Mono K Nerd Font" "Source Han Mono" ];
       sansSerif = [ "Noto Sans CJK SC" ];
       serif = [ "Source Han Serif" ];
     };

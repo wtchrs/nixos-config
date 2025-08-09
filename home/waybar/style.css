@@ -53,7 +53,7 @@ window#waybar {
 #cpu, #memory, #disk,
 #pulseaudio, #network, #battery,
 #clock {
-    font-family: "Iosevka Nerd Font";
+    font-family: "Sarasa Mono K Nerd Font";
 }
 
 #pulseaudio, #network, #battery {

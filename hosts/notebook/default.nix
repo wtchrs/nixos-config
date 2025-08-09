@@ -111,7 +111,8 @@
     fontDir.enable = true;
 
     packages = with pkgs; [
-      nerd-fonts.iosevka
+      # nerd-fonts.iosevka
+      sarasa-mono-k-nerd-font
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-emoji
