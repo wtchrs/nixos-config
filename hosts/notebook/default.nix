@@ -2,12 +2,9 @@ _:
 
 {
   imports = [
-    ./nvidia.nix
     ./hardware-configuration.nix
     ./nix-ld.nix
   ];
-
-  home-manager.sharedModules = [ ./home.nix ];
 
   # Use systemd-boot
   boot.loader = {

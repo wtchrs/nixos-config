@@ -8,6 +8,7 @@ _: hostConfig:
 let
   userConfig = import hostConfig.userModule;
   inherit (userConfig) username;
+  hostHomeOverrides = hostConfig.homeOverrides or [ ];
 in
 nixpkgs.lib.nixosSystem {
   inherit (hostConfig) system;
@@ -38,7 +39,8 @@ nixpkgs.lib.nixosSystem {
           };
           users.${username}.imports =
             (profiles.getHomeModules hostConfig.homeProfiles)
-            ++ userConfig.homeModules;
+            ++ userConfig.homeModules
+            ++ hostHomeOverrides;
         };
       }
     ];

@@ -1,6 +1,7 @@
 _:
 
 {
+  # Host-specific Home overrides for this machine's display and wallpaper.
   services.hyprpaper = {
     enable = true;
     settings = {
