@@ -5,40 +5,44 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "uas" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
-
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "btrfs";
-    options = [ "compress=zstd" "subvol=@" ];
+  boot = {
+    initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "uas" "sd_mod" ];
+    initrd.kernelModules = [ ];
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = [ ];
   };
 
-  fileSystems."/home" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "btrfs";
-    options = [ "compress=zstd" "subvol=@home" ];
-  };
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "subvol=@" ];
+    };
 
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "btrfs";
-    options = [ "compress=zstd" "subvol=@nix" ];
-  };
+    "/home" = {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "subvol=@home" ];
+    };
 
-  fileSystems."/var/log" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "btrfs";
-    options = [ "compress=zstd" "subvol=@log" ];
-  };
+    "/nix" = {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "subvol=@nix" ];
+    };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/51E8-9DA5";
+    "/var/log" = {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "subvol=@log" ];
+    };
+
+    "/boot" = {
+      device = "/dev/disk/by-uuid/51E8-9DA5";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
+  };
 
   swapDevices = [ ];
 

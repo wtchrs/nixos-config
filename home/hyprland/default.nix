@@ -1,4 +1,4 @@
-{ pkgs, ... } :
+_:
 
 {
   imports = [
@@ -10,37 +10,16 @@
     ./input.nix
   ];
 
-  # link all files in `./scripts` to `~/.config/i3/scripts`
   home.file.".config/hypr/scripts" = {
     source = ./scripts;
     recursive = true;
     executable = true;
   };
 
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      splash = false;
-      preload = [
-        "~/Pictures/wallpapers/wallpaper.jpg"
-      ];
-      wallpaper = [
-        ",~/Pictures/wallpapers/wallpaper.jpg"
-      ];
-    };
-  };
-
-  # services.hyprpolkitagent.enable = true;
-
-  xdg.portal = {
-    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
-    config.common.default = "gtk";
-  };
-
   wayland.windowManager.hyprland = {
     enable = true;
 
-    settings  = {
+    settings = {
       exec-once = [
         "waybar"
       ];
@@ -76,9 +55,5 @@
         force_zero_scaling = true;
       };
     };
-
-    extraConfig = ''
-      monitor = ,1920x1080,auto,1.2
-    '';
   };
 }
