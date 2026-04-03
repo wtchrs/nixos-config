@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   imports = [
@@ -14,5 +14,6 @@
 
   home.packages = with pkgs; [
     jetbrains-toolbox
+    inputs.zen-browser.packages.${pkgs.system}.default
   ];
 }
