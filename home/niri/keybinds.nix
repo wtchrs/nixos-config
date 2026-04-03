@@ -12,7 +12,7 @@ _:
 
     "Mod+Shift+Return" = {
       hotkey-overlay.title = "Open a Terminal in same directory: ghostty";
-      action.spawn = [ "~/.scripts/niri-open-ghostty-cwd.sh" ];
+      action.spawn = [ "niri-open-ghostty-cwd" ];
     };
 
     "Mod+Space" = {

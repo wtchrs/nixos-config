@@ -1,9 +1,11 @@
 { pkgs, inputs, ... }:
 
+let
+  open-ghostty-cwd-script = builtins.readFile ./scripts/niri-open-ghostty-cwd.sh;
+  open-ghostty-cwd-bin = pkgs.writeShellScriptBin "niri-open-ghostty-cwd" open-ghostty-cwd-script;
+in
 {
-  #nixpkgs.overlays = [
-  #  inputs.niri.overlays.niri
-  #];
+  home.packages = [ open-ghostty-cwd-bin ];
 
   imports = [
     inputs.niri.homeModules.niri
