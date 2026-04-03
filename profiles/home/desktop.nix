@@ -6,6 +6,7 @@
     ../../home/quickshell
     ../../home/programs/ghostty.nix
     ../../home/programs/dunst.nix
+    ../../home/programs/btop.nix
     ../../home/misc/fonts.nix
     ../../home/misc/input.nix
     ../../home/misc/cursor.nix
