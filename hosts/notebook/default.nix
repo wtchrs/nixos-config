@@ -6,10 +6,21 @@ _:
     ./nix-ld.nix
   ];
 
-  # Use systemd-boot
+  # Use grub
   boot.loader = {
-    efi.canTouchEfiVariables = true;
-    systemd-boot.enable = true;
+    systemd-boot.enable = false;
+
+    grub = {
+      enable = true;
+      device = "nodev";
+      useOSProber = true;
+      efiSupport = true;
+    };
+
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
   };
 
   # Do not change after installation.
