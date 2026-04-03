@@ -75,7 +75,9 @@
     fontDir.enable = true;
 
     packages = with pkgs; [
+      sarasa-gothic
       sarasa-mono-k-nerd-font
+      nerd-fonts.symbols-only
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-color-emoji
