@@ -16,6 +16,7 @@
     glib.bin
     flatpak-xdg-utils
     sddm-astronaut
+    bibata-cursors
   ];
 
   services = {
@@ -28,13 +29,23 @@
     tumbler.enable = true;
     flatpak.enable = true;
 
+    displayManager.sessionPackages = [
+      pkgs.niri-unstable
+    ];
     displayManager.sddm = {
       enable = true;
       package = pkgs.kdePackages.sddm;
       wayland.enable = true;
       theme = "sddm-astronaut-theme";
+      settings = {
+        Theme = {
+          CursorTheme = "Bibata-Modern-Ice"; # Example theme
+          CursorSize = "24";
+        };
+      };
       extraPackages = with pkgs; [
         sddm-astronaut
+        bibata-cursors
         kdePackages.qtsvg
         kdePackages.qtmultimedia
         kdePackages.qtvirtualkeyboard

@@ -3,6 +3,7 @@
 {
   imports = [
     ../../home/hyprland
+    ../../home/niri
     ../../home/quickshell
     ../../home/programs/alacritty.nix
     ../../home/programs/dunst.nix
