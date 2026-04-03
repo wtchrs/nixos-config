@@ -1,4 +1,4 @@
-{ nixpkgs, home-manager, ... }:
+inputs@{ nixpkgs, home-manager, ... }:
 
 let
   inherit (nixpkgs) lib;
@@ -14,7 +14,7 @@ nixpkgs.lib.nixosSystem {
   inherit (hostConfig) system;
 
   specialArgs = {
-    inherit username;
+    inherit username inputs;
   };
 
   modules =
@@ -35,7 +35,7 @@ nixpkgs.lib.nixosSystem {
           useGlobalPkgs = true;
           useUserPackages = true;
           extraSpecialArgs = {
-            inherit username;
+            inherit username inputs;
           };
           users.${username}.imports =
             (profiles.getHomeModules hostConfig.homeProfiles)

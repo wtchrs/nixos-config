@@ -3,7 +3,7 @@
 {
   imports = [
     ../../home/hyprland
-    ../../home/waybar
+    ../../home/quickshell
     ../../home/programs/alacritty.nix
     ../../home/programs/dunst.nix
     ../../home/misc/fonts.nix

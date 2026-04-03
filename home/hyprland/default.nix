@@ -21,7 +21,8 @@ _:
 
     settings = {
       exec-once = [
-        "waybar"
+        #"waybar"
+        "qs"
       ];
 
       gestures = {
