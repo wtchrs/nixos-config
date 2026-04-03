@@ -6,6 +6,7 @@
     flatpak-xdg-utils
     sddm-astronaut
     bibata-cursors
+    nautilus
   ];
 
   services = {
@@ -47,19 +48,16 @@
     rtkit.enable = true;
   };
 
-  programs.thunar = {
-    enable = true;
-    plugins = with pkgs.xfce; [
-      thunar-volman
-      thunar-archive-plugin
-    ];
-  };
-
   xdg.portal = {
     enable = true;
     wlr.enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
-    config.common.default = "gtk";
+    extraPortals = with pkgs; [ xdg-desktop-portal-gnome ];
+    config.common.default = "gnome";
+  };
+
+  programs.nautilus-open-any-terminal = {
+    enable = true;
+    terminal = "ghostty";
   };
 
   systemd.services.flatpak-repo = {
