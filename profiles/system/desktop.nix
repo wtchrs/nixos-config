@@ -78,7 +78,7 @@
       sarasa-mono-k-nerd-font
       noto-fonts
       noto-fonts-cjk-sans
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       source-code-pro
       source-han-mono
       source-han-sans

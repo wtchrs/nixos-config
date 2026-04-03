@@ -16,29 +16,29 @@
     "/" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" "subvol=@" ];
+      options = [ "compress=zstd" "noatime" "discard=async" "subvol=@nixos/root" ];
     };
 
     "/home" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" "subvol=@home" ];
+      options = [ "compress=zstd" "noatime" "discard=async" "subvol=@nixos/home" ];
     };
 
     "/nix" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" "subvol=@nix" ];
+      options = [ "compress=zstd" "noatime" "discard=async" "subvol=@nixos/nix" ];
     };
 
     "/var/log" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" "subvol=@log" ];
+      options = [ "compress=zstd" "noatime" "discard=async" "subvol=@nixos/log" ];
     };
 
     "/boot" = {
-      device = "/dev/disk/by-uuid/51E8-9DA5";
+      device = "/dev/disk/by-label/NIXOS-BOOT";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };

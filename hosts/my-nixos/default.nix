@@ -12,5 +12,5 @@ _:
   };
 
   # Do not change after installation.
-  system.stateVersion = "25.05";
+  system.stateVersion = "26.05";
 }
