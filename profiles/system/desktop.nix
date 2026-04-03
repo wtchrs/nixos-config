@@ -1,17 +1,6 @@
 { pkgs, username, ... }:
 
 {
-  programs.hyprland.enable = true;
-
-  environment.etc."xdg/xsessions/hyprland.desktop".text = ''
-    [Desktop Entry]
-    Name=Hyprland
-    Comment=Wayland compositor
-    Exec=Hyprland
-    Type=Application
-    DesktopNames=Hyprland
-  '';
-
   environment.systemPackages = with pkgs; [
     glib.bin
     flatpak-xdg-utils
