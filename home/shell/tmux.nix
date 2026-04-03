@@ -1,37 +1,42 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   programs.tmux = {
     enable = true;
-
-    baseIndex = 1;
-    # terminal = "screen-256color";
-    escapeTime = 10;
-    focusEvents = true;
-    historyLimit = 50000;
     mouse = true;
     keyMode = "vi";
+    historyLimit = 100000;
+    baseIndex = 1;
+    escapeTime = 10;
+    focusEvents = true;
+    terminal = "tmux-256color";
 
     plugins = with pkgs.tmuxPlugins; [
-      nord
-      prefix-highlight
+      {
+        plugin = dotbar;
+        extraConfig = ''
+          set -g @tmux-dotbar-bg "default"
+          set -g @tmux-dotbar-fg "#4c566a"
+          set -g @tmux-dotbar-fg-current "#d8dee9"
+          set -g @tmux-dotbar-fg-session "#8fbcbb"
+          set -g @tmux-dotbar-fg-prefix "#81a1c1"
+
+          set -g @tmux-dotbar-right true
+          set -g @tmux-dotbar-ssh-icon-only true
+          set -g @tmux-dotbar-show-maximized-icon-for-all-tabs true
+          set -g @tmux-dotbar-session-text " #H:#S "
+        '';
+      }
+
+      yank
     ];
 
     extraConfig = ''
-      set -g default-terminal "tmux-256color"
-      set -ag terminal-features ",xterm-256color:RGB"
-
-      set -g pane-border-status bottom
-      set -g pane-border-format " #P #{pane_current_command} - #{pane_current_path} "
-
-      set -g status-interval 2
-      set -g status-right-length 100
-
-      # Key Bindings
+      set-option -g renumber-windows on
 
       bind C-c new-window -c "#{pane_current_path}"
 
-      # virtical split shortcut
+      # vertical split shortcut
       bind v   split-window -h
       bind C-v split-window -h -c "#{pane_current_path}"
 
@@ -62,12 +67,28 @@
       bind -T prefix q display-panes -d 0
 
       # move pane to window
-      #bind-key C-@ choose-window 'join-pane -t "%%"'
-      bind-key C-Space command-prompt -p "join pane to:" "join-pane -t '%%' -h"
+      bind C-Space command-prompt -p "join pane to:" "join-pane -t '%%' -h"
 
       # change window order
-      bind-key -n C-S-Left  swap-window -t -1 \; previous-window
-      bind-key -n C-S-Right swap-window -t +1 \; next-window
+      bind -n C-S-Left  swap-window -t -1 \; previous-window
+      bind -n C-S-Right swap-window -t +1 \; next-window
+
+      # Kitty Image Support
+      set -gq allow-passthrough on
+      set -g visual-activity off
+
+      # terminal overrides
+      set -sa terminal-overrides ",*-256color:Tc"
+
+      # status bar
+      set -g status-interval 5
+      set -g status-left-length 30
+
+      # pane border setting
+      set -g pane-border-status bottom
+      set -g pane-border-format ""
+      set -g pane-border-style "fg=#4c566a,bg=default"
+      set -g pane-active-border-style "fg=#81a1c1,bg=default"
     '';
   };
 }
