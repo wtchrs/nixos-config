@@ -6,6 +6,7 @@
     ../../home/niri
     ../../home/quickshell
     ../../home/programs/alacritty.nix
+    ../../home/programs/ghostty.nix
     ../../home/programs/dunst.nix
     ../../home/misc/fonts.nix
     ../../home/misc/input.nix
