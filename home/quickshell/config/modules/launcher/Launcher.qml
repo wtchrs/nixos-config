@@ -29,7 +29,7 @@ PanelWindow {
     // --- Logic : App Loading ---
     Process {
         id: loadAppsProc
-        command: ["bash", "-c", "$HOME/.scripts/quickshell-program-list.sh"]
+        command: ["quickshell-program-list"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: {
