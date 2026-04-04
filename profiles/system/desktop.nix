@@ -87,5 +87,20 @@
       fira-sans
       fira-code
     ];
+
+    fontconfig = {
+        enable = true;
+        localConf = ''
+          <fontconfig>
+            <alias>
+              <family>Sarasa Mono K</family>
+              <accept>
+                <family>Symbols Nerd Font Mono</family>
+                <family>Noto Color Emoji</family>
+              </accept>
+            </alias>
+          </fontconfig>
+        '';
+      };
   };
 }

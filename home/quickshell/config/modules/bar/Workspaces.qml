@@ -130,7 +130,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     text: entry.label
-                    font.family: Config.font.text
+                    font.family: Config.font.icon
                     font.pixelSize: 13
 
                     // Priority: focused (global) > active (this output) > urgent
