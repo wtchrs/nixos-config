@@ -15,5 +15,10 @@
   home.packages = with pkgs; [
     jetbrains-toolbox
     inputs.zen-browser.packages.${pkgs.system}.default
+    spotify
   ];
+
+  programs = {
+    vesktop.enable = true;
+  };
 }

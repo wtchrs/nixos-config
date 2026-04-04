@@ -13,8 +13,6 @@
   };
 
   home.packages = with pkgs; [
-    nnn
-
     zip
     xz
     unzip
@@ -25,6 +23,9 @@
     yq-go
     eza
     fzf
+
+    duf
+    dust
 
     mtr
     iperf3
