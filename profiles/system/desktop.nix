@@ -18,6 +18,7 @@
     gvfs.enable = true;
     tumbler.enable = true;
     flatpak.enable = true;
+    upower.enable = true;
 
     displayManager.sessionPackages = [
       pkgs.niri-unstable
