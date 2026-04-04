@@ -68,8 +68,15 @@
 
   programs = {
     git.enable = true;
+    gpg.enable = true;
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
+  };
+
+  services.gpg-agent = {
+    enable = true;
+    # pinentry.package = pkgs.pinentry-curses;
+    pinentry.package = pkgs.pinentry-gnome3;
   };
 
   home.stateVersion = "26.05";
