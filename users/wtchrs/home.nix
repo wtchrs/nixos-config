@@ -2,8 +2,12 @@ _:
 
 {
   programs.git = {
-    userName = "wtchrs";
-    userEmail = "wtchr_@hotmail.com";
+    settings = {
+      user = {
+        name = "wtchrs";
+        email = "wtchr_@hotmail.com";
+      };
+    };
 
     signing = {
       format = "openpgp";

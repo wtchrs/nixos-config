@@ -1,6 +1,8 @@
 { pkgs, inputs, ... }:
 
 let
+  system = pkgs.stdenv.hostPlatform.system;
+
   awkFile = pkgs.writeText "quickshell-program-list.awk" (builtins.readFile ./scripts/quickshell-program-list.awk);
 
   renderedScript = pkgs.replaceVars ./scripts/quickshell-program-list.sh {
@@ -16,7 +18,7 @@ in
 
   programs.quickshell = {
     enable = true;
-    package = inputs.quickshell.packages.${pkgs.system}.default;
+    package = inputs.quickshell.packages.${system}.default;
   };
 
   xdg.configFile."quickshell".source = ./config;

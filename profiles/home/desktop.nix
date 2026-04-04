@@ -1,5 +1,8 @@
 { pkgs, inputs, ... }:
 
+let
+  system = pkgs.stdenv.hostPlatform.system;
+in
 {
   imports = [
     ../../home/niri
@@ -14,7 +17,7 @@
 
   home.packages = with pkgs; [
     jetbrains-toolbox
-    inputs.zen-browser.packages.${pkgs.system}.default
+    inputs.zen-browser.packages.${system}.default
     spotify
   ];
 

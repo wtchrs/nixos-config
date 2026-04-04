@@ -85,7 +85,7 @@ in
       fd
     ];
 
-    extraLuaConfig = ''
+    initLua = ''
       vim.opt.rtp:prepend("${pkgs.vimPlugins.lazy-nvim}/")
       local initLazy = require("config.lazy")
       initLazy("${lazyPath}")
