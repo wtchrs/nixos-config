@@ -77,6 +77,13 @@
     enable = true;
     # pinentry.package = pkgs.pinentry-curses;
     pinentry.package = pkgs.pinentry-gnome3;
+
+    defaultCacheTtl = 0;
+    maxCacheTtl = 0;
+    defaultCacheTtlSsh = 0;
+    maxCacheTtlSsh = 0;
+
+    noAllowExternalCache = true;
   };
 
   home.stateVersion = "26.05";
