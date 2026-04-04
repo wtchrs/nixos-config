@@ -11,7 +11,7 @@
         fcitx5-gtk
         kdePackages.fcitx5-qt
         fcitx5-hangul
-        fcitx5-configtool
+        qt6Packages.fcitx5-configtool
       ];
     };
   };

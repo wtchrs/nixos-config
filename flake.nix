@@ -2,66 +2,42 @@
   description = "NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # Use `wip/branch` branch for blur feature
+      inputs.niri-unstable.url = "git+https://github.com/niri-wm/niri.git?ref=wip/branch";
+    };
+
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }: {
-    nixosConfigurations = let
-      system = "x86_64-linux";
-      # FIX please change the username to your own
-      username = "wtchrs";
-
-      overlays = [
-        (import ./overlays/sarasa-mono-k-nerd-font.nix)
-      ];
-
-      mkHost =
-        { hostname
-        , enableGraphics ? false
-        , enableGames ? false
-        } :
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = { inherit username; };
-
-          modules =
-            [
-              { nixpkgs.config.allowUnfree = true; }
-              { nixpkgs.overlays = overlays; }
-              ./hosts/${hostname}
-              ./users/${username}/nixos.nix
-
-              home-manager.nixosModules.home-manager
-              {
-                home-manager.useGlobalPkgs = true;
-                home-manager.useUserPackages = true;
-
-                home-manager.extraSpecialArgs = inputs // { inherit username enableGraphics; };
-                home-manager.users.${username} = nixpkgs.lib.mkMerge (builtins.map import [
-                  ./home/core.nix
-                  ./users/${username}/home.nix
-                ]);
-              }
-            ]
-            ++ (nixpkgs.lib.optional enableGraphics ./modules/sddm.nix)
-            ++ (nixpkgs.lib.optional enableGames ./modules/steam.nix);
-        };
-    in {
-      # FIX please change the hostnames to your own
-      my-nixos = mkHost {
-        hostname = "my-nixos";
+  outputs = inputs@{ nixpkgs, ... }:
+    let
+      hosts = import ./lib/flake/hosts.nix;
+      mkHost = import ./lib/flake/mkHost.nix inputs;
+      nixosConfigurations = nixpkgs.lib.mapAttrs mkHost hosts;
+      flakeChecks = import ./lib/flake/checks.nix {
+        inherit nixpkgs hosts nixosConfigurations;
       };
-
-      notebook = mkHost {
-        hostname = "notebook";
-        enableGraphics = true;
-        enableGames = true;
-      };
+    in
+    {
+      inherit nixosConfigurations;
+      inherit (flakeChecks) formatter checks;
     };
-  };
 }
