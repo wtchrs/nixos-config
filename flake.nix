@@ -12,6 +12,8 @@
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
+      # Use `wip/branch` branch for blur feature
+      inputs.niri-unstable.url = "git+https://github.com/niri-wm/niri.git?ref=wip/branch";
     };
 
     quickshell = {
