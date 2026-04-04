@@ -9,14 +9,14 @@ in
 
   imports = [
     inputs.niri.homeModules.niri
-    ./input.nix
-    ./outputs.nix
-    ./environments.nix
-    ./autostarts.nix
-    ./layout.nix
-    ./animations.nix
-    ./rules.nix
-    ./keybinds.nix
+    ./config/input.nix
+    ./config/outputs.nix
+    ./config/environments.nix
+    ./config/autostarts.nix
+    ./config/layout.nix
+    ./config/animations.nix
+    ./config/rules.nix
+    ./config/keybinds.nix
   ];
 
   programs.niri = {
