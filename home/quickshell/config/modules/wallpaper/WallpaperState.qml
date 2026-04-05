@@ -7,7 +7,7 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    property string wallpaperPath: Quickshell.env("HOME") + "/Pictures/wallpapers/wallpaper.jpg"
+    property string wallpaperPath: Quickshell.env("HOME") + "/Pictures/wallpapers/wallpaper"
     property int reloadSerial: 0
     property string source: root.pathToUrl(root.wallpaperPath, root.reloadSerial)
 
