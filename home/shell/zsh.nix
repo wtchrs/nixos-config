@@ -6,6 +6,10 @@
 }:
 
 {
+  home.packages = with pkgs; [
+    zsh-completions
+  ];
+
   programs.zsh = {
     enable = true;
 
@@ -76,30 +80,4 @@
       cat = "bat --paging=never";
     };
   };
-
-  programs.bat = {
-    enable = true;
-    config = {
-      theme = "Nord";
-    };
-  };
-
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-
-    defaultCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
-    fileWidgetCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
-    changeDirWidgetCommand = "${pkgs.fd}/bin/fd --type=d --hidden --strip-cwd-prefix --exclude .git";
-  };
-
-  programs.broot = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  home.packages = with pkgs; [
-    fd
-    zsh-completions
-  ];
 }
