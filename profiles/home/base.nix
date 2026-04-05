@@ -4,7 +4,6 @@
   imports = [
     ../../home/shell
     ../../home/neovim
-    ../../home/programs/fastfetch.nix
   ];
 
   home = {
@@ -54,6 +53,8 @@
     htop
     iotop
     iftop
+
+    fastfetch
 
     strace
     ltrace
