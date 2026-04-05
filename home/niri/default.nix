@@ -6,7 +6,7 @@
 }:
 
 let
-  kdl = inputs.niri.lib.kdl;
+  inherit (inputs.niri.lib) kdl;
 
   open-ghostty-cwd-script = builtins.readFile ./scripts/niri-open-ghostty-cwd.sh;
   open-ghostty-cwd-bin = pkgs.writeShellScriptBin "niri-open-ghostty-cwd" open-ghostty-cwd-script;

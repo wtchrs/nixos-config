@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 
 let
-  system = pkgs.stdenv.hostPlatform.system;
+  inherit (pkgs.stdenv.hostPlatform) system;
 
   awkFile = pkgs.writeText "quickshell-program-list.awk" (
     builtins.readFile ./scripts/quickshell-program-list.awk
