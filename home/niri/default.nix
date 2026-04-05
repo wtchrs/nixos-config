@@ -7,7 +7,10 @@ let
   open-ghostty-cwd-bin = pkgs.writeShellScriptBin "niri-open-ghostty-cwd" open-ghostty-cwd-script;
 in
 {
-  home.packages = [ open-ghostty-cwd-bin ];
+  home.packages = [
+    pkgs.xwayland-satellite
+    open-ghostty-cwd-bin
+  ];
 
   # Disabled nix configurations to use raw niri configurations.
   imports = [
