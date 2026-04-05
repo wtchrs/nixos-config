@@ -3,7 +3,9 @@
 let
   system = pkgs.stdenv.hostPlatform.system;
 
-  awkFile = pkgs.writeText "quickshell-program-list.awk" (builtins.readFile ./scripts/quickshell-program-list.awk);
+  awkFile = pkgs.writeText "quickshell-program-list.awk" (
+    builtins.readFile ./scripts/quickshell-program-list.awk
+  );
 
   renderedScript = pkgs.replaceVars ./scripts/quickshell-program-list.sh {
     awkFile = "${awkFile}";
@@ -11,7 +13,9 @@ let
     find = "${pkgs.findutils}/bin/find";
   };
 
-  quickshellProgramList = pkgs.writeShellScriptBin "quickshell-program-list" (builtins.readFile renderedScript);
+  quickshellProgramList = pkgs.writeShellScriptBin "quickshell-program-list" (
+    builtins.readFile renderedScript
+  );
 in
 {
   home.packages = [ quickshellProgramList ];

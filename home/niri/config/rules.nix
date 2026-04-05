@@ -13,14 +13,16 @@ _:
 
     window-rules = [
       {
-        geometry-corner-radius = let
-          r = 4.0;
-        in {
-          top-left = r;
-          top-right = r;
-          bottom-right = r;
-          bottom-left = r;
-        };
+        geometry-corner-radius =
+          let
+            r = 4.0;
+          in
+          {
+            top-left = r;
+            top-right = r;
+            bottom-right = r;
+            bottom-left = r;
+          };
 
         clip-to-geometry = true;
         draw-border-with-background = false;

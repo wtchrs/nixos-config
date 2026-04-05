@@ -1,12 +1,25 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   boot = {
-    initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "uas" "sd_mod" ];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "ahci"
+      "nvme"
+      "usbhid"
+      "uas"
+      "sd_mod"
+    ];
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
@@ -16,31 +29,54 @@
     "/" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" "noatime" "discard=async" "subvol=@nixos/root" ];
+      options = [
+        "compress=zstd"
+        "noatime"
+        "discard=async"
+        "subvol=@nixos/root"
+      ];
     };
 
     "/home" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" "noatime" "discard=async" "subvol=@nixos/home" ];
+      options = [
+        "compress=zstd"
+        "noatime"
+        "discard=async"
+        "subvol=@nixos/home"
+      ];
     };
 
     "/nix" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" "noatime" "discard=async" "subvol=@nixos/nix" ];
+      options = [
+        "compress=zstd"
+        "noatime"
+        "discard=async"
+        "subvol=@nixos/nix"
+      ];
     };
 
     "/var/log" = {
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" "noatime" "discard=async" "subvol=@nixos/log" ];
+      options = [
+        "compress=zstd"
+        "noatime"
+        "discard=async"
+        "subvol=@nixos/log"
+      ];
     };
 
     "/boot" = {
       device = "/dev/disk/by-label/NIXOS-BOOT";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
     };
   };
 

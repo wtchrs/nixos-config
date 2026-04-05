@@ -1,4 +1,4 @@
-{ config, pkgs, ... } :
+{ config, pkgs, ... }:
 
 {
   programs.ghostty = {
@@ -12,7 +12,11 @@
       # Ghostty has its own nerd font support
       font-family = "Sarasa Mono K";
       font-size = 13;
-      font-feature = [ "-calt" "-liga" "-dlig" ];
+      font-feature = [
+        "-calt"
+        "-liga"
+        "-dlig"
+      ];
 
       adjust-cell-height = 1;
       adjust-font-baseline = -1;
@@ -43,7 +47,6 @@
         cursor-style = "block";
         shell-integration-features = "no-cursor";
         adjust-cursor-thickness = 1;
-
 
         palette = [
           # black

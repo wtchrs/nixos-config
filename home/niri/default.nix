@@ -1,4 +1,9 @@
-{ lib, pkgs, inputs, ... }:
+{
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 let
   kdl = inputs.niri.lib.kdl;
@@ -59,37 +64,60 @@ in
     #   background-effect { blur true xray false }
     # }
 
-    config = lib.mkOptionDefault (lib.mkAfter [
-      (kdl.node "blur" [] [
-        (kdl.leaf "passes" 4)
-        (kdl.leaf "offset" 4.0)
-        (kdl.leaf "noise" 0.02)
-        (kdl.leaf "saturation" 1.7)
-      ])
+    config = lib.mkOptionDefault (
+      lib.mkAfter [
+        (kdl.node "blur"
+          [ ]
+          [
+            (kdl.leaf "passes" 4)
+            (kdl.leaf "offset" 4.0)
+            (kdl.leaf "noise" 0.02)
+            (kdl.leaf "saturation" 1.7)
+          ]
+        )
 
-      (kdl.node "layer-rule" [] [
-        (kdl.leaf "match" { namespace = "^quickshell:(bar|tray-menu)$"; })
-        (kdl.node "background-effect" [] [
-          (kdl.leaf "blur" true)
-          (kdl.leaf "xray" false)
-        ])
-      ])
+        (kdl.node "layer-rule"
+          [ ]
+          [
+            (kdl.leaf "match" { namespace = "^quickshell:(bar|tray-menu)$"; })
+            (kdl.node "background-effect"
+              [ ]
+              [
+                (kdl.leaf "blur" true)
+                (kdl.leaf "xray" false)
+              ]
+            )
+          ]
+        )
 
-      (kdl.node "layer-rule" [] [
-        (kdl.leaf "match" { namespace = "^quickshell:launcher$"; })
-        (kdl.node "background-effect" [] [
-          (kdl.leaf "blur" true)
-          (kdl.leaf "xray" true)
-        ])
-      ])
+        (kdl.node "layer-rule"
+          [ ]
+          [
+            (kdl.leaf "match" { namespace = "^quickshell:launcher$"; })
+            (kdl.node "background-effect"
+              [ ]
+              [
+                (kdl.leaf "blur" true)
+                (kdl.leaf "xray" true)
+              ]
+            )
+          ]
+        )
 
-      (kdl.node "window-rule" [] [
-        (kdl.leaf "match" { app-id = "^com.mitchellh.ghostty$"; })
-        (kdl.node "background-effect" [] [
-          (kdl.leaf "blur" true)
-          (kdl.leaf "xray" false)
-        ])
-      ])
-    ]);
+        (kdl.node "window-rule"
+          [ ]
+          [
+            (kdl.leaf "match" { app-id = "^com.mitchellh.ghostty$"; })
+            (kdl.node "background-effect"
+              [ ]
+              [
+                (kdl.leaf "blur" true)
+                (kdl.leaf "xray" false)
+              ]
+            )
+          ]
+        )
+      ]
+    );
   };
 }

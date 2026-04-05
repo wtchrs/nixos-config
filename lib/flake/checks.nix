@@ -1,4 +1,8 @@
-{ nixpkgs, hosts, nixosConfigurations }:
+{
+  nixpkgs,
+  hosts,
+  nixosConfigurations,
+}:
 
 let
   inherit (nixpkgs) lib;
@@ -6,7 +10,8 @@ let
   repoRoot = ../..;
   mkPkgs = system: import nixpkgs { inherit system; };
 
-  perSystem = builder:
+  perSystem =
+    builder:
     builtins.listToAttrs (
       map (system: {
         name = system;
@@ -22,8 +27,7 @@ in
     let
       pkgs = mkPkgs system;
       hostChecks = lib.mapAttrs' (
-        name: config:
-        lib.nameValuePair "nixos-${name}" config.config.system.build.toplevel
+        name: config: lib.nameValuePair "nixos-${name}" config.config.system.build.toplevel
       ) (lib.filterAttrs (name: _: hosts.${name}.system == system) nixosConfigurations);
       statixCheck = pkgs.runCommand "statix-check" { nativeBuildInputs = [ pkgs.statix ]; } ''
         cd ${repoRoot}
@@ -31,7 +35,8 @@ in
         touch $out
       '';
     in
-    hostChecks // {
+    hostChecks
+    // {
       statix = statixCheck;
     }
   );

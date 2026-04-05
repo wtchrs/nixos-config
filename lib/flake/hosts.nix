@@ -4,7 +4,10 @@
     hostName = "my-nixos";
     hostModule = ../../hosts/my-nixos;
     userModule = ../../users/wtchrs;
-    systemProfiles = [ "base" "workstation" ];
+    systemProfiles = [
+      "base"
+      "workstation"
+    ];
     homeProfiles = [ "base" ];
     homeOverrides = [ ];
   };
@@ -14,8 +17,17 @@
     hostName = "notebook";
     hostModule = ../../hosts/notebook;
     userModule = ../../users/wtchrs;
-    systemProfiles = [ "base" "workstation" "desktop" "gaming" "nvidia" ];
-    homeProfiles = [ "base" "desktop" ];
+    systemProfiles = [
+      "base"
+      "workstation"
+      "desktop"
+      "gaming"
+      "nvidia"
+    ];
+    homeProfiles = [
+      "base"
+      "desktop"
+    ];
     homeOverrides = [ ../../hosts/notebook/home.nix ];
   };
 }

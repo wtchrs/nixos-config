@@ -14,11 +14,9 @@ let
     desktop = ../../profiles/home/desktop.nix;
   };
 
-  resolveProfiles = kind: registry: names:
-    builtins.map (
-      name:
-      registry.${name} or (throw "Unknown ${kind} profile `${name}`")
-    ) names;
+  resolveProfiles =
+    kind: registry: names:
+    builtins.map (name: registry.${name} or (throw "Unknown ${kind} profile `${name}`")) names;
 in
 {
   system = systemProfiles;

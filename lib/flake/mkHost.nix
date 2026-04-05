@@ -4,6 +4,7 @@ let
   inherit (nixpkgs) lib;
   profiles = import ./profiles.nix { inherit lib; };
 in
+
 _: hostConfig:
 let
   userConfig = import hostConfig.userModule;
@@ -17,37 +18,34 @@ nixpkgs.lib.nixosSystem {
     inherit username inputs;
   };
 
-  modules =
-    [
-      { nixpkgs.config.allowUnfree = true; }
-      {
-        nixpkgs.overlays = [
-          inputs.nix-cachyos-kernel.overlays.pinned
-          inputs.niri.overlays.niri
-          (import ../../overlays/sarasa-mono-k-nerd-font.nix)
-        ];
-      }
-      { networking.hostName = lib.mkDefault hostConfig.hostName; }
-    ]
-    ++ (profiles.getSystemModules hostConfig.systemProfiles)
-    ++ [
-      hostConfig.hostModule
-    ]
-    ++ userConfig.nixosModules
-    ++ [
-      home-manager.nixosModules.home-manager
-      {
-        home-manager = {
-          useGlobalPkgs = true;
-          useUserPackages = true;
-          extraSpecialArgs = {
-            inherit username inputs;
-          };
-          users.${username}.imports =
-            (profiles.getHomeModules hostConfig.homeProfiles)
-            ++ userConfig.homeModules
-            ++ hostHomeOverrides;
+  modules = [
+    {
+      nixpkgs.config.allowUnfree = true;
+
+      nixpkgs.overlays = [
+        inputs.nix-cachyos-kernel.overlays.pinned
+        inputs.niri.overlays.niri
+        (import ../../overlays/sarasa-mono-k-nerd-font.nix)
+      ];
+
+      networking.hostName = lib.mkDefault hostConfig.hostName;
+    }
+
+    hostConfig.hostModule
+
+    home-manager.nixosModules.home-manager
+    {
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        extraSpecialArgs = {
+          inherit username inputs;
         };
-      }
-    ];
+        users.${username}.imports =
+          (profiles.getHomeModules hostConfig.homeProfiles) ++ userConfig.homeModules ++ hostHomeOverrides;
+      };
+    }
+  ]
+  ++ (profiles.getSystemModules hostConfig.systemProfiles)
+  ++ userConfig.nixosModules;
 }

@@ -34,7 +34,8 @@
     extra-trusted-public-keys = [ "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=" ];
   };
 
-  outputs = inputs@{ nixpkgs, ... }:
+  outputs =
+    inputs@{ nixpkgs, ... }:
     let
       hosts = import ./lib/flake/hosts.nix;
       mkHost = import ./lib/flake/mkHost.nix inputs;

@@ -1,4 +1,4 @@
-{ pkgs, ... } :
+{ pkgs, ... }:
 
 {
   # dependencies for external programs(IDEs)

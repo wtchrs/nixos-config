@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   programs.zsh = {
@@ -67,7 +72,7 @@
 
     shellAliases = {
       ls = "eza --icons=always";
-      ll="eza --icons=always -aal";
+      ll = "eza --icons=always -aal";
       cat = "bat --paging=never";
     };
   };
