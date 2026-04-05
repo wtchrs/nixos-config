@@ -20,7 +20,7 @@ let
     );
 in
 {
-  formatter = perSystem (system: (mkPkgs system).nixfmt-rfc-style);
+  formatter = perSystem (system: (mkPkgs system).nixfmt);
 
   checks = perSystem (
     system:
