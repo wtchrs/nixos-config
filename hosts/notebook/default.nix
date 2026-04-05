@@ -1,4 +1,4 @@
-_:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -22,6 +22,9 @@ _:
       efiSysMountPoint = "/boot";
     };
   };
+
+  # Use CachyOS-fatched kernel
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
 
   # Do not change after installation.
   system.stateVersion = "26.05";

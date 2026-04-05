@@ -20,7 +20,13 @@ nixpkgs.lib.nixosSystem {
   modules =
     [
       { nixpkgs.config.allowUnfree = true; }
-      { nixpkgs.overlays = [ (import ../../overlays/sarasa-mono-k-nerd-font.nix) inputs.niri.overlays.niri ]; }
+      {
+        nixpkgs.overlays = [
+          inputs.nix-cachyos-kernel.overlays.pinned
+          inputs.niri.overlays.niri
+          (import ../../overlays/sarasa-mono-k-nerd-font.nix)
+        ];
+      }
       { networking.hostName = lib.mkDefault hostConfig.hostName; }
     ]
     ++ (profiles.getSystemModules hostConfig.systemProfiles)
