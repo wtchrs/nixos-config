@@ -32,7 +32,6 @@
       options = [
         "compress=zstd"
         "noatime"
-        "discard=async"
         "subvol=@nixos/root"
       ];
     };
@@ -43,7 +42,6 @@
       options = [
         "compress=zstd"
         "noatime"
-        "discard=async"
         "subvol=@nixos/home"
       ];
     };
@@ -54,7 +52,6 @@
       options = [
         "compress=zstd"
         "noatime"
-        "discard=async"
         "subvol=@nixos/nix"
       ];
     };
@@ -65,7 +62,6 @@
       options = [
         "compress=zstd"
         "noatime"
-        "discard=async"
         "subvol=@nixos/log"
       ];
     };
