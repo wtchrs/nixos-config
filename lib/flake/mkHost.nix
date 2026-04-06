@@ -7,12 +7,13 @@ in
 
 _: hostConfig:
 let
+  inherit (hostConfig) system;
   userConfig = import hostConfig.userModule;
   inherit (userConfig) username;
   hostHomeOverrides = hostConfig.homeOverrides or [ ];
 in
 nixpkgs.lib.nixosSystem {
-  inherit (hostConfig) system;
+  inherit system;
 
   specialArgs = {
     inherit username inputs;
@@ -31,6 +32,7 @@ nixpkgs.lib.nixosSystem {
       networking.hostName = lib.mkDefault hostConfig.hostName;
     }
 
+    inputs.distro-grub-themes.nixosModules.${system}.default
     hostConfig.hostModule
 
     home-manager.nixosModules.home-manager

@@ -9,6 +9,11 @@
     nautilus
   ];
 
+  distro-grub-themes = {
+    enable = true;
+    theme = "nixos";
+  };
+
   services = {
     seatd = {
       enable = true;
