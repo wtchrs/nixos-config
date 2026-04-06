@@ -1,17 +1,19 @@
 inputs@{ nixpkgs, home-manager, ... }:
 
+_: hostConfig:
+
 let
   inherit (nixpkgs) lib;
-  profiles = import ./profiles.nix { inherit lib; };
-in
-
-_: hostConfig:
-let
   inherit (hostConfig) system;
+
+  profiles = import ./profiles.nix { inherit lib; };
+
   userConfig = import hostConfig.userModule;
   inherit (userConfig) username;
+
   hostHomeOverrides = hostConfig.homeOverrides or [ ];
 in
+
 nixpkgs.lib.nixosSystem {
   inherit system;
 
