@@ -5,7 +5,7 @@ _:
     keyboard = {
       xkb = {
         layout = "us";
-        options = "ctrl:nocaps";
+        options = "ctrl:nocaps,korean:ralt_hangul,korean:rctrl_hanja";
       };
       repeat-delay = 250;
     };
