@@ -4,6 +4,7 @@
   imports = [
     ../../home/shell
     ../../home/neovim
+    ../../home/programs/btop.nix
   ];
 
   home = {
