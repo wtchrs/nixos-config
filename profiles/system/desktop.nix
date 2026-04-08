@@ -14,24 +14,6 @@
     theme = "nixos";
   };
 
-  # Enable plymouth
-  boot = {
-    plymouth = {
-      enable = true;
-      theme = "mac-style";
-      themePackages = [ pkgs.mac-style-plymouth ];
-    };
-
-    # Enable silent boot
-    consoleLogLevel = 3;
-    initrd.verbose = false;
-    kernelParams = [
-      "quiet"
-      "udev.log_level=3"
-      "systemd.show_status=auto"
-    ];
-  };
-
   services = {
     seatd = {
       enable = true;
