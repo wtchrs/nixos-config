@@ -15,11 +15,6 @@ _:
     MOZ_ENABLE_WAYLAND = "1";
     MOZ_DISABLE_RDD_SANDBOX = "1";
     OZONE_PLATFORM = "wayland";
-    LIBVA_DRIVER_NAME = "nvidia";
-    GBM_BACKEND = "nvidia-drm";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-    __GL_VRR_ALLOWED = "1";
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
-    NVD_BACKEND = "direct";
   };
 }

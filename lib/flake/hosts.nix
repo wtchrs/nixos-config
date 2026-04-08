@@ -27,6 +27,7 @@
     homeProfiles = [
       "base"
       "desktop"
+      "nvidia"
     ];
     homeOverrides = [ ../../hosts/notebook/home.nix ];
   };

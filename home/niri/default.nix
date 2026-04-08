@@ -17,11 +17,11 @@ in
     open-ghostty-cwd-bin
   ];
 
-  # Disabled nix configurations to use raw niri configurations.
+  # `programs.niri.settings.outputs` (display configuration) should be in host-specific overrides.
+  # See `${hostname}.homeOverrides` in `lib/flake/hosts.nix`.
   imports = [
     inputs.niri.homeModules.niri
     ./config/input.nix
-    ./config/outputs.nix
     ./config/environments.nix
     ./config/autostarts.nix
     ./config/layout.nix

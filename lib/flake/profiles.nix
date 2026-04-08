@@ -12,6 +12,7 @@ let
   homeProfiles = {
     base = ../../profiles/home/base.nix;
     desktop = ../../profiles/home/desktop.nix;
+    nvidia = ../../profiles/home/nvidia.nix;
   };
 
   resolveProfiles =
