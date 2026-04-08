@@ -164,6 +164,26 @@
         "type": "github"
       }
     },
+    "neovim-flake": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775670142,
+        "narHash": "sha256-jNdONIbOMZDPc1q1Uugklvz3HJEpil84bZ2rn0k1bfs=",
+        "owner": "wtchrs",
+        "repo": "neovim-flake",
+        "rev": "7ce896e195f815a025b1c6cc187a2a16a921684a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wtchrs",
+        "repo": "neovim-flake",
+        "type": "github"
+      }
+    },
     "niri": {
       "inputs": {
         "niri-stable": "niri-stable",
@@ -334,6 +354,7 @@
         "distro-grub-themes": "distro-grub-themes",
         "home-manager": "home-manager",
         "mac-style-plymouth": "mac-style-plymouth",
+        "neovim-flake": "neovim-flake",
         "niri": "niri",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
         "nixpkgs": "nixpkgs_2",
