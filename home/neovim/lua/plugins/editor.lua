@@ -27,4 +27,8 @@ return {
       scroll = { enabled = false },
     },
   },
+
+  {
+    "dstein64/vim-startuptime",
+  },
 }
