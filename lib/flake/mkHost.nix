@@ -27,7 +27,6 @@ nixpkgs.lib.nixosSystem {
 
       nixpkgs.overlays = [
         inputs.nix-cachyos-kernel.overlays.pinned
-        inputs.mac-style-plymouth.overlays.default
         inputs.niri.overlays.niri
         (import ../../overlays/sarasa-mono-k-nerd-font.nix)
       ];
