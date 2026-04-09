@@ -29,6 +29,7 @@ nixpkgs.lib.nixosSystem {
         inputs.nix-cachyos-kernel.overlays.pinned
         inputs.niri.overlays.niri
         (import ../../overlays/sarasa-mono-k-nerd-font.nix)
+        (import ../../overlays/tmux-dotbar.nix)
       ];
 
       networking.hostName = lib.mkDefault hostConfig.hostName;
