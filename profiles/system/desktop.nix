@@ -24,6 +24,7 @@
     tumbler.enable = true;
     flatpak.enable = true;
     upower.enable = true;
+    playerctld.enable = true;
 
     displayManager.sessionPackages = [
       pkgs.niri-unstable
