@@ -55,12 +55,12 @@
       hosts = import ./lib/flake/hosts.nix;
       mkHost = import ./lib/flake/mkHost.nix inputs;
       nixosConfigurations = nixpkgs.lib.mapAttrs mkHost hosts;
-      flakeChecks = import ./lib/flake/checks.nix {
-        inherit nixpkgs hosts nixosConfigurations;
-      };
+      flakeChecks = import ./lib/flake/checks.nix { inherit nixpkgs hosts nixosConfigurations; };
+      devShells = import ./lib/flake/devShells.nix { inherit nixpkgs hosts; };
     in
     {
       inherit nixosConfigurations;
       inherit (flakeChecks) formatter checks;
+      inherit devShells;
     };
 }
