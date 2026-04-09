@@ -63,18 +63,18 @@
         format = "[$all_status$ahead_behind ]($style)";
         style = "fg:nord0 bg:nord8";
 
-        modified = " \${count} ";
-        staged = " \${count} ";
-        renamed = " \${count} ";
-        deleted = " \${count} ";
-        ahead = " \${count} ";
-        behind = " \${count} ";
-        diverged = "  \${ahead_count} \${behind_count} ";
+        modified = " \${count}";
+        staged = " \${count}";
+        renamed = " \${count}";
+        deleted = " \${count}";
+        ahead = " \${count}";
+        behind = " \${count}";
+        diverged = "  \${ahead_count} \${behind_count}";
         up_to_date = " ";
-        untracked = " \${count} ";
-        stashed = " \${count} ";
-        typechanged = "  ";
-        conflicted = " \${count} ";
+        untracked = " \${count}";
+        stashed = " \${count}";
+        typechanged = " ";
+        conflicted = " \${count}";
       };
 
       nix_shell = {
