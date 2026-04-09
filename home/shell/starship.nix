@@ -12,7 +12,7 @@
 
       format = lib.concatStrings [
         "[](nord10)"
-        "$os$username[@](bg:nord10 fg:nord0)$hostname$sudo"
+        "$os$username[@](bg:nord10 fg:nord0)$hostname$sudo$nix_shell$shlvl"
         "[](bg:nord9 fg:nord10)"
         "$directory"
         "[](bg:nord8 fg:nord9)"
@@ -75,6 +75,21 @@
         stashed = " \${count} ";
         typechanged = "  ";
         conflicted = " \${count} ";
+      };
+
+      nix_shell = {
+        disabled = false;
+        impure_msg = "";
+        symbol = " ";
+        style = "fg:nord0 bg:nord10";
+        format = "[$symbol$state]($style)";
+      };
+
+      shlvl = {
+        disabled = false;
+        symbol = "";
+        style = "fg:nord0 bg:nord10";
+        format = "[$symbol$shlvl]($style)";
       };
 
       bun = {
