@@ -14,11 +14,6 @@ in
     htop
   ];
 
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
-
   programs = {
     firefox.enable = true;
     zsh.enable = true;
@@ -30,8 +25,17 @@ in
     };
   };
 
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = true;
+  services = {
+    tailscale.enable = true;
+
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+    };
+
+    openssh = {
+      enable = true;
+      settings.PasswordAuthentication = true;
+    };
   };
 }
