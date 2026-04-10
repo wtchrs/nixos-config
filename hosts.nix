@@ -1,7 +1,7 @@
 {
   notebook = {
     system = "x86_64-linux";
-    hostName = "notebook";
+    hostName = "notebook-nixos";
     user = "wtchrs";
 
     my.features = {
@@ -11,7 +11,7 @@
     };
   };
 
-  my-nixos = {
+  vm = {
     system = "x86_64-linux";
     user = "wtchrs";
     # use the attrName as a default hostName
