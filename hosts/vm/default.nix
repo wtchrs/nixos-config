@@ -4,9 +4,7 @@ let
   importDir = import ../../lib/importDir.nix { inherit lib; };
 in
 {
-  imports =
-    [ ./hardware-configuration.nix ]
-    ++ importDir ./system;
+  imports = [ ./hardware-configuration.nix ] ++ importDir ./system;
 
   home-manager.users.${username}.imports = importDir ./home;
 

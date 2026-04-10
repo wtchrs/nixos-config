@@ -11,7 +11,11 @@ let
   hostDir = ../hosts/${name};
 
   # remove metadata
-  hostConfig = removeAttrs host [ "system" "user" "hostName" ];
+  hostConfig = removeAttrs host [
+    "system"
+    "user"
+    "hostName"
+  ];
 in
 
 nixpkgs.lib.nixosSystem rec {
@@ -43,7 +47,7 @@ nixpkgs.lib.nixosSystem rec {
       };
     })
 
-    hostDir    # `hosts/<name>/default.nix` entry
+    hostDir # `hosts/<name>/default.nix` entry
     hostConfig # inject feature flags
   ];
 }

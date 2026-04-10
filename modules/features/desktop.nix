@@ -1,4 +1,11 @@
-{ inputs, lib, config, pkgs, username, ... }:
+{
+  inputs,
+  lib,
+  config,
+  pkgs,
+  username,
+  ...
+}:
 
 let
   cfg = config.my.features.desktop;
