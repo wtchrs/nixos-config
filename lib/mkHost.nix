@@ -8,13 +8,17 @@ let
   username = host.user;
   hostName = host.hostName or name;
 
-  hostDir = ../hosts/${name};
+  mkHomeModules = import ./mkHomeModules.nix inputs;
 
+  hostDir = ../hosts/${name};
   # remove metadata
   hostConfig = removeAttrs host [
     "system"
     "user"
     "hostName"
+    "homeDirectory"
+    "stateVersion"
+    "profileName"
   ];
 in
 
@@ -34,16 +38,13 @@ nixpkgs.lib.nixosSystem rec {
 
     (_: {
       nixpkgs.config.allowUnfree = true;
-
       networking.hostName = lib.mkDefault hostName;
 
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
         extraSpecialArgs = { inherit inputs username hostName; };
-        users.${username}.imports = [
-          ../users/${username}/home.nix
-        ];
+        users.${username}.imports = mkHomeModules name host;
       };
     })
 

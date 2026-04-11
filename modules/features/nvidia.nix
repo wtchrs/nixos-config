@@ -1,16 +1,9 @@
-{
-  lib,
-  config,
-  username,
-  ...
-}:
+{ lib, config, ... }:
 
 let
   cfg = config.my.features.nvidia;
 in
 {
-  options.my.features.nvidia.enable = lib.mkEnableOption "NVIDIA stack";
-
   config = lib.mkIf cfg.enable {
     hardware.graphics = {
       enable = true;
