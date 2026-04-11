@@ -24,8 +24,8 @@ in
   home.packages = with pkgs; [
     jetbrains-toolbox
     inputs.zen-browser.packages.${system}.default
-    spotify
-  ];
+  ]
+  ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
 
   # nvidia-specific environment configuration for niri
   programs.niri.settings.environment = lib.mkIf nvidiaCfg.enable {

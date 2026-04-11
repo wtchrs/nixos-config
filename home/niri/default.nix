@@ -18,7 +18,7 @@ in
   ];
 
   # `programs.niri.settings.outputs` (display configuration) should be in host-specific overrides.
-  # See `${hostname}.homeOverrides` in `lib/flake/hosts.nix`.
+  # See `hosts/notebook/home/display-outputs.nix`.
   imports = [
     inputs.niri.homeModules.niri
     ./config/input.nix

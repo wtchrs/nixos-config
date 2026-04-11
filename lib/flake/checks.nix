@@ -7,7 +7,9 @@
 
 let
   inherit (nixpkgs) lib;
-  systems = lib.unique (map (host: host.system) (builtins.attrValues hosts));
+  allHosts = hosts.system // hosts.home;
+
+  systems = lib.unique (map (host: host.system) (builtins.attrValues allHosts));
   repoRoot = ../..;
   mkPkgs = system: import nixpkgs { inherit system; };
 
@@ -31,7 +33,7 @@ in
       hostChecks =
         lib.mapAttrs'
           (name: config: lib.nameValuePair "nixos-${name}" config.config.system.build.toplevel)
-          (lib.filterAttrs (name: _: hosts.${name}.system == system) nixosConfigurations);
+          (lib.filterAttrs (name: _: allHosts.${name}.system == system) nixosConfigurations);
 
       homeChecks =
         lib.mapAttrs'

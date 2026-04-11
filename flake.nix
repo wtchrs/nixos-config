@@ -59,13 +59,23 @@
       mkHost = import ./lib/mkHost.nix inputs;
       mkHome = import ./lib/mkHome.nix inputs;
 
-      nixosConfigurations = mapAttrs mkHost hosts;
-      homeConfigurations = flip mapAttrs' hosts (
-        name: target: nameValuePair (target.profileName or "${target.user}@${name}") (mkHome name target)
+      nixosConfigurations = mapAttrs mkHost hosts.system;
+      homeConfigurations = flip mapAttrs' hosts.home (
+        name: target: nameValuePair (target.profileName or "${target.user}@${target.hostName or name}") (mkHome name target)
       );
 
-      flakeChecks = import ./lib/flake/checks.nix { inherit nixpkgs hosts nixosConfigurations homeConfigurations; };
-      devShells = import ./lib/flake/devShells.nix { inherit nixpkgs hosts; };
+      flakeChecks = import ./lib/flake/checks.nix {
+        inherit
+          nixpkgs
+          hosts
+          nixosConfigurations
+          homeConfigurations
+          ;
+      };
+      devShells = import ./lib/flake/devShells.nix {
+        inherit nixpkgs;
+        hosts = hosts.system;
+      };
     in
     {
       inherit nixosConfigurations homeConfigurations devShells;
