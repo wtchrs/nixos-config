@@ -9,6 +9,7 @@ let
   hostName = host.hostName or name;
 
   mkHomeModules = import ./mkHomeModules.nix inputs;
+  overlays = import ../overlays inputs;
 
   hostDir = ../hosts/${name};
   # remove metadata
@@ -30,7 +31,6 @@ nixpkgs.lib.nixosSystem rec {
   };
 
   modules = [
-    (import ../overlays inputs)
     inputs.distro-grub-themes.nixosModules.${system}.default
     ../modules
     ../users/${username}/system.nix
@@ -39,6 +39,7 @@ nixpkgs.lib.nixosSystem rec {
     (_: {
       nixpkgs.config.allowUnfree = true;
       networking.hostName = lib.mkDefault hostName;
+      nixpkgs.overlays = overlays;
 
       home-manager = {
         useGlobalPkgs = true;
