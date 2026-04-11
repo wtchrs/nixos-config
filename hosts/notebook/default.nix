@@ -1,6 +1,5 @@
 {
   lib,
-  username,
   pkgs,
   ...
 }:
@@ -10,8 +9,6 @@ let
 in
 {
   imports = [ ./hardware-configuration.nix ] ++ importDir ./system;
-
-  home-manager.users.${username}.imports = importDir ./home;
 
   # Use grub
   boot.loader = {

@@ -1,12 +1,10 @@
-{ lib, username, ... }:
+{ lib, ... }:
 
 let
   importDir = import ../../lib/importDir.nix { inherit lib; };
 in
 {
   imports = [ ./hardware-configuration.nix ] ++ importDir ./system;
-
-  home-manager.users.${username}.imports = importDir ./home;
 
   # Use systemd-boot
   boot.loader = {
