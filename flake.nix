@@ -61,7 +61,11 @@
 
       nixosConfigurations = mapAttrs mkHost hosts.system;
       homeConfigurations = flip mapAttrs' hosts.home (
-        name: target: nameValuePair (target.profileName or "${target.user}@${target.hostName or name}") (mkHome name target)
+        name: target:
+        let
+          profileName = target.profileName or "${target.user}@${target.hostName or name}";
+        in
+        nameValuePair profileName (mkHome name target)
       );
 
       flakeChecks = import ./lib/flake/checks.nix {

@@ -30,14 +30,12 @@ in
     let
       pkgs = mkPkgs system;
 
-      hostChecks =
-        lib.mapAttrs'
-          (name: config: lib.nameValuePair "nixos-${name}" config.config.system.build.toplevel)
-          (lib.filterAttrs (name: _: allHosts.${name}.system == system) nixosConfigurations);
+      hostChecks = lib.mapAttrs' (
+        name: config: lib.nameValuePair "nixos-${name}" config.config.system.build.toplevel
+      ) (lib.filterAttrs (name: _: allHosts.${name}.system == system) nixosConfigurations);
 
       homeChecks =
-        lib.mapAttrs'
-          (name: config: lib.nameValuePair "home-${name}" config.activationPackage)
+        lib.mapAttrs' (name: config: lib.nameValuePair "home-${name}" config.activationPackage)
           (lib.filterAttrs (_: config: config.pkgs.stdenv.hostPlatform.system == system) homeConfigurations);
 
       statixCheck = pkgs.runCommand "statix-check" { nativeBuildInputs = [ pkgs.statix ]; } ''

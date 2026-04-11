@@ -21,11 +21,13 @@ in
     ../misc/cursor.nix
   ];
 
-  home.packages = with pkgs; [
-    jetbrains-toolbox
-    inputs.zen-browser.packages.${system}.default
-  ]
-  ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
+  home.packages =
+    with pkgs;
+    [
+      jetbrains-toolbox
+      inputs.zen-browser.packages.${system}.default
+    ]
+    ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
 
   # nvidia-specific environment configuration for niri
   programs.niri.settings.environment = lib.mkIf nvidiaCfg.enable {
