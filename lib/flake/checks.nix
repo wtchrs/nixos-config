@@ -2,6 +2,7 @@
   nixpkgs,
   hosts,
   nixosConfigurations,
+  homeConfigurations,
 }:
 
 let
@@ -13,10 +14,10 @@ let
   perSystem =
     builder:
     builtins.listToAttrs (
-      map (system: {
+      lib.flip map systems (system: {
         name = system;
         value = builder system;
-      }) systems
+      })
     );
 in
 {
@@ -26,18 +27,23 @@ in
     system:
     let
       pkgs = mkPkgs system;
-      hostChecks = lib.mapAttrs' (
-        name: config: lib.nameValuePair "nixos-${name}" config.config.system.build.toplevel
-      ) (lib.filterAttrs (name: _: hosts.${name}.system == system) nixosConfigurations);
+
+      hostChecks =
+        lib.mapAttrs'
+          (name: config: lib.nameValuePair "nixos-${name}" config.config.system.build.toplevel)
+          (lib.filterAttrs (name: _: hosts.${name}.system == system) nixosConfigurations);
+
+      homeChecks =
+        lib.mapAttrs'
+          (name: config: lib.nameValuePair "home-${name}" config.activationPackage)
+          (lib.filterAttrs (_: config: config.pkgs.stdenv.hostPlatform.system == system) homeConfigurations);
+
       statixCheck = pkgs.runCommand "statix-check" { nativeBuildInputs = [ pkgs.statix ]; } ''
         cd ${repoRoot}
         statix check .
         touch $out
       '';
     in
-    hostChecks
-    // {
-      statix = statixCheck;
-    }
+    hostChecks // homeChecks // { statix = statixCheck; }
   );
 }

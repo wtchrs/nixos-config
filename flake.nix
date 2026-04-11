@@ -64,7 +64,7 @@
         name: target: nameValuePair (target.profileName or "${target.user}@${name}") (mkHome name target)
       );
 
-      flakeChecks = import ./lib/flake/checks.nix { inherit nixpkgs hosts nixosConfigurations; };
+      flakeChecks = import ./lib/flake/checks.nix { inherit nixpkgs hosts nixosConfigurations homeConfigurations; };
       devShells = import ./lib/flake/devShells.nix { inherit nixpkgs hosts; };
     in
     {
