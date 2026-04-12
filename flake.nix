@@ -10,8 +10,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    distro-grub-themes = {
-      url = "github:AdisonCavani/distro-grub-themes";
+    grub2-themes = {
+      url = "github:vinceliuice/grub2-themes";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

@@ -31,7 +31,7 @@ nixpkgs.lib.nixosSystem rec {
   };
 
   modules = [
-    inputs.distro-grub-themes.nixosModules.${system}.default
+    inputs.grub2-themes.nixosModules.default
     ../modules
     ../users/${username}/system.nix
     home-manager.nixosModules.home-manager
