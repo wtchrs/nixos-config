@@ -18,13 +18,18 @@ home-manager.lib.homeManagerConfiguration {
   inherit pkgs;
   extraSpecialArgs = { inherit inputs username hostName; };
   modules = [
-    (_: {
+    ({ config, ... }: {
       nix = {
         package = pkgs.nix;
         settings.experimental-features = [
           "nix-command"
           "flakes"
         ];
+      };
+
+      targets.genericLinux = nixpkgs.lib.mkIf config.my.features.desktop.enable {
+        enable = true;
+        gpu.enable = true;
       };
     })
   ]
