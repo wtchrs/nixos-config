@@ -73,6 +73,7 @@ in
   ];
 
   programs = {
+    home-manager.enable = true;
     git.enable = true;
     gpg.enable = true;
     direnv.enable = true;
