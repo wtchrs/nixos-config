@@ -20,7 +20,7 @@
   };
 
   home = {
-    desktop = {
+    notebook = {
       system = "x86_64-linux";
       hostName = "archlinux";
       user = "wtchrs";

@@ -1,5 +1,9 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
+let
+  inherit (pkgs.stdenv.hostPlatform) system;
+  neovim-flake = inputs.neovim-flake.packages.${system}.default;
+in
 {
   imports = [
     ../shell
@@ -7,10 +11,16 @@
   ];
 
   home.packages = with pkgs; [
+    neovim-flake
+    vim
+
     zip
     xz
     unzip
     p7zip
+
+    curl
+    wget
 
     ripgrep
     jq

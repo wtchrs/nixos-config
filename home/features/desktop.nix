@@ -26,6 +26,7 @@ in
     [
       jetbrains-toolbox
       inputs.zen-browser.packages.${system}.default
+      nautilus
     ]
     ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
 
