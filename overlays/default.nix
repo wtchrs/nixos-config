@@ -6,4 +6,5 @@ inputs:
   inputs.niri.overlays.niri
   (import ./tmux-dotbar.nix)
   (import ./sarasa-mono-k-nerd-font.nix)
+  (import ./mactahoe.nix)
 ]

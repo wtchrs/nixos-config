@@ -36,6 +36,8 @@ in
       upower.enable = true;
       playerctld.enable = true;
 
+      desktopManager.gnome.enable = true;
+
       displayManager.sessionPackages = [
         pkgs.niri-unstable
       ];
