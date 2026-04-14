@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ inputs, lib, config, pkgs, ... }:
 
 let
   inherit (pkgs.stdenv.hostPlatform) system;
@@ -19,12 +19,14 @@ let
   };
 in
 {
-  home.packages = [ quickshellProgramList ];
+  config = lib.mkIf config.my.features.desktop.enable {
+    home.packages = [ quickshellProgramList ];
 
-  programs.quickshell = {
-    enable = true;
-    package = inputs.quickshell.packages.${system}.default;
+    programs.quickshell = {
+      enable = true;
+      package = inputs.quickshell.packages.${system}.default;
+    };
+
+    xdg.configFile."quickshell".source = ./config;
   };
-
-  xdg.configFile."quickshell".source = ./config;
 }
