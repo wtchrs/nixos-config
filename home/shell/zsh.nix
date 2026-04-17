@@ -63,6 +63,11 @@
         # editor
         export EDITOR=nvim
 
+        # pnpm
+        export PNPM_HOME="$HOME/.local/share/pnpm"
+        mkdir -p "$PNPM_HOME"
+        path+=("$PNPM_HOME")
+
         # fzf
         _fzf_compgen_path() { fd --hidden --exclude .git . "$1"; }
         _fzf_compgen_dir()  { fd --type=d --hidden --exclude .git . "$1"; }

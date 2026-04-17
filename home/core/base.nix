@@ -14,6 +14,12 @@ in
     neovim-flake
     vim
 
+    nodejs
+    pnpm
+
+    # necessary for codex
+    bubblewrap
+
     zip
     xz
     unzip
