@@ -42,6 +42,7 @@ in
       };
 
       # niri-flake does not provide blur options in settings yet.
+      # quickshell:tray-menu now uses ext-background-effect-v1 region blur from quickshell.
       #
       # Original KDL for blur:
       # blur {
@@ -52,18 +53,23 @@ in
       # }
       #
       # layer-rule {
-      #   match namespace="^quickshell:(bar|tray-menu)$"
-      #   background-effect { blur true xray false }
+      #   match namespace="^quickshell:bar$"
+      #   background-effect { blur true; xray false; }
+      # }
+      #
+      # layer-rule {
+      #   match namespace="^quickshell:tray-menu$"
+      #   background-effect { xray false; }
       # }
       #
       # layer-rule {
       #   match namespace="^quickshell:launcher$"
-      #   background-effect { blur true xray true }
+      #   background-effect { blur true; xray true; }
       # }
       #
       # window-rule {
       #   match app-id="com.mitchellh.ghostty"
-      #   background-effect { blur true xray false }
+      #   background-effect { blur true; xray false; }
       # }
 
       config = lib.mkOptionDefault (
@@ -81,11 +87,24 @@ in
           (kdl.node "layer-rule"
             [ ]
             [
-              (kdl.leaf "match" { namespace = "^quickshell:(bar|tray-menu)$"; })
+              (kdl.leaf "match" { namespace = "^quickshell:bar$"; })
               (kdl.node "background-effect"
                 [ ]
                 [
                   (kdl.leaf "blur" true)
+                  (kdl.leaf "xray" false)
+                ]
+              )
+            ]
+          )
+
+          (kdl.node "layer-rule"
+            [ ]
+            [
+              (kdl.leaf "match" { namespace = "^quickshell:tray-menu$"; })
+              (kdl.node "background-effect"
+                [ ]
+                [
                   (kdl.leaf "xray" false)
                 ]
               )

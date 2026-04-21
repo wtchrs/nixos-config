@@ -11,6 +11,9 @@ PanelWindow {
     property string layershellNamespace: "quickshell:tray-menu"
     WlrLayershell.namespace: layershellNamespace
 
+    // Use Wayland ext-background-effect API
+    BackgroundEffect.blurRegion: popupContent.opacity > 0 ? popupBlurRegion : null
+
     exclusionMode: ExclusionMode.Ignore
     focusable: false
     aboveWindows: true
@@ -26,6 +29,12 @@ PanelWindow {
     property MouseArea iconMouseArea: null
 
     readonly property SystemTrayItem systemTray: trayItem ? trayItem.systemTray : null
+
+    Region {
+        id: popupBlurRegion
+        item: popupContent
+        radius: popupContent.radius
+    }
 
     // ----- state -----
     property bool active: true
