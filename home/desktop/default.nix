@@ -16,6 +16,7 @@ in
     ./quickshell
     ./ghostty.nix
     ./dunst.nix
+    ./obsidian.nix
 
     ./misc/fonts.nix
     ./misc/input.nix
