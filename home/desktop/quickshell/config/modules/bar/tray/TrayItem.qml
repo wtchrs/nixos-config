@@ -1,6 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
-import Quickshell
 import Quickshell.Services.SystemTray
 import qs.configs
 
@@ -11,7 +9,8 @@ Rectangle {
     color: "transparent"
 
     property SystemTrayItem systemTray: null
-    property var barWindow: null
+    readonly property bool hovered: iconMouseArea.containsMouse
+    property alias iconMouseAreaRef: iconMouseArea
 
     Image {
         id: icon
@@ -42,8 +41,4 @@ Rectangle {
         }
     }
 
-    TrayItemMenu {
-        trayItem: root
-        iconMouseArea: iconMouseArea
-    }
 }

@@ -58,6 +58,23 @@ PanelWindow {
         }
     }
 
+    onTrayItemChanged: {
+        if (trayItem && iconMouseArea && iconMouseArea.containsMouse) {
+            active = true
+        }
+
+        if (trayItem && (visible || isShown || (iconMouseArea && iconMouseArea.containsMouse))) {
+            updatePosition()
+        }
+    }
+
+    onIconMouseAreaChanged: {
+        if (trayItem && iconMouseArea && iconMouseArea.containsMouse) {
+            active = true
+            updatePosition()
+        }
+    }
+
     function windowOriginInScreen(win) {
         if (!win || !win.screen)
             return Qt.point(0, 0)

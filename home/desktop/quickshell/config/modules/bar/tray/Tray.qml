@@ -11,6 +11,8 @@ Item {
     implicitHeight: container.implicitHeight
 
     required property var barWindow
+    property Item activeTrayItem: null
+    property MouseArea activeIconMouseArea: null
 
     ColumnLayout {
         id: container
@@ -25,9 +27,22 @@ Item {
         Repeater {
             model: SystemTray.items
             delegate: TrayItem {
+                id: trayItem
                 systemTray: modelData
-                barWindow: root.barWindow
+
+                onHoveredChanged: {
+                    if (hovered) {
+                        root.activeTrayItem = trayItem
+                        root.activeIconMouseArea = trayItem.iconMouseAreaRef
+                    }
+                }
             }
         }
+    }
+
+    TrayItemMenu {
+        id: sharedMenu
+        trayItem: root.activeTrayItem
+        iconMouseArea: root.activeIconMouseArea
     }
 }
