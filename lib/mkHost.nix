@@ -8,6 +8,7 @@ let
   username = host.user;
   hostName = host.hostName or name;
 
+  importDir = import ./importDir.nix { inherit lib; };
   mkHomeModules = import ./mkHomeModules.nix inputs;
   overlays = import ../overlays inputs;
 
@@ -23,7 +24,7 @@ let
   ];
 in
 
-nixpkgs.lib.nixosSystem rec {
+nixpkgs.lib.nixosSystem {
   inherit (host) system;
 
   specialArgs = {
@@ -51,5 +52,6 @@ nixpkgs.lib.nixosSystem rec {
 
     hostDir # `hosts/<name>/default.nix` entry
     hostConfig # inject feature flags
-  ];
+  ]
+  ++ importDir ../hosts/${name}/system; # host-specific overrides
 }
