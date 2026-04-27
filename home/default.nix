@@ -5,6 +5,5 @@ _:
     ../modules/options/features.nix
     ./core/base.nix
     ./desktop
-    ./gaming
   ];
 }
