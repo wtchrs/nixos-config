@@ -88,8 +88,7 @@ in
 
   services.gpg-agent = {
     enable = true;
-    # pinentry.package = pkgs.pinentry-curses;
-    pinentry.package = pkgs.pinentry-gnome3;
+    pinentry.package = pkgs.pinentry-tty; # or `pinentry-curses`, `pkgs.pinentry-gnome3`
 
     defaultCacheTtl = 0;
     maxCacheTtl = 0;

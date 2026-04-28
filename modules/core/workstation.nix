@@ -15,7 +15,6 @@ in
   ];
 
   programs = {
-    firefox.enable = true;
     zsh.enable = true;
     mtr.enable = true;
 
@@ -27,11 +26,6 @@ in
 
   services = {
     tailscale.enable = true;
-
-    pipewire = {
-      enable = true;
-      pulse.enable = true;
-    };
 
     openssh = {
       enable = true;

@@ -31,6 +31,7 @@ in
         jetbrains-toolbox
         inputs.zen-browser.packages.${system}.default
         nautilus
+        brightnessctl
       ]
       ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
 

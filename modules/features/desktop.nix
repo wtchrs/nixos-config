@@ -38,6 +38,11 @@ in
       upower.enable = true;
       playerctld.enable = true;
 
+      pipewire = {
+        enable = true;
+        pulse.enable = true;
+      };
+
       displayManager.sessionPackages = [
         pkgs.niri-unstable
       ];
