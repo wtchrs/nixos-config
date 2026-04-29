@@ -2,9 +2,10 @@
 
 let
   sshKeys = [
-    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7QGgYMN2OU7Kzfhd4hhkhfdT56nqf83YFdVur4kaLs6+dNGnK1mIIuk5g/M+7aSeUyTYhSz7vGSKsJtEpxoKDxRSNZAYF91jr9FNuA5tl9z4KpWv2e0X7ziLAU4GAwVmy6SvI3gz34Lu4lmm1DIGXv55oJNHGC4yRV+TobvI2L08RujU3shVzrW0J81yhFu/BPtP9caYlfF4E2Q1dNfqHoG5y+KI8gKF9nCljlf0XTHKwfH7QoR/PdzwVILHaiCtBZqKGUrZqPvTiOG7RbaLcvbbs4VPOEWjaC71wuJfJ9S1Mym2HuM0lDl5sdV28uzU7DRpJJ4ORvG1mtojlwbTl ssh-key-2026-04-29"
+    # Remove ssh key after connecting to tailscale and enable tailscale ssh.
+    # "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/J8yX9riY/xpewtMotOCRS+4yvL3xFpSuIx2EKjZXRAO/baMBvF1xIQj+hC9nvrIIkzODqPyAxBi/rY+hymweBW+9GAWwowBd2F7dEY8oVt+L4YLLzXoQQaMLj59+S9fQL1LrVxSvf8jOfqthuiHS0WD9iI8oXWgOnSfC14hHEa1qXRcrt17C4RIMTF56wDC6dR9r/8bG/81HQwOy4475VsY3yT3xhpL2m5bvE47n3T8/KXZNIoVxDbi6BsdCabL3c/YRxgTVD2O3J8r8OzYkxpsb2QsS/SJSuLxGKmNQei3YF7J2iIU8rjdsEUUjAKi1M0VFoL7A5Cc3vSukIanv ssh-key-2026-04-29"
   ];
-in 
+in
 {
   imports = [
     inputs.disko.nixosModules.disko
@@ -26,7 +27,7 @@ in
 
     efi = {
       canTouchEfiVariables = false;
-      efiSysMountPoint = "/boot";
+      efiSysMountPoint = "/boot/efi";
     };
   };
 
@@ -45,7 +46,10 @@ in
   };
 
   networking = {
-    firewall.allowedTCPPorts = [ 22 ];
+    firewall.allowedTCPPorts = [
+      # Disallow ssh port after connecting to tailscale and enable tailscale ssh.
+      # 22
+    ];
     firewall.allowedUDPPorts = [ ];
   };
 
