@@ -17,6 +17,11 @@
       user = "wtchrs";
       # use the attrName as a default hostName
     };
+
+    srv-cloud-2 = {
+      system = "x86_64-linux";
+      user = "wtchrs";
+    };
   };
 
   home = {

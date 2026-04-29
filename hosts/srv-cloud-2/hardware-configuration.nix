@@ -1,0 +1,2 @@
+# Dummy hardware-configuration.nix
+{ ... }: {}

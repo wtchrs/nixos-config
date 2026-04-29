@@ -111,3 +111,37 @@ Example:
 ```bash
 home-manager switch --flake .#wtchrs@archlinux
 ```
+
+### nixos-anywhere
+
+The `srv-cloud-2` host declares its disk layout using [nix-community/disko][disko]. [nix-community/nixos-anywhere][nixos-anywhere] will repartition and format the target disks declared in `hosts/srv-cloud-2/disko.nix`.
+
+> [!WARNING]
+> This is destructive. The disks declared in `hosts/srv-cloud-2/disko.nix` will be repartitioned and formatted.
+
+Before installation, verify that the target host is reachable, the target user can run passwordless sudo, and the target disks match the devices described in the disko configuration file.
+
+```bash
+ssh -i <private-key-path> <user>@<server-ip> \
+  'sudo -n true && lsblk -o NAME,SIZE,TYPE,MOUNTPOINTS && free -h'
+```
+
+Then, run the following command from a local machine to install NixOS on the server via SSH:
+
+```bash
+nix run github:nix-community/nixos-anywhere -- \
+  --flake .#srv-cloud-2 \
+  --target-host <user>@<server-ip> \
+  -i <private-key-path> \
+  --build-on local \
+  --copy-host-keys \
+  --generate-hardware-config nixos-generate-config ./hosts/srv-cloud-2/hardware-configuration.nix \
+  --print-build-logs
+```
+
+> [!WARNING]
+> If the target host has less than 1.5 GiB of RAM, the installation may fail during the `kexec` phase.
+
+
+[disko]: https://github.com/nix-community/disko
+[nixos-anywhere]: https://github.com/nix-community/nixos-anywhere
