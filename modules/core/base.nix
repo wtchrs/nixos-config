@@ -15,12 +15,6 @@ _:
     useXkbConfig = true;
   };
 
-  networking = {
-    networkmanager.enable = true;
-    firewall.allowedTCPPorts = [ ];
-    firewall.allowedUDPPorts = [ ];
-  };
-
   services.xserver = {
     xkb = {
       layout = "us";

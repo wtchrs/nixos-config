@@ -35,7 +35,7 @@
       };
     };
 
-    server = {
+    srv-cloud-1 = {
       system = "aarch64-linux";
       user = "wtchrs";
     };
