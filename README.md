@@ -112,7 +112,7 @@ Example:
 home-manager switch --flake .#wtchrs@archlinux
 ```
 
-### nixos-anywhere
+## nixos-anywhere
 
 The `srv-cloud-2` host declares its disk layout using [nix-community/disko][disko]. [nix-community/nixos-anywhere][nixos-anywhere] will repartition and format the target disks declared in `hosts/srv-cloud-2/disko.nix`.
 
@@ -140,7 +140,31 @@ nix run github:nix-community/nixos-anywhere -- \
 ```
 
 > [!WARNING]
-> If the target host has less than 1.5 GiB of RAM, the installation may fail during the `kexec` phase.
+> If the target host has less than 1.5 GiB of RAM, the installation may fail during the `kexec` phase. Create and enable a swap file on the target host to reduce the risk of OOM during `kexec`, and pass `--no-disko-deps` to skip installing disko dependencies.
+
+```bash
+# target host
+sudo fallocate -l 4G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+sudo sync
+echo 3 | sudo tee /proc/sys/vm/drop_caches
+```
+
+```bash
+# local machine
+nix run github:nix-community/nixos-anywhere -- \
+  --flake .#srv-cloud-2 \
+  --target-host <user>@<server-ip> \
+  -i <private-key-path> \
+  --build-on local \
+  --copy-host-keys \
+  --generate-hardware-config nixos-generate-config ./hosts/srv-cloud-2/hardware-configuration.nix \
+  --no-disko-deps \
+  --print-build-logs
+```
 
 
 [disko]: https://github.com/nix-community/disko
