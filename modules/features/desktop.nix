@@ -49,7 +49,16 @@ in
       displayManager.sddm = {
         enable = true;
         package = pkgs.kdePackages.sddm;
-        wayland.enable = true;
+        wayland = {
+          enable = true;
+          compositor = "kwin";
+          compositorCommand = let
+            sddmKwinConfig = pkgs.writeTextDir "kwinrc" ''
+              [Plugins]
+              shakecursorEnabled=false
+            '';
+          in "${lib.getExe' pkgs.coreutils "env"} XDG_CONFIG_HOME=${sddmKwinConfig} ${lib.getExe' pkgs.kdePackages.kwin "kwin_wayland"} --no-global-shortcuts --no-kactivities --no-lockscreen --locale1";
+        };
         theme = "sddm-astronaut-theme";
         settings = {
           Theme = {
