@@ -26,8 +26,25 @@
     };
   };
 
-  zramSwap.enable = true;
-  zramSwap.memoryPercent = 100;
+  zramSwap = {
+    enable = true;
+    memoryPercent = 100;
+    algorithm = "zstd";
+    priority = 100;
+  };
+
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 16 * 1024; # MiB
+      priority = 0;
+    }
+  ];
+
+  services.earlyoom = {
+    enable = true;
+    enableNotifications = true;
+  };
 
   # Do not change after installation.
   system.stateVersion = "26.05";
