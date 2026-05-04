@@ -11,7 +11,6 @@
     ./display-manager.nix
     ./file-manager.nix
     ./flatpak.nix
-    ./fonts.nix
   ];
 
   config = lib.mkIf config.my.features.desktop.enable {

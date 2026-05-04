@@ -16,14 +16,32 @@
       fira-code
     ];
 
-    fonts = {
-      fontconfig.enable = true;
+    fonts.fontconfig = {
+      enable = true;
 
-      fontconfig.defaultFonts = {
+      defaultFonts = {
         emoji = [ "Noto Color Emoji" ];
         monospace = [ "Sarasa Mono K" ];
         sansSerif = [ "Noto Sans CJK SC" ];
         serif = [ "Source Han Serif" ];
+      };
+
+      configFile.sarasa-gothic-fallback = {
+        enable = true;
+        priority = 51;
+        text = ''
+          <?xml version='1.0'?>
+          <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+          <fontconfig>
+            <alias>
+              <family>Sarasa Mono K</family>
+              <accept>
+                <family>Symbols Nerd Font Mono</family>
+                <family>Noto Color Emoji</family>
+              </accept>
+            </alias>
+          </fontconfig>
+        '';
       };
     };
   };
