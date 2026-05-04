@@ -3,9 +3,9 @@
 {
   config = lib.mkIf config.my.features.desktop.enable {
     home.pointerCursor = {
-      name = "Adwaita";
-      package = pkgs.adwaita-icon-theme;
-      size = 24;
+      name = "Bibata-Modern-Ice";
+      package = pkgs.bibata-cursors;
+      size = 20;
     };
   };
 }

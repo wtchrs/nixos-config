@@ -39,6 +39,7 @@ in
       settings = {
         prefer-no-csd = true;
         screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
+        cursor.size = 20;
       };
 
       # niri-flake does not provide blur options in settings yet.
