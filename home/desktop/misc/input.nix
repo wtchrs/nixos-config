@@ -13,8 +13,13 @@
           addons = with pkgs; [
             fcitx5-gtk
             kdePackages.fcitx5-qt
+
+            # language support
             fcitx5-hangul
             fcitx5-mozc
+
+            # theme and config
+            fcitx5-nord
             qt6Packages.fcitx5-configtool
           ];
 
@@ -22,6 +27,10 @@
           ignoreUserConfig = false;
 
           settings = {
+            addons = {
+              classicui.globalSection.Theme = "Nord-Light";
+            };
+
             inputMethod = {
               GroupOrder."0" = "KO";
               GroupOrder."1" = "JA";
