@@ -48,6 +48,15 @@
         ];
       };
 
+      "Mod+P" = {
+        hotkey-overlay.title = "Toggle float sticky";
+        action.spawn = [
+          "niri-float-sticky"
+          "-ipc"
+          "toggle_sticky"
+        ];
+      };
+
       # volume controls and media controls
       # The allow-when-locked=true property makes them work even when the session is locked.
       "XF86AudioRaiseVolume" = {

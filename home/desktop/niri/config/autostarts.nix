@@ -13,6 +13,7 @@
           "hyprpolkitagent"
         ];
       }
+      { argv = [ "niri-float-sticky" ]; }
       { argv = [ "vesktop" ]; }
       { argv = [ "spotify" ]; }
     ];
