@@ -13,6 +13,8 @@ let
       awkFile = "${awkFile}";
       awk = "${pkgs.gawk}/bin/awk";
       find = "${pkgs.findutils}/bin/find";
+      jq = "${pkgs.jq}/bin/jq";
+      umuExeList = "${config.home.profileDirectory}/bin/umu-exe-list";
     };
     dir = "bin";
     isExecutable = true;

@@ -1,10 +1,24 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   config = lib.mkIf config.my.features.desktop.enable {
     programs.niri.settings.binds = {
       # Shows a list of important hotkeys.
       "Mod+Shift+Slash".action.show-hotkey-overlay = [ ];
+
+      # Wine/XWayland apps may consume the Hangul keysym before Fcitx sees it.
+      "Hangul" = {
+        repeat = false;
+        action.spawn = [
+          "${pkgs.fcitx5}/bin/fcitx5-remote"
+          "-t"
+        ];
+      };
 
       "Mod+Return" = {
         hotkey-overlay.title = "Open a Terminal: ghostty";
