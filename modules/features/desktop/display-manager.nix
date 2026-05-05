@@ -6,13 +6,15 @@
 }:
 
 let
+  dmEnable = (config.my.features.desktop.enable && config.my.features.desktop.displayManager.enable);
+
   sddmKwinConfig = pkgs.writeTextDir "kwinrc" ''
     [Plugins]
     shakecursorEnabled=false
   '';
 in
 {
-  config = lib.mkIf config.my.features.desktop.enable {
+  config = lib.mkIf dmEnable {
     environment.systemPackages = with pkgs; [
       sddm-astronaut
       bibata-cursors
