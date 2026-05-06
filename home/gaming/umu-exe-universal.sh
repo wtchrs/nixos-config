@@ -1,7 +1,7 @@
 set -euo pipefail
 
 app_name="umu-exe-universal"
-proton_name="DW-Proton Latest"
+proton_name="@protonName@"
 game_id="umu-exe-universal"
 prefix_default="$HOME/Games/umu/exe-universal"
 

@@ -25,9 +25,40 @@ let
   ];
 
   desktopFile = "umu-exe-universal.desktop";
-  dwProtonName = "DW-Proton Latest";
+  dwProtonName = "DW-Proton";
   dwProton = pkgs.dwproton-bin.override {
     steamDisplayName = dwProtonName;
+  };
+
+  launcher = pkgs.writeShellApplication {
+    name = "umu-exe-universal";
+    runtimeInputs = runtimePackages ++ helperPackages;
+    text = builtins.replaceStrings [ "@protonName@" ] [ dwProtonName ] (
+      builtins.readFile ./umu-exe-universal.sh
+    );
+  };
+
+  exeIcon = pkgs.writeShellApplication {
+    name = "umu-exe-icon";
+    runtimeInputs = with pkgs; [
+      coreutils
+      findutils
+      icoutils
+    ];
+    text = builtins.readFile ./umu-exe-icon.sh;
+  };
+
+  exeList = pkgs.writeShellApplication {
+    name = "umu-exe-list";
+    runtimeInputs =
+      with pkgs;
+      [
+        coreutils
+        findutils
+        jq
+      ]
+      ++ [ exeIcon ];
+    text = builtins.readFile ./umu-exe-list.sh;
   };
 
   windowsMimeTypes = [
@@ -45,32 +76,6 @@ let
     "text/x-msdos-batch"
   ];
 
-  launcher = pkgs.writeShellApplication {
-    name = "umu-exe-universal";
-    runtimeInputs = runtimePackages ++ helperPackages;
-    text = builtins.readFile ./umu-exe-universal.sh;
-  };
-
-  exeIcon = pkgs.writeShellApplication {
-    name = "umu-exe-icon";
-    runtimeInputs = with pkgs; [
-      coreutils
-      findutils
-      icoutils
-    ];
-    text = builtins.readFile ./umu-exe-icon.sh;
-  };
-
-  exeList = pkgs.writeShellApplication {
-    name = "umu-exe-list";
-    runtimeInputs = with pkgs; [
-      coreutils
-      findutils
-      jq
-    ] ++ [ exeIcon ];
-    text = builtins.readFile ./umu-exe-list.sh;
-  };
-
   mimeDefaultCommands = lib.concatMapStringsSep "\n" (
     mimeType:
     "run ${pkgs.xdg-utils}/bin/xdg-mime default ${lib.escapeShellArg desktopFile} ${lib.escapeShellArg mimeType}"
@@ -82,7 +87,8 @@ in
       launcher
       exeIcon
       exeList
-    ] ++ runtimePackages;
+    ]
+    ++ runtimePackages;
 
     xdg.dataFile."Steam/compatibilitytools.d/${dwProtonName}".source = dwProton.steamcompattool;
 
