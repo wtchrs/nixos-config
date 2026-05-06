@@ -51,13 +51,23 @@ let
     text = builtins.readFile ./umu-exe-universal.sh;
   };
 
+  exeIcon = pkgs.writeShellApplication {
+    name = "umu-exe-icon";
+    runtimeInputs = with pkgs; [
+      coreutils
+      findutils
+      icoutils
+    ];
+    text = builtins.readFile ./umu-exe-icon.sh;
+  };
+
   exeList = pkgs.writeShellApplication {
     name = "umu-exe-list";
     runtimeInputs = with pkgs; [
       coreutils
       findutils
       jq
-    ];
+    ] ++ [ exeIcon ];
     text = builtins.readFile ./umu-exe-list.sh;
   };
 
@@ -70,6 +80,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [
       launcher
+      exeIcon
       exeList
     ] ++ runtimePackages;
 

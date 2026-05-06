@@ -11,13 +11,15 @@ fi
 emit_item() {
   local name=$1
   local exe=$2
-  local description=$3
+  local icon=$3
+  local description=$4
 
   jq -cn \
     --arg name "$name" \
     --arg exec "umu-exe-universal \"$exe\"" \
+    --arg icon "$icon" \
     --arg description "$description" \
-    '{name:$name, exec:$exec, icon:"", description:$description}'
+    '{name:$name, exec:$exec, icon:$icon, description:$description}'
 }
 
 pretty_name() {
@@ -89,8 +91,9 @@ find "$drive_c" -type f -iname '*.exe' -print 2>/dev/null |
   while IFS= read -r exe; do
     is_interesting_exe "$exe" || continue
     name=$(pretty_name "$exe")
+    icon=$(umu-exe-icon "$exe" 2>/dev/null || true)
     desc=$(description_for "$exe")
-    emit_item "$name" "$exe" "$desc"
+    emit_item "$name" "$exe" "$icon" "$desc"
   done > "$tmp"
 
 if [ ! -s "$tmp" ]; then
