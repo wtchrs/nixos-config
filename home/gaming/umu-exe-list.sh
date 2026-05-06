@@ -67,8 +67,7 @@ is_interesting_exe() {
   case "$path" in
     */drive_c/Program\ Files/* | \
     */drive_c/Program\ Files\ \(x86\)/* | \
-    */drive_c/users/*/AppData/Local/Programs/* | \
-    */drive_c/users/*/AppData/Local/Kakao/KakaoTalk/*)
+    */drive_c/users/*/AppData/Local/Programs/*)
       return 0
       ;;
   esac
