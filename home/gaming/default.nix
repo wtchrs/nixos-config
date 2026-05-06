@@ -2,11 +2,14 @@
   lib,
   config,
   pkgs,
+  osConfig ? null,
   ...
 }:
 
 let
   cfg = config.my.features.gaming;
+  inherit (cfg) proton;
+  steamCompatManagedByNixOS = osConfig != null && (osConfig.programs.steam.enable or false);
 
   runtimePackages = with pkgs; [
     umu-launcher
@@ -25,17 +28,20 @@ let
   ];
 
   desktopFile = "umu-exe-universal.desktop";
-  dwProtonName = "DW-Proton";
-  dwProton = pkgs.dwproton-bin.override {
-    steamDisplayName = dwProtonName;
-  };
 
   launcher = pkgs.writeShellApplication {
     name = "umu-exe-universal";
     runtimeInputs = runtimePackages ++ helperPackages;
-    text = builtins.replaceStrings [ "@protonName@" ] [ dwProtonName ] (
-      builtins.readFile ./umu-exe-universal.sh
-    );
+    text = builtins.replaceStrings
+      [
+        "@protonName@"
+        "@protonPath@"
+      ]
+      [
+        proton.name
+        "${proton.package.steamcompattool}"
+      ]
+      (builtins.readFile ./umu-exe-universal.sh);
   };
 
   exeIcon = pkgs.writeShellApplication {
@@ -90,12 +96,14 @@ in
     ]
     ++ runtimePackages;
 
-    xdg.dataFile."Steam/compatibilitytools.d/${dwProtonName}".source = dwProton.steamcompattool;
+    xdg.dataFile = lib.mkIf (!steamCompatManagedByNixOS) {
+      "Steam/compatibilitytools.d/${proton.name}".source = proton.package.steamcompattool;
+    };
 
     xdg.desktopEntries.umu-exe-universal = {
-      name = "UMU DW-Proton";
+      name = "UMU ${proton.name}";
       genericName = "Windows Program Launcher";
-      comment = "Run Windows executables with UMU and DW-Proton Latest";
+      comment = "Run Windows executables with UMU and ${proton.name}";
       exec = "${launcher}/bin/umu-exe-universal %f";
       terminal = false;
       type = "Application";

@@ -2,6 +2,7 @@ set -euo pipefail
 
 app_name="umu-exe-universal"
 proton_name="@protonName@"
+proton_path="@protonPath@"
 game_id="umu-exe-universal"
 prefix_default="$HOME/Games/umu/exe-universal"
 
@@ -21,32 +22,12 @@ if [ ! -e "$target" ]; then
   die "target does not exist: $target"
 fi
 
-find_dw_proton() {
-  local xdg_data_home="${XDG_DATA_HOME:-$HOME/.local/share}"
-  local -a roots=(
-    "$xdg_data_home/Steam/compatibilitytools.d"
-    "$HOME/.steam/root/compatibilitytools.d"
-    "$HOME/.steam/steam/compatibilitytools.d"
-    "$HOME/.local/share/Steam/compatibilitytools.d"
-    "$HOME/.local/share/umu/compatibilitytools.d"
-    "$HOME/.local/share/umu/compatibilitytools"
-    "$HOME/.var/app/com.valvesoftware.Steam/.local/share/Steam/compatibilitytools.d"
-  )
-  local root candidate
+validate_proton_path() {
+  if [ -d "$proton_path" ]; then
+    return 0
+  fi
 
-  for root in "${roots[@]}"; do
-    candidate="$root/$proton_name"
-    if [ -d "$candidate" ]; then
-      printf '%s\n' "$candidate"
-      return 0
-    fi
-  done
-
-  printf '%s: %s not found. Searched:\n' "$app_name" "$proton_name" >&2
-  for root in "${roots[@]}"; do
-    printf '  - %s/%s\n' "$root" "$proton_name" >&2
-  done
-  return 1
+  die "$proton_name not found at $proton_path"
 }
 
 normalize_refresh_rate() {
@@ -153,7 +134,7 @@ run_umu_with_gamemode() {
   ' "$app_name" "$@"
 }
 
-proton_path=$(find_dw_proton) || exit 1
+validate_proton_path
 prefix=${UMU_EXE_UNIVERSAL_WINEPREFIX:-$prefix_default}
 mkdir -p "$prefix"
 
