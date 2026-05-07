@@ -28,6 +28,7 @@
         '';
       }
 
+      vim-tmux-navigator
       yank
     ];
 
