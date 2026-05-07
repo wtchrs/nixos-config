@@ -12,13 +12,6 @@
   ];
 
   programs = {
-    # Enable `command-not-found`
-    nix-index = {
-      enable = true;
-      enableBashIntegration = true;
-      enableZshIntegration = true;
-    };
-
     bat = {
       enable = true;
       config = {
