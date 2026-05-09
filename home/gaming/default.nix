@@ -29,19 +29,38 @@ let
 
   desktopFile = "umu-exe-universal.desktop";
 
+  common = pkgs.replaceVarsWith {
+    src = ./umu-exe-common.sh;
+    replacements = {
+      protonName = proton.name;
+      protonPath = "${proton.package.steamcompattool}";
+    };
+  };
+
   launcher = pkgs.writeShellApplication {
     name = "umu-exe-universal";
     runtimeInputs = runtimePackages ++ helperPackages;
     text = builtins.replaceStrings
       [
-        "@protonName@"
-        "@protonPath@"
+        "@umuExeCommon@"
       ]
       [
-        proton.name
-        "${proton.package.steamcompattool}"
+        "${common}"
       ]
       (builtins.readFile ./umu-exe-universal.sh);
+  };
+
+  setup = pkgs.writeShellApplication {
+    name = "umu-exe-prefix-setup";
+    runtimeInputs = runtimePackages ++ helperPackages;
+    text = builtins.replaceStrings
+      [
+        "@umuExeCommon@"
+      ]
+      [
+        "${common}"
+      ]
+      (builtins.readFile ./umu-exe-prefix-setup.sh);
   };
 
   exeIcon = pkgs.writeShellApplication {
@@ -91,6 +110,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [
       launcher
+      setup
       exeIcon
       exeList
     ]
