@@ -28,7 +28,15 @@
         '';
       }
 
-      vim-tmux-navigator
+      {
+        plugin = vim-tmux-navigator;
+        extraConfig = ''
+          bind C-h send-keys C-h
+          bind C-l send-keys C-l
+          bind C-k send-keys C-k
+          bind C-j send-keys C-j
+        '';
+      }
       yank
     ];
 
@@ -51,11 +59,11 @@
       bind k select-pane -U
       bind j select-pane -D
 
-      # Use Ctrl + hjkl keys to resize panes
-      bind -r C-h resize-pane -L 4
-      bind -r C-l resize-pane -R 4
-      bind -r C-k resize-pane -U 2
-      bind -r C-j resize-pane -D 2
+      # Use Meta/Alt + hjkl keys to resize panes
+      bind -r M-h resize-pane -L 4
+      bind -r M-l resize-pane -R 4
+      bind -r M-k resize-pane -U 2
+      bind -r M-j resize-pane -D 2
 
       # Shift hl to switch windows
       bind H previous-window
