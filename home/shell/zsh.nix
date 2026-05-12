@@ -82,7 +82,7 @@
     shellAliases = {
       ls = "eza --icons=always";
       ll = "eza --icons=always -aal";
-      cat = "bat --paging=never";
+      bat = "bat --paging=never";
     };
   };
 }

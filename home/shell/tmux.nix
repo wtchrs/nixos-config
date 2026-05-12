@@ -43,6 +43,7 @@
     extraConfig = ''
       set-option -g renumber-windows on
 
+      bind C-s new-session -c "#{pane_current_path}"
       bind C-c new-window -c "#{pane_current_path}"
 
       # vertical split shortcut
