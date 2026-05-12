@@ -6,7 +6,7 @@
 }:
 
 let
-  dmEnable = (config.my.features.desktop.enable && config.my.features.desktop.displayManager.enable);
+  dmEnable = config.my.features.desktop.enable && config.my.features.desktop.displayManager.enable;
 
   sddmKwinConfig = pkgs.writeTextDir "kwinrc" ''
     [Plugins]
