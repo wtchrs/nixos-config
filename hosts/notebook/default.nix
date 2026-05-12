@@ -26,6 +26,18 @@
     firewall.allowedUDPPorts = [ ];
   };
 
+  zramSwap = {
+    enable = true;
+    memoryPercent = 100;
+    algorithm = "zstd";
+    priority = 100;
+  };
+
+  services.earlyoom = {
+    enable = true;
+    enableNotifications = true;
+  };
+
   # Use CachyOS-fatched kernel
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-x86_64-v3;
 
