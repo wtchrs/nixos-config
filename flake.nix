@@ -3,6 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    nix-github-actions = {
+      url = "github:nix-community/nix-github-actions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
     disko = {
@@ -47,7 +53,7 @@
   };
 
   outputs =
-    inputs@{ nixpkgs, ... }:
+    inputs@{ nixpkgs, nix-github-actions, ... }:
     let
       inherit (nixpkgs.lib)
         mapAttrs
@@ -86,5 +92,7 @@
     {
       inherit nixosConfigurations homeConfigurations devShells;
       inherit (flakeChecks) formatter checks;
+
+      githubActions = nix-github-actions.lib.mkGithubMatrix { inherit (flakeChecks) checks; };
     };
 }

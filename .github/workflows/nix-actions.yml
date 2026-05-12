@@ -1,0 +1,28 @@
+name: Nix Flake actions
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - id: set-matrix
+        run: echo "matrix=$(nix eval --json .#githubActions.matrix)" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: matrix
+    name: ${{ matrix.name }} (${{ matrix.system }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - run: nix build --print-build-logs .#${{ matrix.attr }}
