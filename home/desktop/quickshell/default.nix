@@ -1,8 +1,6 @@
-{ inputs, lib, config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
-
   awkFile = pkgs.writeText "quickshell-program-list.awk" (
     builtins.readFile ./scripts/quickshell-program-list.awk
   );
@@ -24,11 +22,7 @@ in
   config = lib.mkIf config.my.features.desktop.enable {
     home.packages = [ quickshellProgramList ];
 
-    programs.quickshell = {
-      enable = true;
-      package = inputs.quickshell.packages.${system}.default;
-    };
-
+    programs.quickshell.enable = true;
     xdg.configFile."quickshell".source = ./config;
   };
 }
