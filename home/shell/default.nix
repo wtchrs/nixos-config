@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
-{
+let
+  inherit (import ./scripts pkgs) lsc;
+in {
   imports = [
     ./starship.nix
     ./tmux.nix
@@ -43,7 +45,10 @@
         export PATH="$PATH:$HOME/.local/bin"
       '';
 
-      initExtra = '' eval "$(${pkgs.rgrc}/bin/rgrc --aliases --except ls)" '';
+      initExtra = ''
+        eval "$(${pkgs.rgrc}/bin/rgrc --aliases --except ls)"
+        source ${lsc}
+      '';
 
       shellAliases = {
         bat = "bat --paging=never";

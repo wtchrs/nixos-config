@@ -40,6 +40,7 @@
     };
 
     settings = {
+      classic = false;
       color.when = "auto";
     };
   };
