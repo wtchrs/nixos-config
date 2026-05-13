@@ -5,8 +5,10 @@
     home.packages = with pkgs; [
       sarasa-gothic
       nerd-fonts.symbols-only
+      pretendard
       noto-fonts
       noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
       noto-fonts-color-emoji
       source-code-pro
       source-han-mono
@@ -22,8 +24,8 @@
       defaultFonts = {
         emoji = [ "Noto Color Emoji" ];
         monospace = [ "Sarasa Mono K" ];
-        sansSerif = [ "Noto Sans CJK SC" ];
-        serif = [ "Source Han Serif" ];
+        sansSerif = [ "Pretendard" "Noto Sans CJK KR" "Source Han Sans" ];
+        serif = [ "Noto Serif CJK KR" "Source Han Serif" ];
       };
 
       configFile.sarasa-gothic-fallback = {
