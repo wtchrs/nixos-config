@@ -9,6 +9,7 @@
 
   home.packages = with pkgs; [
     fd
+    rgrc
   ];
 
   programs = {
@@ -40,6 +41,8 @@
       bashrcExtra = ''
         export PATH="$PATH:$HOME/.local/bin"
       '';
+
+      initExtra = '' eval "$(${pkgs.rgrc}/bin/rgrc --aliases --except ls)" '';
 
       shellAliases = {
         ls = "eza";
