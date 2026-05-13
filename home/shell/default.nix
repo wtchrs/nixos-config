@@ -5,6 +5,7 @@
     ./starship.nix
     ./tmux.nix
     ./zsh.nix
+    ./lsd.nix
   ];
 
   home.packages = with pkgs; [
@@ -45,7 +46,7 @@
       initExtra = '' eval "$(${pkgs.rgrc}/bin/rgrc --aliases --except ls)" '';
 
       shellAliases = {
-        ls = "eza";
+        bat = "bat --paging=never";
       };
     };
   };
