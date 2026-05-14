@@ -1,13 +1,11 @@
 { pkgs, ... }:
 
-let
-  inherit (import ./scripts pkgs) lsc;
-in {
+{
   imports = [
     ./starship.nix
     ./tmux.nix
     ./zsh.nix
-    ./lsd.nix
+    ./lsd
   ];
 
   home.packages = with pkgs; [
@@ -47,7 +45,6 @@ in {
 
       initExtra = ''
         eval "$(${pkgs.rgrc}/bin/rgrc --aliases --except ls)"
-        source ${lsc}
       '';
 
       shellAliases = {

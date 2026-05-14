@@ -1,10 +1,17 @@
 { pkgs, ... }:
 
 {
+  imports = [ ./shell-integration.nix ];
+
   programs.lsd = {
     enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
+
+    settings = {
+      classic = false;
+      color.when = "auto";
+    };
 
     colors = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/mstill3/lsd-nord-theme/7f221b491dc72a4c077ebae3a009b901757b89e0/nord.yaml";
@@ -37,11 +44,6 @@
         ".node_repl_history" = "";
         "package.json" = "";
       };
-    };
-
-    settings = {
-      classic = false;
-      color.when = "auto";
     };
   };
 }

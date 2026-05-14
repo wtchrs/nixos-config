@@ -5,9 +5,7 @@
   ...
 }:
 
-let
-  inherit (import ./scripts pkgs) lsc;
-in {
+{
   home.packages = with pkgs; [
     zsh-completions
   ];
@@ -73,9 +71,6 @@ in {
         # fzf
         _fzf_compgen_path() { fd --hidden --exclude .git . "$1"; }
         _fzf_compgen_dir()  { fd --type=d --hidden --exclude .git . "$1"; }
-
-        # LS_COLORS
-        source ${lsc}
       '')
 
       (lib.mkOrder 1200 ''
