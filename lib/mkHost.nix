@@ -29,10 +29,14 @@ nixpkgs.lib.nixosSystem {
 
   specialArgs = {
     inherit inputs username hostName;
+
+    # Expose the host platform as pre-module metadata for platform-gated imports.
+    # Do not derive this from `pkgs` or `config` inside `imports`, as that can
+    # recurse during module collection.
+    hostSystem = host.system;
   };
 
   modules = [
-    inputs.grub2-themes.nixosModules.default
     ../modules
     ../users/${username}/system.nix
     home-manager.nixosModules.home-manager
@@ -53,5 +57,7 @@ nixpkgs.lib.nixosSystem {
     hostDir # `hosts/<name>/default.nix` entry
     hostConfig # inject feature flags
   ]
+  # `grub2-themes` flake provides only `x86_64-linux` derivation
+  ++ lib.optional (host.system == "x86_64-linux") inputs.grub2-themes.nixosModules.default
   ++ importDir ../hosts/${name}/system; # host-specific overrides
 }

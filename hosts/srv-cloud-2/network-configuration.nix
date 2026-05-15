@@ -1,9 +1,8 @@
-{ config, lib, username, ... }:
+{ config, username, ... }:
 
 let
   sshKeys = [
-    # Remove ssh key after connecting to tailscale and enable tailscale ssh.
-    # "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/J8yX9riY/xpewtMotOCRS+4yvL3xFpSuIx2EKjZXRAO/baMBvF1xIQj+hC9nvrIIkzODqPyAxBi/rY+hymweBW+9GAWwowBd2F7dEY8oVt+L4YLLzXoQQaMLj59+S9fQL1LrVxSvf8jOfqthuiHS0WD9iI8oXWgOnSfC14hHEa1qXRcrt17C4RIMTF56wDC6dR9r/8bG/81HQwOy4475VsY3yT3xhpL2m5bvE47n3T8/KXZNIoVxDbi6BsdCabL3c/YRxgTVD2O3J8r8OzYkxpsb2QsS/SJSuLxGKmNQei3YF7J2iIU8rjdsEUUjAKi1M0VFoL7A5Cc3vSukIanv ssh-key-2026-04-29"
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNSB2sAJnby+yoTViZDqz37AWP736lzitRtkNoGlFHJPAFuFya/SA3t+zXiuGMUm23Hz4gah30bpKdHvG+fB3tnLwWPT0CXqvsaa2/W7S4geDBoQAfnVlxceATMQhjo57T+ewAdbOkqgaje7tftLcjHFTBGfzjo/dl9GXDUJe+TZ7JdQ1mYrv+HssGYKfrF5i66iEkMuetGHaOJ0jghnyScWrGmXTCiV3ZkM/gJV1twVB8Pok1yMB1NmjD4Izsh0mA1nVt36XxRMImrrmpH4oX+UMCWx+tvvNJPgtVHQKBL5+m3x/Qq8QhwlNp17u0aUa6Pr7Pqh6JB6K4ghDYKJq9 ssh-key-2026-05-15"
   ];
 in
 {
@@ -22,7 +21,7 @@ in
   };
 
   services.tailscale = {
-    enable = lib.mkDefault true;
+    enable = true;
     # Enables routing features for tailscale, including sysctl/kernel parameters
     # normally configured via `/etc/sysctl.d/*`, such as:
     #   net.ipv4.ip_forward = 1
@@ -34,8 +33,7 @@ in
     enable = true;
     trustedInterfaces = [ "tailscale0" ];
     allowedTCPPorts = [
-      # Disallow ssh port after connecting to tailscale and enable tailscale ssh.
-      # 22
+      22
     ];
     allowedUDPPorts = [
       config.services.tailscale.port

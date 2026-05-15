@@ -19,7 +19,7 @@
     };
 
     srv-cloud-2 = {
-      system = "x86_64-linux";
+      system = "aarch64-linux";
       user = "wtchrs";
     };
   };

@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 
 let
   inherit (pkgs.stdenv.hostPlatform) system;
@@ -25,7 +25,7 @@ in
   };
 
   services = {
-    tailscale.enable = true;
+    tailscale.enable = lib.mkDefault true;
 
     openssh = {
       enable = true;

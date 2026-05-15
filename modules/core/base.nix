@@ -1,4 +1,4 @@
-_:
+{ lib, ... }:
 
 {
   # enable flake
@@ -7,7 +7,7 @@ _:
     "flakes"
   ];
 
-  time.timeZone = "Asia/Seoul";
+  time.timeZone = lib.mkDefault "Asia/Seoul";
   i18n.defaultLocale = "en_US.UTF-8";
 
   console = {

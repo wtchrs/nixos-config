@@ -8,6 +8,8 @@
     ./network-configuration.nix
   ];
 
+  time.timeZone = "Asia/Tokyo";
+
   # Use grub
   boot.loader = {
     systemd-boot.enable = false;
@@ -32,14 +34,6 @@
     algorithm = "zstd";
     priority = 100;
   };
-
-  swapDevices = [
-    {
-      device = "/swapfile";
-      size = 16 * 1024; # MiB
-      priority = 0;
-    }
-  ];
 
   services.earlyoom = {
     enable = true;

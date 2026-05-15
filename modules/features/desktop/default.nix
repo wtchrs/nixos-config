@@ -3,6 +3,7 @@
   config,
   pkgs,
   username,
+  hostSystem,
   ...
 }:
 
@@ -11,19 +12,12 @@
     ./display-manager.nix
     ./file-manager.nix
     ./flatpak.nix
-  ];
+  ] ++ lib.optional (hostSystem == "x86_64-linux") ./grub-theme.nix;
 
   config = lib.mkIf config.my.features.desktop.enable {
     environment.systemPackages = with pkgs; [
       glib.bin
     ];
-
-    boot.loader.grub2-theme = {
-      enable = true;
-      theme = "stylish";
-      footer = true;
-      customResolution = "1920x1080";
-    };
 
     services = {
       seatd = {
