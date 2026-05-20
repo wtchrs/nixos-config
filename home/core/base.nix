@@ -8,6 +8,7 @@ in
   imports = [
     ../shell
     ../programs/btop.nix
+    ./productivity.nix
   ];
 
   home.packages = with pkgs; [
