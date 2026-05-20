@@ -66,7 +66,7 @@
         # pnpm
         export PNPM_HOME="$HOME/.local/share/pnpm"
         mkdir -p "$PNPM_HOME"
-        path+=("$PNPM_HOME")
+        path+=("$PNPM_HOME/bin")
 
         # fzf
         _fzf_compgen_path() { fd --hidden --exclude .git . "$1"; }
