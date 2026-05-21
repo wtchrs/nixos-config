@@ -12,6 +12,7 @@
     ./display-manager.nix
     ./file-manager.nix
     ./flatpak.nix
+    ./keyring.nix
   ] ++ lib.optional (hostSystem == "x86_64-linux") ./grub-theme.nix;
 
   config = lib.mkIf config.my.features.desktop.enable {
