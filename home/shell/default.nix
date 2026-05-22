@@ -6,6 +6,7 @@
     ./tmux.nix
     ./zsh.nix
     ./lsd
+    ./colored-man.nix
   ];
 
   home.packages = with pkgs; [
