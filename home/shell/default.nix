@@ -2,9 +2,9 @@
 
 {
   imports = [
-    ./starship.nix
-    ./tmux.nix
     ./zsh.nix
+    ./starship.nix
+    ./tmux
     ./lsd
     ./colored-man.nix
   ];

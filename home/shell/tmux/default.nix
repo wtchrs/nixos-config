@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  imports = [ ./shell-integration.nix ];
+
   programs.tmux = {
     enable = true;
     mouse = true;
