@@ -8,7 +8,13 @@
 
 let
   inherit (inputs.niri.lib) kdl;
+
   inherit (inputs.niri-float-sticky.packages.${pkgs.stdenv.hostPlatform.system}) niri-float-sticky;
+  floatStickyLauncher = pkgs.writeShellApplication {
+    name = "niri-float-sticky-launcher";
+    runtimeInputs = [ niri-float-sticky ];
+    text = builtins.readFile ./scripts/niri-float-sticky-launch.sh;
+  };
 
   openGhosttyCwd = pkgs.writeShellApplication {
     name = "niri-open-ghostty-cwd";
@@ -33,7 +39,7 @@ in
   config = lib.mkIf config.my.features.desktop.enable {
     home.packages = [
       pkgs.xwayland-satellite
-      niri-float-sticky
+      floatStickyLauncher
       openGhosttyCwd
     ];
 
