@@ -10,8 +10,11 @@ let
   inherit (inputs.niri.lib) kdl;
   inherit (inputs.niri-float-sticky.packages.${pkgs.stdenv.hostPlatform.system}) niri-float-sticky;
 
-  open-ghostty-cwd-script = builtins.readFile ./scripts/niri-open-ghostty-cwd.sh;
-  open-ghostty-cwd-bin = pkgs.writeShellScriptBin "niri-open-ghostty-cwd" open-ghostty-cwd-script;
+  openGhosttyCwd = pkgs.writeShellApplication {
+    name = "niri-open-ghostty-cwd";
+    runtimeInputs = [ pkgs.jq ];
+    text = builtins.readFile ./scripts/niri-open-ghostty-cwd.sh;
+  };
 in
 {
   # `programs.niri.settings.outputs` (display configuration) should be in host-specific overrides.
@@ -31,7 +34,7 @@ in
     home.packages = [
       pkgs.xwayland-satellite
       niri-float-sticky
-      open-ghostty-cwd-bin
+      openGhosttyCwd
     ];
 
     programs.niri = {
