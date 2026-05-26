@@ -34,7 +34,7 @@ getSessionList() {
     # Error handling
     status=$?
 
-    if [[ "$output" == *"no server running"* ]]; then
+    if [[ "$output" == *"no server running"* || "$output" == error\ connecting\ to\ *"(No such file or directory)"* ]]; then
       printf '{"by_path":{},"names":{}}\n'
       return 0
     fi
