@@ -4,6 +4,7 @@
   imports = [
     ../shell
     ../programs/btop.nix
+    ./git.nix
     ./development.nix
     ./networking.nix
     ./productivity.nix
@@ -43,8 +44,5 @@
     glow
   ];
 
-  programs = {
-    home-manager.enable = true;
-    git.enable = true;
-  };
+  programs.home-manager.enable = true;
 }
