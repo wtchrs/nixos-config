@@ -18,12 +18,13 @@
         plugin = dotbar;
         extraConfig = ''
           set -g @tmux-dotbar-bg "default"
-          set -g @tmux-dotbar-fg "#4c566a"
+          set -g @tmux-dotbar-fg "#616e88"
           set -g @tmux-dotbar-fg-current "#d8dee9"
           set -g @tmux-dotbar-fg-session "#8fbcbb"
           set -g @tmux-dotbar-fg-prefix "#81a1c1"
 
           set -g @tmux-dotbar-right true
+          set -g @tmux-dotbar-rounded false
           set -g @tmux-dotbar-ssh-icon-only true
           set -g @tmux-dotbar-show-maximized-icon-for-all-tabs true
           set -g @tmux-dotbar-session-text " #H:#S "
