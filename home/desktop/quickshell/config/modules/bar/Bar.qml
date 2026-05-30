@@ -35,8 +35,13 @@ Rectangle {
 
             // TOP
 
+            Logo {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: 10
+            }
+
             Workspaces {
-                Layout.topMargin: 30
+                Layout.topMargin: 20
             }
 
             ActiveWindowDisplay {
