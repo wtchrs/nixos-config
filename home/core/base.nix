@@ -30,8 +30,9 @@
     eza
     fzf
 
-    # Core command-line utilities
+    # Command-line utilities
     cowsay
+    expect
     file
     which
     tree
