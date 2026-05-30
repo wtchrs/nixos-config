@@ -6,7 +6,10 @@
       user = "wtchrs";
 
       my.features = {
-        desktop.enable = true;
+        desktop = {
+          enable = true;
+          displayManager.enable = true;
+        };
         nvidia.enable = true;
         gaming.enable = true;
       };
