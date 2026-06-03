@@ -45,5 +45,8 @@
     glow
   ];
 
-  programs.home-manager.enable = true;
+  programs = {
+    home-manager.enable = true;
+    nh.enable = true;
+  };
 }

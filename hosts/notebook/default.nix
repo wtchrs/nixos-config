@@ -20,6 +20,8 @@
     };
   };
 
+  time.hardwareClockInLocalTime = true;
+
   networking = {
     networkmanager.enable = true;
     firewall.allowedTCPPorts = [ ];

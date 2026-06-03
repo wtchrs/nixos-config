@@ -15,7 +15,7 @@ Item {
 
     Text {
         id: icon
-        text: ""
+        text: "󱗼"
         color: Config.theme.fg
         font.family: Config.font.icon
         font.pixelSize: 24

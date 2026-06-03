@@ -22,7 +22,7 @@
           sort = true;
           idle_threshold = 0;
 
-          font = "Sarasa Mono K Nerd Font 10";
+          font = "Sarasa Mono K 10";
           line_height = 0;
           markup = "full";
           format = "<b>%a</b>\n<i>%s</i>\n%b";

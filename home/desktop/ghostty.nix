@@ -7,12 +7,12 @@
 
       settings = {
         theme = "nord";
-        title = " Ghostty";
+        # title = " Ghostty";
         term = "xterm-256color";
 
         # Ghostty has its own nerd font support
         font-family = "Sarasa Mono K";
-        font-size = 13;
+        font-size = 12;
         font-feature = [
           "-calt"
           "-liga"
@@ -22,8 +22,8 @@
         adjust-cell-height = 1;
         adjust-font-baseline = -1;
 
-        window-padding-x = 4;
-        window-padding-y = 4;
+        window-padding-x = 6;
+        window-padding-y = 6;
         window-padding-balance = false;
 
         unfocused-split-opacity = 0.8;
