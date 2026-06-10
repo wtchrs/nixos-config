@@ -13,7 +13,7 @@ in
 {
   imports = [
     ./niri
-    ./quickshell
+    ./desktopShell.nix
     ./ghostty.nix
     ./dunst.nix
     ./obsidian.nix

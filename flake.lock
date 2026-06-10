@@ -164,6 +164,26 @@
         "type": "github"
       }
     },
+    "nereid-shell": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1781108133,
+        "narHash": "sha256-LlnWVN4/ougKvA/D8/lUj8xiKeX5wxbnEutU76XUNqY=",
+        "owner": "wtchrs",
+        "repo": "nereid-shell",
+        "rev": "1016c15b46f225df0b83c98437aa6adab63590d9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wtchrs",
+        "repo": "nereid-shell",
+        "type": "github"
+      }
+    },
     "niri": {
       "inputs": {
         "niri-stable": "niri-stable",
@@ -335,6 +355,7 @@
         "grub2-themes": "grub2-themes",
         "home-manager": "home-manager",
         "neovim-flake": "neovim-flake",
+        "nereid-shell": "nereid-shell",
         "niri": "niri",
         "niri-float-sticky": "niri-float-sticky",
         "nix-cachyos-kernel": "nix-cachyos-kernel",

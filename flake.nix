@@ -30,6 +30,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nereid-shell = {
+      url = "github:wtchrs/nereid-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     neovim-flake = {
       url = "github:wtchrs/neovim-flake";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -30,17 +30,6 @@
         action.spawn = [ "niri-open-ghostty-cwd" ];
       };
 
-      "Mod+Space" = {
-        hotkey-overlay.title = "Run an Application: quickshell app launcher";
-        action.spawn = [
-          "qs"
-          "ipc"
-          "call"
-          "appLauncher"
-          "toggle"
-        ];
-      };
-
       "Mod+Alt+L" = {
         hotkey-overlay.title = "Lock the Screen: swaylock";
         action.spawn = [ "swaylock" ];
@@ -49,17 +38,6 @@
       "Mod+E" = {
         hotkey-overlay.title = "Open file manager: nautilus";
         action.spawn = [ "nautilus" ];
-      };
-
-      "Mod+Shift+W" = {
-        hotkey-overlay.title = "Reload wallpaper: quickshell";
-        action.spawn = [
-          "qs"
-          "ipc"
-          "call"
-          "wallpaper"
-          "reload"
-        ];
       };
 
       "Mod+P" = {
