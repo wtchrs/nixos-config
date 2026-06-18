@@ -18,9 +18,9 @@
         "[](bg:nord8 fg:nord9)"
         "$git_branch$git_metrics$git_status"
         "[](bg:nord7 fg:nord8)"
-        "$package$bun$c$cmake$deno$dotnet$elixir$erlang$gleam$golang$haskell"
+        "($package$bun$c$cmake$deno$dotnet$elixir$erlang$gleam$golang$haskell"
         "$helm$java$julia$kotlin$gradle$lua$nodejs$php$python$ruby$rust"
-        "$scala$swift$terraform$typst$vagrant$zig"
+        "$scala$swift$terraform$typst$vagrant$zig[ ](fg:nord0 bg:nord7))"
         "[](bg:nord4 fg:nord7)"
         "$cmd_duration"
         "[](fg:nord4)"
@@ -94,169 +94,175 @@
 
       bun = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       c = {
-        symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        symbol = " ";
+        format = "[ $symbol($version(-$name))]($style)";
+        style = "fg:nord0 bg:nord7";
+      };
+
+      cpp = {
+        symbol = " ";
+        format = "[ $symbol($version(-$name))]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       cmake = {
         symbol = "󰔷 ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       deno = {
         symbol = "🦕 ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       dotnet = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)( $tfm)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       elixir = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       erlang = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       gleam = {
         symbol = "⭐ ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       golang = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)( mod $mod_version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       haskell = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($ghc_version)( $snapshot)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       helm = {
         symbol = "⎈ ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       java = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       julia = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       kotlin = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       gradle = {
         symbol = " ";
-        format = "[ $symbol ]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       lua = {
         symbol = "󰢱 ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       python = {
         symbol = "󰌠 ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol$pyenv_prefix($version)(\\($virtualenv\\))]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       nodejs = {
-        symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        symbol = " ";
+        format = "[ $symbol($version)( req $engines_version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       php = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       ruby = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)(@$gemset)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       rust = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($numver)(-$toolchain)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       scala = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       swift = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       terraform = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol$workspace( $version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       typst = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       vagrant = {
         symbol = " ";
-        format = "[ $symbol ]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       zig = {
         symbol = " ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
       package = {
         symbol = "󰏗 ";
-        format = "[ $symbol($version )]($style)";
+        format = "[ $symbol($version)]($style)";
         style = "fg:nord0 bg:nord7";
       };
 
