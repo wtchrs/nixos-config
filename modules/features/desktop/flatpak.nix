@@ -15,9 +15,23 @@
 
     systemd.services.flatpak-repo = {
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.flatpak ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+
+      path = [
+        pkgs.flatpak
+        pkgs.gnugrep
+      ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        Restart = "on-failure";
+        RestartSec = "1min";
+      };
+
       script = ''
-        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        flatpak remotes --system --columns=name | grep -qx flathub \
+          || flatpak remote-add --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
       '';
     };
   };
