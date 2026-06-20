@@ -171,11 +171,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781772181,
-        "narHash": "sha256-bQdlC5IgISaeDjiVx3NS78oKwhlVd+4+4M458i0n/+g=",
+        "lastModified": 1781977665,
+        "narHash": "sha256-myCF2TBNLz0u+Y0K2EAp9Wvyj+7Ma67S+85VKU6xaCY=",
         "owner": "wtchrs",
         "repo": "nereid-shell",
-        "rev": "aef81d22205a37a8f75ce7443290c0c81214972a",
+        "rev": "db096f535aa96c1b2b1e03f98732ba19c2e49275",
         "type": "github"
       },
       "original": {
