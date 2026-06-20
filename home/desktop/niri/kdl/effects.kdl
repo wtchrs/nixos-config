@@ -1,0 +1,36 @@
+blur {
+  passes 4
+  offset 4.0
+  noise 0.02
+  saturation 1.7
+}
+
+layer-rule {
+  match namespace="^quickshell:bar$"
+  background-effect {
+    blur true;
+    xray false;
+  }
+}
+
+// Rule for ext-background-effect-v1 region blur from quickshell
+layer-rule {
+  match namespace="^quickshell:tray-menu$"
+  background-effect { xray false; }
+}
+
+layer-rule {
+  match namespace="^quickshell:launcher$"
+  background-effect {
+    blur true;
+    xray true;
+  }
+}
+
+window-rule {
+  match app-id="com.mitchellh.ghostty"
+  background-effect {
+    blur true;
+    xray false;
+  }
+}
