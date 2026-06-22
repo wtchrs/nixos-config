@@ -14,6 +14,7 @@
     lm_sensors
 
     # System inspection and tracing
+    catnap
     fastfetch
     strace
     ltrace
@@ -21,4 +22,9 @@
     pciutils
     usbutils
   ];
+
+  xdg.configFile = {
+    "catnap/config.toml".source = "${pkgs.catnap}/share/catnap/config.toml";
+    "catnap/distros.toml".source = "${pkgs.catnap}/share/catnap/distros.toml";
+  };
 }
