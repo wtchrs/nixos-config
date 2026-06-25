@@ -1,8 +1,8 @@
-{ inputs, ... }:
+{ flake, ... }:
 
 {
   imports = [
-    inputs.disko.nixosModules.disko
+    flake.inputs.disko.nixosModules.disko
     ./disko.nix
     ./hardware-configuration.nix
     ./network-configuration.nix

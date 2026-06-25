@@ -13,7 +13,6 @@ let
   overlays = import ../overlays inputs;
 
   hostDir = ../hosts/${name};
-  # remove metadata
   hostConfig = removeAttrs host [
     "system"
     "user"
@@ -22,42 +21,52 @@ let
     "stateVersion"
     "profileName"
   ];
-in
 
-nixpkgs.lib.nixosSystem {
-  inherit (host) system;
-
-  specialArgs = {
+  compatArgs = {
     inherit inputs username hostName;
 
-    # Expose the host platform as pre-module metadata for platform-gated imports.
-    # Do not derive this from `pkgs` or `config` inside `imports`, as that can
-    # recurse during module collection.
+    # Keep the legacy module arg available during the compatibility migration.
     hostSystem = host.system;
   };
 
-  modules = [
+  grubModules = lib.optionals (host.system == "x86_64-linux") [
+    inputs.grub2-themes.nixosModules.default
+    ../modules/features/desktop/grub-theme.nix
+  ];
+in
+
+{
+  flake ? null,
+  ...
+}:
+
+{
+  imports = [
     ../modules
     ../users/${username}/system.nix
     home-manager.nixosModules.home-manager
 
     (_: {
-      nixpkgs.config.allowUnfree = true;
+      _module.args = compatArgs;
+
+      nixpkgs = {
+        hostPlatform = host.system;
+        config.allowUnfree = true;
+        inherit overlays;
+      };
       networking.hostName = lib.mkDefault hostName;
-      nixpkgs.overlays = overlays;
 
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
-        extraSpecialArgs = { inherit inputs username hostName; };
+        extraSpecialArgs = compatArgs // lib.optionalAttrs (flake != null) { inherit flake; };
         users.${username}.imports = mkHomeModules name host;
       };
     })
 
-    hostDir # `hosts/<name>/default.nix` entry
-    hostConfig # inject feature flags
+    hostDir
+    hostConfig
   ]
-  # `grub2-themes` flake provides only `x86_64-linux` derivation
-  ++ lib.optional (host.system == "x86_64-linux") inputs.grub2-themes.nixosModules.default
-  ++ importDir ../hosts/${name}/system; # host-specific overrides
+  ++ grubModules
+  ++ importDir ../hosts/${name}/system;
 }
