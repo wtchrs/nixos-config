@@ -9,31 +9,22 @@ let
   inherit (inputs.nixpkgs) lib;
 
   flakeConfig = config;
-  hosts = import (root + /hosts.nix);
-
-  homeProfileName = name: target: target.profileName or "${target.user}@${target.hostName or name}";
 in
 {
   perSystem =
     { system, pkgs, ... }:
     let
-      systemHosts = lib.filterAttrs (_: host: host.system == system) hosts.system;
-      homeHosts = lib.filterAttrs (_: target: target.system == system) hosts.home;
+      hostChecks = lib.filterAttrs (_: check: check.system == system) (
+        lib.mapAttrs' (
+          name: host: lib.nameValuePair "nixos-${name}" host.config.system.build.toplevel
+        ) flakeConfig.flake.nixosConfigurations
+      );
 
-      hostChecks = lib.mapAttrs' (
-        name: _:
-        lib.nameValuePair "nixos-${name}"
-          flakeConfig.flake.nixosConfigurations.${name}.config.system.build.toplevel
-      ) systemHosts;
-
-      homeChecks = lib.mapAttrs' (
-        name: target:
-        let
-          profileName = homeProfileName name target;
-        in
-        lib.nameValuePair "home-${profileName}"
-          flakeConfig.flake.homeConfigurations.${profileName}.activationPackage
-      ) homeHosts;
+      homeChecks = lib.filterAttrs (_: check: check.system == system) (
+        lib.mapAttrs' (
+          name: home: lib.nameValuePair "home-${name}" home.activationPackage
+        ) flakeConfig.flake.homeConfigurations
+      );
 
       statixCheck = pkgs.runCommand "statix-check" { nativeBuildInputs = [ pkgs.statix ]; } ''
         cd ${root}

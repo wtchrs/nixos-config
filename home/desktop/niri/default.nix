@@ -24,7 +24,7 @@ let
 in
 {
   # `programs.niri.settings.outputs` (display configuration) should be in host-specific overrides.
-  # See `hosts/notebook/home/display-outputs.nix`.
+  # See `configurations/nixos/notebook/home/display-outputs.nix`.
   imports = [
     inputs.niri.homeModules.niri
     ./config/input.nix

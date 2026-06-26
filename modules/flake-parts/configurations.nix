@@ -5,25 +5,23 @@
 }:
 
 let
-  inherit (inputs.nixpkgs) lib;
   inherit (self.nixos-unified.lib) mkLinuxSystem;
-
-  hosts = import ../../hosts.nix;
-  mkHostModule = import ../../lib/mkHost.nix inputs;
-  mkHome = import ../../lib/mkHome.nix inputs;
 
   mkNixos = mkLinuxSystem { home-manager = false; };
 in
 {
   flake = {
-    nixosConfigurations = lib.mapAttrs (name: host: mkNixos (mkHostModule name host)) hosts.system;
+    nixosConfigurations = {
+      notebook = mkNixos (import ../../configurations/nixos/notebook { inherit inputs; });
+      vm = mkNixos (import ../../configurations/nixos/vm { inherit inputs; });
+      srv-cloud-2 = mkNixos (import ../../configurations/nixos/srv-cloud-2 { inherit inputs; });
+    };
 
-    homeConfigurations = lib.flip lib.mapAttrs' hosts.home (
-      name: target:
-      let
-        profileName = target.profileName or "${target.user}@${target.hostName or name}";
-      in
-      lib.nameValuePair profileName (mkHome name target)
-    );
+    homeConfigurations = {
+      "wtchrs@archlinux" = import (../../configurations/home + "/wtchrs@archlinux") { inherit inputs; };
+      "wtchrs@srv-cloud-1" = import (../../configurations/home + "/wtchrs@srv-cloud-1") {
+        inherit inputs;
+      };
+    };
   };
 }
