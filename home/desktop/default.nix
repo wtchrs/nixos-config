@@ -1,5 +1,5 @@
 {
-  inputs,
+  flake,
   lib,
   pkgs,
   ...
@@ -26,7 +26,7 @@ in
     with pkgs;
     [
       jetbrains-toolbox
-      inputs.zen-browser.packages.${system}.default
+      flake.inputs.zen-browser.packages.${system}.default
       brightnessctl
       nautilus
       loupe

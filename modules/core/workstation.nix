@@ -1,8 +1,13 @@
-{ inputs, lib, pkgs, ... }:
+{
+  flake,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (pkgs.stdenv.hostPlatform) system;
-  neovim-flake = inputs.neovim-flake.packages.${system}.default;
+  neovim-flake = flake.inputs.neovim-flake.packages.${system}.default;
 in
 {
   environment.systemPackages = with pkgs; [

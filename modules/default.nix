@@ -1,6 +1,7 @@
-{ inputs }:
+{ flake, ... }:
 
 let
+  inherit (flake) inputs;
   overlays = import ../overlays inputs;
 in
 
@@ -21,6 +22,8 @@ in
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = { inherit inputs; };
+    extraSpecialArgs = {
+      inherit flake inputs;
+    };
   };
 }

@@ -7,7 +7,8 @@ let
     rev = "0.19.2";
     hash = "sha256-vW2mPAxlPXdwqyK/QhU/DOx6MD9u6DDVCDm0OEWm4AQ=";
   };
-in {
+in
+{
   home.packages = with pkgs; [ lazygit ];
 
   programs = {
@@ -15,6 +16,11 @@ in {
       enable = true;
       settings = {
         include.path = "${deltaThemes}/themes.gitconfig";
+
+        user = {
+          name = "wtchrs";
+          email = "wtchr_@hotmail.com";
+        };
       };
     };
 

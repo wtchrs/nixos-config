@@ -1,33 +1,29 @@
-{ inputs, ... }:
+{ flake, ... }:
 
 let
-  system = "x86_64-linux";
+  inherit (flake) self;
   username = "wtchrs";
   hostName = "archlinux";
-  overlays = import ../../../overlays inputs;
-  pkgs = import inputs.nixpkgs {
-    inherit system overlays;
-    config.allowUnfree = true;
-  };
 in
-inputs.home-manager.lib.homeManagerConfiguration {
-  inherit pkgs;
-  extraSpecialArgs = { inherit inputs username hostName; };
-  modules = [
-    ../../../home/standalone.nix
-    ../../../home/core
-    ../../../home/desktop
-    ../../../home/gaming
-    ../../../home/desktop/gaming.nix
-    ../../../home/desktop/nvidia.nix
-    ../../../users/${username}/home.nix
-    (_: {
-      home = {
-        inherit username;
-        homeDirectory = "/home/${username}";
-        stateVersion = "26.05";
-      };
-    })
+{
+  imports = [
+    self.homeModules.standalone
+    self.homeModules.core
+    self.homeModules.graphics-desktop
+    self.homeModules.graphics-gaming
+    self.homeModules.graphics-desktop-gaming
+    self.homeModules.graphics-desktop-nvidia
+    self.homeModules.identity-git-gpg
     ../../nixos/notebook/home/display-outputs.nix
   ];
+
+  _module.args = {
+    inherit username hostName;
+  };
+
+  home = {
+    inherit username;
+    homeDirectory = "/home/${username}";
+    stateVersion = "26.05";
+  };
 }

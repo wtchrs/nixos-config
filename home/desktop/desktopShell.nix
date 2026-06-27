@@ -1,7 +1,7 @@
-{ inputs, ... }:
+{ flake, ... }:
 
 {
-  imports = [ inputs.nereid-shell.homeManagerModules.default ];
+  imports = [ flake.inputs.nereid-shell.homeManagerModules.default ];
 
   programs.nereid-shell = {
     enable = true;

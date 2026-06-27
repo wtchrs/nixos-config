@@ -1,13 +1,27 @@
-{ inputs, ... }:
+{ flake, ... }:
 
 let
+  inherit (flake) inputs self;
   username = "wtchrs";
   hostName = "srv-cloud-2";
 in
 {
   imports = [
-    (import ../../../modules { inherit inputs; })
-    ../../../users/${username}/system.nix
+    self.nixosModules.default
+    ({ pkgs, ... }: {
+      users.users.${username} = {
+        isNormalUser = true;
+        extraGroups = [
+          "wheel"
+          "docker"
+          "networkmanager"
+          "video"
+          "input"
+          "render"
+        ];
+        shell = pkgs.zsh;
+      };
+    })
 
     inputs.disko.nixosModules.disko
     ./disko.nix
@@ -16,7 +30,7 @@ in
   ];
 
   _module.args = {
-    inherit inputs username hostName;
+    inherit username hostName;
   };
 
   nixpkgs.hostPlatform = "aarch64-linux";
@@ -58,9 +72,13 @@ in
   system.stateVersion = "26.05";
 
   home-manager.users.${username}.imports = [
-    ../../../home/core
-    ../../../users/${username}/home.nix
+    self.homeModules.core
+    self.homeModules.identity-git-gpg
     (_: {
+      _module.args = {
+        inherit username hostName;
+      };
+
       home = {
         inherit username;
         homeDirectory = "/home/${username}";

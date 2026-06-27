@@ -5,23 +5,31 @@
 }:
 
 let
-  inherit (self.nixos-unified.lib) mkLinuxSystem;
+  inherit (self.nixos-unified.lib) mkHomeConfiguration mkLinuxSystem;
 
   mkNixos = mkLinuxSystem { home-manager = false; };
+
+  mkPkgs =
+    system:
+    import inputs.nixpkgs {
+      inherit system;
+      overlays = import ../../overlays inputs;
+      config.allowUnfree = true;
+    };
+
+  mkHome = system: module: mkHomeConfiguration (mkPkgs system) module;
 in
 {
   flake = {
     nixosConfigurations = {
-      notebook = mkNixos (import ../../configurations/nixos/notebook { inherit inputs; });
-      vm = mkNixos (import ../../configurations/nixos/vm { inherit inputs; });
-      srv-cloud-2 = mkNixos (import ../../configurations/nixos/srv-cloud-2 { inherit inputs; });
+      notebook = mkNixos ../../configurations/nixos/notebook;
+      vm = mkNixos ../../configurations/nixos/vm;
+      srv-cloud-2 = mkNixos ../../configurations/nixos/srv-cloud-2;
     };
 
     homeConfigurations = {
-      "wtchrs@archlinux" = import (../../configurations/home + "/wtchrs@archlinux") { inherit inputs; };
-      "wtchrs@srv-cloud-1" = import (../../configurations/home + "/wtchrs@srv-cloud-1") {
-        inherit inputs;
-      };
+      "wtchrs@archlinux" = mkHome "x86_64-linux" (../../configurations/home + "/wtchrs@archlinux");
+      "wtchrs@srv-cloud-1" = mkHome "aarch64-linux" (../../configurations/home + "/wtchrs@srv-cloud-1");
     };
   };
 }

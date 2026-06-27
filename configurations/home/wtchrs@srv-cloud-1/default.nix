@@ -1,27 +1,23 @@
-{ inputs, ... }:
+{ flake, ... }:
 
 let
-  system = "aarch64-linux";
+  inherit (flake) self;
   username = "wtchrs";
   hostName = "srv-cloud-1";
-  overlays = import ../../../overlays inputs;
-  pkgs = import inputs.nixpkgs {
-    inherit system overlays;
-    config.allowUnfree = true;
-  };
 in
-inputs.home-manager.lib.homeManagerConfiguration {
-  inherit pkgs;
-  extraSpecialArgs = { inherit inputs username hostName; };
-  modules = [
-    ../../../home/core
-    ../../../users/${username}/home.nix
-    (_: {
-      home = {
-        inherit username;
-        homeDirectory = "/home/${username}";
-        stateVersion = "26.05";
-      };
-    })
+{
+  imports = [
+    self.homeModules.core
+    self.homeModules.identity-git-gpg
   ];
+
+  _module.args = {
+    inherit username hostName;
+  };
+
+  home = {
+    inherit username;
+    homeDirectory = "/home/${username}";
+    stateVersion = "26.05";
+  };
 }

@@ -1,21 +1,35 @@
-{ inputs, ... }:
+{ flake, ... }:
 
 let
+  inherit (flake) inputs self;
   username = "wtchrs";
   hostName = "notebook-nixos";
 in
 {
   imports = [
-    (import ../../../modules { inherit inputs; })
-    ../../../users/${username}/system.nix
+    self.nixosModules.default
+    ({ pkgs, ... }: {
+      users.users.${username} = {
+        isNormalUser = true;
+        extraGroups = [
+          "wheel"
+          "docker"
+          "networkmanager"
+          "video"
+          "input"
+          "render"
+        ];
+        shell = pkgs.zsh;
+      };
+    })
 
-    ../../../modules/features/desktop
-    ../../../modules/features/desktop/display-manager.nix
-    ../../../modules/features/nvidia.nix
-    ../../../modules/features/gaming.nix
+    self.nixosModules.graphics-desktop
+    self.nixosModules.graphics-display-manager
+    self.nixosModules.graphics-nvidia
+    self.nixosModules.graphics-gaming
 
     inputs.grub2-themes.nixosModules.default
-    ../../../modules/features/desktop/grub-theme.nix
+    self.nixosModules.graphics-grub-theme
 
     ./hardware-configuration.nix
     ./system/kernel.nix
@@ -24,7 +38,7 @@ in
   ];
 
   _module.args = {
-    inherit inputs username hostName;
+    inherit username hostName;
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";
@@ -71,13 +85,17 @@ in
   system.stateVersion = "26.05";
 
   home-manager.users.${username}.imports = [
-    ../../../home/core
-    ../../../home/desktop
-    ../../../home/gaming
-    ../../../home/desktop/gaming.nix
-    ../../../home/desktop/nvidia.nix
-    ../../../users/${username}/home.nix
+    self.homeModules.core
+    self.homeModules.graphics-desktop
+    self.homeModules.graphics-gaming
+    self.homeModules.graphics-desktop-gaming
+    self.homeModules.graphics-desktop-nvidia
+    self.homeModules.identity-git-gpg
     (_: {
+      _module.args = {
+        inherit username hostName;
+      };
+
       home = {
         inherit username;
         homeDirectory = "/home/${username}";

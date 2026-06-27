@@ -1,14 +1,17 @@
 {
-  inputs,
+  flake,
   lib,
   pkgs,
   ...
 }:
 
 let
-  inherit (inputs.niri.lib) kdl;
+  inherit (flake.inputs.niri.lib) kdl;
 
-  inherit (inputs.niri-float-sticky.packages.${pkgs.stdenv.hostPlatform.system}) niri-float-sticky;
+  inherit (flake.inputs.niri-float-sticky.packages.${pkgs.stdenv.hostPlatform.system})
+    niri-float-sticky
+    ;
+
   floatStickyLauncher = pkgs.writeShellApplication {
     name = "niri-float-sticky-launcher";
     runtimeInputs = [ niri-float-sticky ];
@@ -25,7 +28,7 @@ in
   # `programs.niri.settings.outputs` (display configuration) should be in host-specific overrides.
   # See `configurations/nixos/notebook/home/display-outputs.nix`.
   imports = [
-    inputs.niri.homeModules.niri
+    flake.inputs.niri.homeModules.niri
     ./config/input.nix
     ./config/environments.nix
     ./config/autostarts.nix
