@@ -14,8 +14,7 @@ inputs.home-manager.lib.homeManagerConfiguration {
   inherit pkgs;
   extraSpecialArgs = { inherit inputs username hostName; };
   modules = [
-    ../../../home/standalone-linux.nix
-    ../../../home
+    ../../../home/core
     ../../../users/${username}/home.nix
     (_: {
       home = {

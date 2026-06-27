@@ -1,16 +1,9 @@
-{ config, pkgs, ... }:
+{ lib, pkgs, ... }:
 
-let
-  package =
-    if config.my.features.nvidia.enable then
-      pkgs.btop-cuda
-    else
-      pkgs.btop;
-in
 {
   programs.btop = {
     enable = true;
-    inherit package;
+    package = lib.mkDefault pkgs.btop;
 
     settings = {
       color_theme = "nord";

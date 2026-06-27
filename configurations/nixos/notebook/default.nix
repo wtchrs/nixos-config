@@ -9,6 +9,11 @@ in
     (import ../../../modules { inherit inputs; })
     ../../../users/${username}/system.nix
 
+    ../../../modules/features/desktop
+    ../../../modules/features/desktop/display-manager.nix
+    ../../../modules/features/nvidia.nix
+    ../../../modules/features/gaming.nix
+
     inputs.grub2-themes.nixosModules.default
     ../../../modules/features/desktop/grub-theme.nix
 
@@ -24,15 +29,6 @@ in
 
   nixpkgs.hostPlatform = "x86_64-linux";
   networking.hostName = hostName;
-
-  my.features = {
-    desktop = {
-      enable = true;
-      displayManager.enable = true;
-    };
-    nvidia.enable = true;
-    gaming.enable = true;
-  };
 
   # Use grub
   boot.loader = {
@@ -75,7 +71,11 @@ in
   system.stateVersion = "26.05";
 
   home-manager.users.${username}.imports = [
-    ../../../home
+    ../../../home/core
+    ../../../home/desktop
+    ../../../home/gaming
+    ../../../home/desktop/gaming.nix
+    ../../../home/desktop/nvidia.nix
     ../../../users/${username}/home.nix
     (_: {
       home = {
@@ -84,13 +84,6 @@ in
         stateVersion = "26.05";
       };
     })
-    {
-      my.features = {
-        desktop.enable = true;
-        nvidia.enable = true;
-        gaming.enable = true;
-      };
-    }
     ./home/display-outputs.nix
   ];
 }

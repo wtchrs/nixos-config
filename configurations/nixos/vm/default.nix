@@ -9,9 +9,6 @@ in
     (import ../../../modules { inherit inputs; })
     ../../../users/${username}/system.nix
 
-    inputs.grub2-themes.nixosModules.default
-    ../../../modules/features/desktop/grub-theme.nix
-
     ./hardware-configuration.nix
   ];
 
@@ -38,7 +35,7 @@ in
   system.stateVersion = "26.05";
 
   home-manager.users.${username}.imports = [
-    ../../../home
+    ../../../home/core
     ../../../users/${username}/home.nix
     (_: {
       home = {

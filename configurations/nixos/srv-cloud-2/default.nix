@@ -58,7 +58,7 @@ in
   system.stateVersion = "26.05";
 
   home-manager.users.${username}.imports = [
-    ../../../home
+    ../../../home/core
     ../../../users/${username}/home.nix
     (_: {
       home = {

@@ -1,14 +1,12 @@
 {
   lib,
-  config,
   pkgs,
   osConfig ? null,
   ...
 }:
 
 let
-  cfg = config.my.features.gaming;
-  inherit (cfg) proton;
+  proton = import ../../lib/gaming-proton.nix { inherit lib pkgs; };
   steamCompatManagedByNixOS = osConfig != null && (osConfig.programs.steam.enable or false);
 
   runtimePackages = with pkgs; [
@@ -40,27 +38,29 @@ let
   launcher = pkgs.writeShellApplication {
     name = "umu-exe-universal";
     runtimeInputs = runtimePackages ++ helperPackages;
-    text = builtins.replaceStrings
-      [
-        "@umuExeCommon@"
-      ]
-      [
-        "${common}"
-      ]
-      (builtins.readFile ./umu-exe-universal.sh);
+    text =
+      builtins.replaceStrings
+        [
+          "@umuExeCommon@"
+        ]
+        [
+          "${common}"
+        ]
+        (builtins.readFile ./umu-exe-universal.sh);
   };
 
   setup = pkgs.writeShellApplication {
     name = "umu-exe-prefix-setup";
     runtimeInputs = runtimePackages ++ helperPackages;
-    text = builtins.replaceStrings
-      [
-        "@umuExeCommon@"
-      ]
-      [
-        "${common}"
-      ]
-      (builtins.readFile ./umu-exe-prefix-setup.sh);
+    text =
+      builtins.replaceStrings
+        [
+          "@umuExeCommon@"
+        ]
+        [
+          "${common}"
+        ]
+        (builtins.readFile ./umu-exe-prefix-setup.sh);
   };
 
   exeIcon = pkgs.writeShellApplication {
@@ -107,36 +107,36 @@ let
   ) windowsMimeTypes;
 in
 {
-  config = lib.mkIf cfg.enable {
-    home.packages = [
-      launcher
-      setup
-      exeIcon
-      exeList
-    ]
-    ++ runtimePackages;
+  inherit (proton) assertions;
 
-    xdg.dataFile = lib.mkIf (!steamCompatManagedByNixOS) {
-      "Steam/compatibilitytools.d/${proton.name}".source = proton.package.steamcompattool;
-    };
+  home.packages = [
+    launcher
+    setup
+    exeIcon
+    exeList
+  ]
+  ++ runtimePackages;
 
-    xdg.desktopEntries.umu-exe-universal = {
-      name = "UMU ${proton.name}";
-      genericName = "Windows Program Launcher";
-      comment = "Run Windows executables with UMU and ${proton.name}";
-      exec = "${launcher}/bin/umu-exe-universal %f";
-      terminal = false;
-      type = "Application";
-      categories = [
-        "Game"
-        "Utility"
-      ];
-      mimeType = windowsMimeTypes;
-      noDisplay = false;
-    };
-
-    home.activation.umuExeUniversalMimeDefaults = lib.hm.dag.entryAfter [ "installPackages" ] ''
-      ${mimeDefaultCommands}
-    '';
+  xdg.dataFile = lib.mkIf (!steamCompatManagedByNixOS) {
+    "Steam/compatibilitytools.d/${proton.name}".source = proton.package.steamcompattool;
   };
+
+  xdg.desktopEntries.umu-exe-universal = {
+    name = "UMU ${proton.name}";
+    genericName = "Windows Program Launcher";
+    comment = "Run Windows executables with UMU and ${proton.name}";
+    exec = "${launcher}/bin/umu-exe-universal %f";
+    terminal = false;
+    type = "Application";
+    categories = [
+      "Game"
+      "Utility"
+    ];
+    mimeType = windowsMimeTypes;
+    noDisplay = false;
+  };
+
+  home.activation.umuExeUniversalMimeDefaults = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    ${mimeDefaultCommands}
+  '';
 }

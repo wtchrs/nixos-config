@@ -1,11 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
+  nixpkgs.config.allowUnfree = true;
+
   nix = {
     package = pkgs.nix;
     settings.experimental-features = [
@@ -14,7 +11,7 @@
     ];
   };
 
-  targets.genericLinux = lib.mkIf config.my.features.desktop.enable {
+  targets.genericLinux = {
     enable = true;
     gpu.enable = true;
   };

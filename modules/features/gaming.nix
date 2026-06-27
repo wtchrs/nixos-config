@@ -1,30 +1,29 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
 
 let
-  cfg = config.my.features.gaming;
+  proton = import ../../lib/gaming-proton.nix { inherit lib pkgs; };
 in
 {
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      mangohud
-      gamemode
-      umu-launcher
-    ];
+  inherit (proton) assertions;
 
-    programs = {
-      steam = {
-        enable = true;
-        extraCompatPackages = [ cfg.proton.package ] ++ cfg.proton.extraPackages;
-      };
+  environment.systemPackages = with pkgs; [
+    mangohud
+    gamemode
+    umu-launcher
+  ];
 
-      gamescope = {
-        enable = true;
-      };
+  programs = {
+    steam = {
+      enable = true;
+      extraCompatPackages = [ proton.package ] ++ proton.extraPackages;
+    };
+
+    gamescope = {
+      enable = true;
     };
   };
 }

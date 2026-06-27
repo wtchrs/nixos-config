@@ -14,8 +14,12 @@ inputs.home-manager.lib.homeManagerConfiguration {
   inherit pkgs;
   extraSpecialArgs = { inherit inputs username hostName; };
   modules = [
-    ../../../home/standalone-linux.nix
-    ../../../home
+    ../../../home/standalone.nix
+    ../../../home/core
+    ../../../home/desktop
+    ../../../home/gaming
+    ../../../home/desktop/gaming.nix
+    ../../../home/desktop/nvidia.nix
     ../../../users/${username}/home.nix
     (_: {
       home = {
@@ -24,13 +28,6 @@ inputs.home-manager.lib.homeManagerConfiguration {
         stateVersion = "26.05";
       };
     })
-    {
-      my.features = {
-        desktop.enable = true;
-        nvidia.enable = true;
-        gaming.enable = true;
-      };
-    }
     ../../nixos/notebook/home/display-outputs.nix
   ];
 }

@@ -1,8 +1,6 @@
-{ lib, config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  config = lib.mkIf config.my.features.desktop.enable {
-    home.packages = [ pkgs.wl-clipboard ];
-    services.cliphist.enable = true;
-  };
+  home.packages = [ pkgs.wl-clipboard ];
+  services.cliphist.enable = true;
 }

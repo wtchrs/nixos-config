@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  config,
   pkgs,
   ...
 }:
@@ -36,28 +35,26 @@ in
     ./config/keybinds.nix
   ];
 
-  config = lib.mkIf config.my.features.desktop.enable {
-    home.packages = [
-      pkgs.xwayland-satellite
-      floatStickyLauncher
-      openGhosttyCwd
-    ];
+  home.packages = [
+    pkgs.xwayland-satellite
+    floatStickyLauncher
+    openGhosttyCwd
+  ];
 
-    programs.niri = {
-      enable = true;
-      package = pkgs.niri;
+  programs.niri = {
+    enable = true;
+    package = pkgs.niri;
 
-      settings = {
-        prefer-no-csd = true;
-        screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
-        cursor.size = 20;
-      };
-
-      config = lib.mkOptionDefault (
-        lib.mkAfter [
-          (kdl.leaf "include" "${./kdl/effects.kdl}")
-        ]
-      );
+    settings = {
+      prefer-no-csd = true;
+      screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
+      cursor.size = 20;
     };
+
+    config = lib.mkOptionDefault (
+      lib.mkAfter [
+        (kdl.leaf "include" "${./kdl/effects.kdl}")
+      ]
+    );
   };
 }
