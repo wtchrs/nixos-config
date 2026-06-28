@@ -1,8 +1,8 @@
 { flake, ... }:
 
 let
-  inherit (flake) inputs;
-  overlays = import ../overlays inputs;
+  inherit (flake) inputs self;
+  overlays = builtins.attrValues self.overlays;
 in
 
 {

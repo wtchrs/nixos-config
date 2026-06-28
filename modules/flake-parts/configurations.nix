@@ -13,7 +13,7 @@ let
     system:
     import inputs.nixpkgs {
       inherit system;
-      overlays = import ../../overlays inputs;
+      overlays = builtins.attrValues self.overlays;
       config.allowUnfree = true;
     };
 

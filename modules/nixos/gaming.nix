@@ -1,11 +1,13 @@
 {
+  flake,
   lib,
   pkgs,
   ...
 }:
 
 let
-  proton = import ../../lib/gaming-proton.nix { inherit lib pkgs; };
+  inherit (flake) self;
+  proton = self.lib.gaming-proton { inherit lib pkgs; };
 in
 {
   inherit (proton) assertions;

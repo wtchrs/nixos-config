@@ -1,4 +1,5 @@
 {
+  flake,
   lib,
   pkgs,
   osConfig ? null,
@@ -6,7 +7,8 @@
 }:
 
 let
-  proton = import ../../lib/gaming-proton.nix { inherit lib pkgs; };
+  inherit (flake) self;
+  proton = self.lib.gaming-proton { inherit lib pkgs; };
   steamCompatManagedByNixOS = osConfig != null && (osConfig.programs.steam.enable or false);
 
   runtimePackages = with pkgs; [
