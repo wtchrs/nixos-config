@@ -5,6 +5,13 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
+    nixos-unified.url = "github:srid/nixos-unified";
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,44 +54,19 @@
   };
 
   outputs =
-    inputs@{ nixpkgs, ... }:
-    let
-      inherit (nixpkgs.lib)
-        mapAttrs
-        mapAttrs'
-        nameValuePair
-        flip
-        ;
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
 
-      hosts = import ./hosts.nix;
-
-      mkHost = import ./lib/mkHost.nix inputs;
-      mkHome = import ./lib/mkHome.nix inputs;
-
-      nixosConfigurations = mapAttrs mkHost hosts.system;
-      homeConfigurations = flip mapAttrs' hosts.home (
-        name: target:
-        let
-          profileName = target.profileName or "${target.user}@${target.hostName or name}";
-        in
-        nameValuePair profileName (mkHome name target)
-      );
-
-      flakeChecks = import ./lib/flake/checks.nix {
-        inherit
-          nixpkgs
-          hosts
-          nixosConfigurations
-          homeConfigurations
-          ;
+      _module.args = {
+        root = ./.;
       };
-      devShells = import ./lib/flake/devShells.nix {
-        inherit nixpkgs;
-        hosts = hosts.system;
-      };
-    in
-    {
-      inherit nixosConfigurations homeConfigurations devShells;
-      inherit (flakeChecks) formatter checks;
+
+      imports = [
+        ./modules/flake-parts
+      ];
     };
 }
