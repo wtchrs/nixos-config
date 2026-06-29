@@ -15,6 +15,7 @@
     homeModules = {
       core = import ../home/core;
       standalone = import ../home/standalone.nix;
+      standalone-graphics = import ../home/standalone-graphics.nix;
 
       graphics-desktop = import ../home/desktop;
       graphics-desktop-gaming = import ../home/desktop/gaming.nix;

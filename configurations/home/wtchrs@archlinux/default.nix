@@ -8,6 +8,7 @@ in
 {
   imports = [
     self.homeModules.standalone
+    self.homeModules.standalone-graphics
     self.homeModules.core
     self.homeModules.graphics-desktop
     self.homeModules.graphics-gaming

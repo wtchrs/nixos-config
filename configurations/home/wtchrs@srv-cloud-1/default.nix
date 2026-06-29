@@ -7,6 +7,7 @@ let
 in
 {
   imports = [
+    self.homeModules.standalone
     self.homeModules.core
     self.homeModules.identity-git-gpg
   ];
