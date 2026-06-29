@@ -35,6 +35,7 @@ in
     ./system/kernel.nix
     ./system/gpu.nix
     ./system/nix-ld.nix
+    ./system/power.nix
   ];
 
   _module.args = {
