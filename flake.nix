@@ -55,12 +55,18 @@
 
   outputs =
     inputs:
-    inputs.nixos-unified.lib.mkFlake {
-      inherit inputs;
-      root = ./.;
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "aarch64-linux"
         "x86_64-linux"
+      ];
+
+      _module.args = {
+        root = ./.;
+      };
+
+      imports = [
+        ./modules/flake-parts
       ];
     };
 }
