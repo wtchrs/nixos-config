@@ -2,6 +2,7 @@
   flake,
   lib,
   pkgs,
+  username,
   ...
 }:
 
@@ -30,7 +31,12 @@ in
   };
 
   services = {
-    tailscale.enable = lib.mkDefault true;
+    tailscale = {
+      enable = lib.mkDefault true;
+      extraSetFlags = [
+        "--operator=${username}"
+      ];
+    };
 
     openssh = {
       enable = true;

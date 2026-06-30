@@ -44,4 +44,6 @@ in
       niri = [ "com.mitchellh.ghostty.desktop" ];
     };
   };
+
+  services.tailscale-systray.enable = true;
 }
