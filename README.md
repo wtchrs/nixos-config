@@ -5,7 +5,7 @@ Personal Nix flake for NixOS hosts and standalone Home Manager profiles.
 ## Outputs
 
 - `nixosConfigurations`: `notebook`, `vm`, `srv-cloud-2`
-- `homeConfigurations`: `wtchrs@archlinux`, `wtchrs@srv-cloud-1`
+- `homeConfigurations`: `wtchrs@archlinux`, `ubuntu@srv-cloud-1`
 - `nixosModules`: reusable NixOS modules exported from `modules/nixos`
 - `homeModules`: reusable Home Manager modules exported from `modules/home`
 - `overlays`: package overlays used by this flake

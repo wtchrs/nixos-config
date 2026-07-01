@@ -29,7 +29,7 @@ in
 
     homeConfigurations = {
       "wtchrs@archlinux" = mkHome "x86_64-linux" (../../configurations/home + "/wtchrs@archlinux");
-      "wtchrs@srv-cloud-1" = mkHome "aarch64-linux" (../../configurations/home + "/wtchrs@srv-cloud-1");
+      "ubuntu@srv-cloud-1" = mkHome "aarch64-linux" (../../configurations/home + "/ubuntu@srv-cloud-1");
     };
   };
 }
