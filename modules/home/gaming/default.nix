@@ -119,6 +119,9 @@ in
   ]
   ++ runtimePackages;
 
+  # Tray icon integration
+  services.xembed-sni-proxy.enable = true;
+
   xdg.dataFile = lib.mkIf (!steamCompatManagedByNixOS) {
     "Steam/compatibilitytools.d/${proton.name}".source = proton.package.steamcompattool;
   };
