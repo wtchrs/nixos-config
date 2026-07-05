@@ -27,8 +27,8 @@
       enableZshIntegration = true;
 
       defaultCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
-      fileWidgetCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
-      changeDirWidgetCommand = "${pkgs.fd}/bin/fd --type=d --hidden --strip-cwd-prefix --exclude .git";
+      fileWidget.command = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
+      changeDirWidget.command = "${pkgs.fd}/bin/fd --type=d --hidden --strip-cwd-prefix --exclude .git";
     };
 
     broot = {
