@@ -11,6 +11,7 @@ in
 {
   imports = [
     ./niri
+    ./gnome
     ./desktopShell.nix
     ./ghostty.nix
     ./dunst.nix

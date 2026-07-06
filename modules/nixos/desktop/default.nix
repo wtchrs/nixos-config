@@ -9,6 +9,8 @@
     ./file-manager.nix
     ./flatpak.nix
     ./keyring.nix
+    ./gnome.nix
+    ./input-method.nix
   ];
 
   environment.systemPackages = with pkgs; [
