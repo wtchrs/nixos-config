@@ -18,7 +18,7 @@ in
 
   services.displayManager = {
     sessionPackages = [
-      pkgs.niri-unstable
+      pkgs.niri
     ];
 
     sddm = {
