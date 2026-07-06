@@ -68,6 +68,7 @@ in
 
   home-manager.users.${username}.imports = [
     self.homeModules.core
+    self.homeModules.nixos
     self.homeModules.identity-git-gpg
     (_: {
       _module.args = {

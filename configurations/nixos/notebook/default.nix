@@ -84,6 +84,7 @@ in
 
   home-manager.users.${username}.imports = [
     self.homeModules.core
+    self.homeModules.nixos
     self.homeModules.graphics-desktop
     self.homeModules.graphics-gaming
     self.homeModules.graphics-desktop-gaming
