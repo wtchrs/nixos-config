@@ -15,7 +15,7 @@ layer-rule {
 
 // Rule for ext-background-effect-v1 region blur from quickshell
 layer-rule {
-  match namespace="^quickshell:(tray-menu|brightness-panel|media-panel)$"
+  match namespace="^quickshell:panel$"
   background-effect { xray false; }
 }
 

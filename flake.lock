@@ -171,11 +171,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782827193,
-        "narHash": "sha256-5goMrNdD3+X0bF+WHaoBmiOxHddDtdqGrvPs9Rfp6K0=",
+        "lastModified": 1783518638,
+        "narHash": "sha256-pUpBuqMR4inmKcjqfnKG2W37UYIsgOz2Svzu/UrM5+k=",
         "owner": "wtchrs",
         "repo": "neovim-flake",
-        "rev": "6c172702296d3b8cd725a1e1b2845ea7972af301",
+        "rev": "5773afc81ef31e4983046247bb2321c9ee6222d5",
         "type": "github"
       },
       "original": {
@@ -191,11 +191,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782907467,
-        "narHash": "sha256-h6n6ZA4GECoXh/1AxMxLO4MdYoAnkffr/zGCnRFnIhE=",
+        "lastModified": 1783606550,
+        "narHash": "sha256-w+hd0wPfFUhTTZmkwg87tAt49GGSWV/m1WmER9Rd9wk=",
         "owner": "wtchrs",
         "repo": "nereid-shell",
-        "rev": "19c808b1a4ffd79c455fd9d4d4bab115f9e747ff",
+        "rev": "8795b01df0bb4012fac1e25687d29b54b86d77dd",
         "type": "github"
       },
       "original": {
