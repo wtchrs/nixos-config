@@ -5,6 +5,7 @@
     ./zsh.nix
     ./starship.nix
     ./tmux
+    ./zellij
     ./lsd
     ./colored-man.nix
   ];

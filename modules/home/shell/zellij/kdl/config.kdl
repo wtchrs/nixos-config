@@ -1,0 +1,373 @@
+// Startup and appearance
+default_layout "default"
+default_mode "locked"
+theme "nord"
+
+pane_frames true
+mouse_mode true
+mouse_click_through true
+
+// Clipboard and scrollback
+copy_command "wl-copy"
+copy_on_select true
+scroll_buffer_size 10000
+
+// Sessions
+mirror_session true
+// Effective when a session name is supplied through config or CLI.
+attach_to_session true
+session_serialization true
+
+show_startup_tips false
+show_release_notes false
+
+// Plugin aliases. Changes require a restart.
+plugins {
+    about location="zellij:about"
+    compact-bar location="zellij:compact-bar" {
+        tooltip "F1"
+    }
+    configuration location="zellij:configuration"
+    filepicker location="zellij:strider" {
+        cwd "/"
+    }
+    plugin-manager location="zellij:plugin-manager"
+    session-manager location="zellij:session-manager"
+    status-bar location="zellij:status-bar"
+    strider location="zellij:strider"
+    tab-bar location="zellij:tab-bar"
+    welcome-screen location="zellij:session-manager" {
+        welcome_screen true
+    }
+}
+
+// Background plugins loaded when a session starts.
+load_plugins {
+    "zellij:link"
+}
+
+web_client {
+    font "monospace"
+}
+
+keybinds clear-defaults=true {
+    locked {
+        bind "Ctrl g" { SwitchToMode "Normal"; }
+    }
+
+    tmux {
+        bind "Esc" { SwitchToMode "Locked"; }
+        bind "Ctrl b" { Write 2; SwitchToMode "Locked"; }
+
+        // Create pane
+        bind "\"" "g" "Ctrl g" { NewPane "Down"; SwitchToMode "Locked"; }
+        bind "%" "v" "Ctrl v" { NewPane "Right"; SwitchToMode "Locked"; }
+
+        // Create / rename tab
+        bind "c" "Ctrl c" { NewTab; SwitchToMode "Locked"; }
+        bind "," { SwitchToMode "RenameTab"; TabNameInput 0; }
+
+        // Move to tab
+        bind "p" "H" { GoToPreviousTab; SwitchToMode "Locked"; }
+        bind "n" "L" { GoToNextTab; SwitchToMode "Locked"; }
+
+        // Move to pane
+        bind "h" "Left" { MoveFocus "Left"; SwitchToMode "Locked"; }
+        bind "j" "Down" { MoveFocus "Down"; SwitchToMode "Locked"; }
+        bind "k" "Up" { MoveFocus "Up"; SwitchToMode "Locked"; }
+        bind "l" "Right" { MoveFocus "Right"; SwitchToMode "Locked"; }
+        bind "o" { FocusNextPane; SwitchToMode "Locked"; }
+        bind ";" { FocusPreviousPane; SwitchToMode "Locked"; }
+
+        // Close pane / tab
+        bind "x" { CloseFocus; SwitchToMode "Locked"; }
+        bind "&" { CloseTab; SwitchToMode "Locked"; }
+
+        // Pane operations
+        bind "z" { ToggleFocusFullscreen; SwitchToMode "Locked"; }
+        bind "!" { BreakPane; SwitchToMode "Locked"; }
+        bind "{" { MovePaneBackwards; SwitchToMode "Locked"; }
+        bind "}" { MovePane; SwitchToMode "Locked"; }
+
+        // Layout
+        bind "Space" { NextSwapLayout; SwitchToMode "Locked"; }
+
+        // Session manager
+        bind "w" "s" {
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Locked";
+        }
+
+        // Scroll / detach
+        bind "[" "PageUp" { SwitchToMode "Scroll"; }
+        bind "d" { Detach; }
+
+        // Resize pane. Staying in Tmux mode preserves repeated resizing.
+        bind "Alt h" { Resize "Increase Left"; }
+        bind "Alt j" { Resize "Increase Down"; }
+        bind "Alt k" { Resize "Increase Up"; }
+        bind "Alt l" { Resize "Increase Right"; }
+    }
+
+    pane {
+        bind "p" { SwitchToMode "Normal"; }
+
+        bind "Left" "h" { MoveFocus "Left"; }
+        bind "Down" "j" { MoveFocus "Down"; }
+        bind "Up" "k" { MoveFocus "Up"; }
+        bind "Right" "l" { MoveFocus "Right"; }
+
+        bind "n" { NewPane; SwitchToMode "Locked"; }
+        bind "r" { NewPane "Right"; SwitchToMode "Locked"; }
+        bind "d" { NewPane "Down"; SwitchToMode "Locked"; }
+        bind "s" { NewPane "stacked"; SwitchToMode "Locked"; }
+
+        bind "c" { SwitchToMode "RenamePane"; PaneNameInput 0; }
+
+        bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "Locked"; }
+        bind "f" { ToggleFocusFullscreen; SwitchToMode "Locked"; }
+        bind "i" { TogglePanePinned; SwitchToMode "Locked"; }
+        bind "w" { ToggleFloatingPanes; SwitchToMode "Locked"; }
+        bind "z" { TogglePaneFrames; SwitchToMode "Locked"; }
+        bind "Tab" { SwitchFocus; }
+
+        bind "x" { CloseFocus; SwitchToMode "Locked"; }
+    }
+
+    tab {
+        bind "t" { SwitchToMode "Normal"; }
+
+        bind "Left" "h" { GoToPreviousTab; }
+        bind "Down" "j" { GoToNextTab; }
+        bind "Up" "k" { GoToPreviousTab; }
+        bind "Right" "l" { GoToNextTab; }
+
+        bind "[" { BreakPaneLeft; SwitchToMode "Locked"; }
+        bind "]" { BreakPaneRight; SwitchToMode "Locked"; }
+        bind "b" { BreakPane; SwitchToMode "Locked"; }
+
+        bind "n" { NewTab; SwitchToMode "Locked"; }
+        bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "s" { ToggleActiveSyncTab; SwitchToMode "Locked"; }
+        bind "Tab" { ToggleTab; }
+
+        bind "x" { CloseTab; SwitchToMode "Locked"; }
+    }
+
+    shared_among "tab" "tmux" {
+        bind "1" { GoToTab 1; SwitchToMode "Locked"; }
+        bind "2" { GoToTab 2; SwitchToMode "Locked"; }
+        bind "3" { GoToTab 3; SwitchToMode "Locked"; }
+        bind "4" { GoToTab 4; SwitchToMode "Locked"; }
+        bind "5" { GoToTab 5; SwitchToMode "Locked"; }
+        bind "6" { GoToTab 6; SwitchToMode "Locked"; }
+        bind "7" { GoToTab 7; SwitchToMode "Locked"; }
+        bind "8" { GoToTab 8; SwitchToMode "Locked"; }
+        bind "9" { GoToTab 9; SwitchToMode "Locked"; }
+        bind "0" { GoToTab 10; SwitchToMode "Locked"; }
+    }
+
+    resize {
+        bind "r" { SwitchToMode "Normal"; }
+
+        bind "Left" "h" { Resize "Increase Left"; }
+        bind "Down" "j" { Resize "Increase Down"; }
+        bind "Up" "k" { Resize "Increase Up"; }
+        bind "Right" "l" { Resize "Increase Right"; }
+
+        bind "H" { Resize "Decrease Left"; }
+        bind "J" { Resize "Decrease Down"; }
+        bind "K" { Resize "Decrease Up"; }
+        bind "L" { Resize "Decrease Right"; }
+
+        bind "+" "=" { Resize "Increase"; }
+        bind "-" { Resize "Decrease"; }
+    }
+
+    move {
+        bind "m" { SwitchToMode "Normal"; }
+
+        bind "Left" "h" { MovePane "Left"; }
+        bind "Down" "j" { MovePane "Down"; }
+        bind "Up" "k" { MovePane "Up"; }
+        bind "Right" "l" { MovePane "Right"; }
+
+        bind "n" { MovePane; }
+        bind "p" { MovePaneBackwards; }
+        bind "Tab" { MovePane; }
+    }
+
+    scroll {
+        bind "s" { SwitchToMode "Normal"; }
+        bind "Esc" "q" "Ctrl c" { ScrollToBottom; SwitchToMode "Locked"; }
+
+        bind "Alt Left" "Alt h" { MoveFocusOrTab "Left"; SwitchToMode "Locked"; }
+        bind "Alt Down" "Alt j" { MoveFocus "Down"; SwitchToMode "Locked"; }
+        bind "Alt Up" "Alt k" { MoveFocus "Up"; SwitchToMode "Locked"; }
+        bind "Alt Right" "Alt l" { MoveFocusOrTab "Right"; SwitchToMode "Locked"; }
+
+        bind "e" { EditScrollback; SwitchToMode "Locked"; }
+        bind "f" { SwitchToMode "EnterSearch"; SearchInput 0; }
+    }
+
+    search {
+        bind "p" { Search "up"; }
+        bind "n" { Search "down"; }
+
+        bind "c" { SearchToggleOption "CaseSensitivity"; }
+        bind "o" { SearchToggleOption "WholeWord"; }
+        bind "w" { SearchToggleOption "Wrap"; }
+    }
+
+    session {
+        bind "a" {
+            LaunchOrFocusPlugin "about" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Locked";
+        }
+        bind "c" {
+            LaunchOrFocusPlugin "configuration" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Locked";
+        }
+        bind "d" { Detach; }
+        bind "l" {
+            LaunchOrFocusPlugin "zellij:layout-manager" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Locked";
+        }
+        bind "o" { SwitchToMode "Normal"; }
+        bind "p" {
+            LaunchOrFocusPlugin "plugin-manager" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Locked";
+        }
+        bind "s" {
+            LaunchOrFocusPlugin "zellij:share" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Locked";
+        }
+        bind "w" {
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Locked";
+        }
+    }
+
+    shared_among "normal" "locked" {
+        // tmux-style prefix from both Locked and Normal mode.
+        bind "Ctrl b" { SwitchToMode "Tmux"; }
+
+        bind "Alt Left" "Alt h" { MoveFocusOrTab "Left"; }
+        bind "Alt Down" "Alt j" { MoveFocus "Down"; }
+        bind "Alt Up" "Alt k" { MoveFocus "Up"; }
+        bind "Alt Right" "Alt l" { MoveFocusOrTab "Right"; }
+
+        bind "Alt +" "Alt =" { Resize "Increase"; }
+        bind "Alt -" { Resize "Decrease"; }
+
+        bind "Alt [" { PreviousSwapLayout; }
+        bind "Alt ]" { NextSwapLayout; }
+
+        bind "Alt i" { MoveTab "Left"; }
+        bind "Alt o" { MoveTab "Right"; }
+
+        bind "Alt n" { NewPane; }
+
+        bind "Alt f" { ToggleFloatingPanes; }
+        bind "Alt p" { TogglePaneInGroup; }
+        bind "Alt Shift p" { ToggleGroupMarking; }
+    }
+
+    shared_except "locked" "renametab" "renamepane" {
+        bind "Ctrl g" { SwitchToMode "Locked"; }
+        bind "Ctrl q" { Quit; }
+    }
+
+    shared_except "locked" "entersearch" {
+        bind "Enter" { SwitchToMode "Locked"; }
+    }
+
+    shared_except "locked" "entersearch" "renametab" "renamepane" {
+        bind "Esc" { SwitchToMode "Locked"; }
+    }
+
+    shared_except "locked" "entersearch" "renametab" "renamepane" "move" {
+        bind "m" { SwitchToMode "Move"; }
+    }
+
+    shared_except "locked" "entersearch" "search" "renametab" "renamepane" "session" {
+        bind "o" { SwitchToMode "Session"; }
+    }
+
+    shared_except "locked" "tab" "entersearch" "renametab" "renamepane" {
+        bind "t" { SwitchToMode "Tab"; }
+    }
+
+    shared_among "normal" "resize" "tab" "scroll" "prompt" "tmux" {
+        bind "p" { SwitchToMode "Pane"; }
+    }
+
+    shared_among "normal" "resize" "search" "move" "prompt" "tmux" {
+        bind "s" { SwitchToMode "Scroll"; }
+    }
+
+    shared_except "locked" "resize" "pane" "tab" "entersearch" "renametab" "renamepane" {
+        bind "r" { SwitchToMode "Resize"; }
+    }
+
+    shared_among "scroll" "search" {
+        bind "h" { PageScrollUp; }
+        bind "j" { ScrollDown; }
+        bind "k" { ScrollUp; }
+        bind "l" { PageScrollDown; }
+
+        bind "Left" { PageScrollUp; }
+        bind "Down" { ScrollDown; }
+        bind "Up" { ScrollUp; }
+        bind "Right" { PageScrollDown; }
+
+        bind "PageDown" { PageScrollDown; }
+        bind "PageUp" { PageScrollUp; }
+
+        bind "Ctrl b" { PageScrollUp; }
+        bind "Ctrl f" { PageScrollDown; }
+
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+
+        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Locked"; }
+    }
+
+    entersearch {
+        bind "Esc" "Ctrl c" { SwitchToMode "Scroll"; }
+        bind "Enter" { SwitchToMode "Search"; }
+    }
+
+    renametab {
+        bind "Esc" { UndoRenameTab; SwitchToMode "Tab"; }
+    }
+
+    shared_among "renametab" "renamepane" {
+        bind "Ctrl c" { SwitchToMode "Locked"; }
+    }
+
+    renamepane {
+        bind "Esc" { UndoRenamePane; SwitchToMode "Pane"; }
+    }
+}
