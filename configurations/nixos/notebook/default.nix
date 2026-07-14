@@ -67,6 +67,13 @@ in
     firewall.allowedUDPPorts = [ ];
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+
+  services.blueman.enable = true;
+
   zramSwap = {
     enable = true;
     memoryPercent = 100;
