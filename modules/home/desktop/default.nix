@@ -46,5 +46,8 @@ in
     };
   };
 
-  services.tailscale-systray.enable = true;
+  services = {
+    tailscale-systray.enable = true;
+    network-manager-applet.enable = true;
+  };
 }
