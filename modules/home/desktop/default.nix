@@ -29,6 +29,7 @@ in
       jetbrains-toolbox
       flake.inputs.zen-browser.packages.${system}.default
       brightnessctl
+      kdePackages.qt6ct
       nautilus
       loupe
     ]
