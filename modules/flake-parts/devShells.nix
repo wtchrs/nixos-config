@@ -6,6 +6,7 @@
         packages = with pkgs; [
           nil
           nixd
+          nixfmt
           statix
         ];
 
