@@ -34,3 +34,12 @@ window-rule {
     xray false;
   }
 }
+
+window-rule {
+  match app-id=r#"^(code|Code)$"#
+
+  background-effect {
+    blur true;
+    xray false;
+  }
+}

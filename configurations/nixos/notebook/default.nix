@@ -96,6 +96,7 @@ in
     self.homeModules.graphics-gaming
     self.homeModules.graphics-desktop-gaming
     self.homeModules.graphics-desktop-nvidia
+    self.homeModules.graphics-develop-vscode
     self.homeModules.identity-git-gpg
     (_: {
       _module.args = {
