@@ -389,6 +389,10 @@ in
         "workbench.tree.enableStickyScroll" = false;
         "workbench.activityBar.location" = "top";
 
+        # -- Window
+        "window.titleBarStyle" = "custom";
+        "window.controlsStyle" = "hidden";
+
         # -- VSCode Neovim
         "vscode-neovim.neovimExecutablePaths.linux" = "${pkgs.neovim}/bin/nvim";
         "vscode-neovim.neovimInitVimPaths.linux" = "${vscodeNeovimInit}";
