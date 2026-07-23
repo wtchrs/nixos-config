@@ -359,11 +359,6 @@ in
 {
   imports = [ ./vscodeTheme.nix ];
 
-  # VSCode Neovim backend
-  home.packages = [
-    pkgs.neovim
-  ];
-
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
