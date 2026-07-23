@@ -89,7 +89,18 @@ let
     vim.opt.hlsearch = true
 
     vim.opt.runtimepath:prepend("${pkgs.vimPlugins.mini-nvim}")
-    require("mini.surround").setup()
+    require("mini.surround").setup({
+      mappings = {
+        add = "gsa",
+        delete = "gsd",
+        find = "gsf",
+        find_left = "gsF",
+        highlight = "gsh",
+        replace = "gsr",
+        suffix_last = "l",
+        suffix_next = "n",
+      },
+    })
 
     local vscode = require("vscode")
     local map = vim.keymap.set
