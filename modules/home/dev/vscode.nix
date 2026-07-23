@@ -1,6 +1,80 @@
 { pkgs, ... }:
 
 let
+  whichKeyCommand = key: name: command: {
+    inherit
+      key
+      name
+      command
+      ;
+    type = "command";
+  };
+
+  whichKeyGroup = key: name: bindings: {
+    inherit
+      key
+      name
+      bindings
+      ;
+    type = "bindings";
+  };
+
+  whichKeyBindings = [
+    (whichKeyCommand "e" "Explorer" "workbench.view.explorer")
+    (whichKeyGroup "f" "File..." [
+      (whichKeyCommand "e" "Focus File Explorer" "workbench.files.action.focusFilesExplorer")
+      (whichKeyCommand "f" "Find Files" "workbench.action.quickOpen")
+      (whichKeyCommand "g" "Find in Files" "workbench.action.findInFiles")
+      (whichKeyCommand "b" "Find Buffers" "workbench.action.showAllEditors")
+      (whichKeyCommand "r" "Recent Files" "workbench.action.openRecent")
+      (whichKeyCommand "n" "New File" "workbench.action.files.newUntitledFile")
+      (whichKeyCommand "t" "Terminal" "workbench.action.terminal.toggleTerminal")
+    ])
+    (whichKeyCommand "?" "Command Palette" "workbench.action.showCommands")
+    (whichKeyGroup "b" "Buffer..." [
+      (whichKeyCommand "b" "Other Buffer" "workbench.action.openPreviousRecentlyUsedEditor")
+      (whichKeyCommand "`" "Other Buffer" "workbench.action.openPreviousRecentlyUsedEditor")
+      (whichKeyCommand "d" "Delete Buffer" "workbench.action.closeActiveEditor")
+      (whichKeyCommand "o" "Delete Other Buffers" "workbench.action.closeOtherEditors")
+    ])
+    (whichKeyGroup "u" "UI..." [
+      (whichKeyCommand "z" "Toggle Zen Mode" "workbench.action.toggleZenMode")
+      (whichKeyCommand "w" "Toggle Word Wrap" "editor.action.toggleWordWrap")
+      (whichKeyCommand "i" "Inspect Tokens and Scopes" "editor.action.inspectTMScopes")
+    ])
+    (whichKeyGroup "c" "Code..." [
+      (whichKeyCommand "a" "Code Action" "editor.action.quickFix")
+      (whichKeyCommand "r" "Rename Symbol" "editor.action.rename")
+      (whichKeyCommand "s" "Document Symbols" "workbench.action.gotoSymbol")
+      (whichKeyCommand "f" "Format Document" "editor.action.formatDocument")
+      (whichKeyCommand "d" "Hover Diagnostics" "editor.action.showHover")
+    ])
+    (whichKeyGroup "s" "Search..." [
+      (whichKeyCommand "S" "Workspace Symbols" "workbench.action.showAllSymbols")
+    ])
+    (whichKeyGroup "x" "Diagnostics..." [
+      (whichKeyCommand "x" "Problems" "workbench.actions.view.problems")
+    ])
+    (whichKeyGroup "g" "Git..." [
+      (whichKeyCommand "g" "Source Control" "workbench.view.scm")
+    ])
+    (whichKeyCommand "-" "Split Below" "workbench.action.splitEditorDown")
+    (whichKeyCommand "|" "Split Right" "workbench.action.splitEditorRight")
+    (whichKeyGroup "w" "Window..." [
+      (whichKeyCommand "d" "Close Editor Group" "workbench.action.closeGroup")
+      (whichKeyCommand "m" "Maximize Editor Group" "workbench.action.toggleMaximizeEditorGroup")
+    ])
+    (whichKeyGroup "d" "Debug..." [
+      (whichKeyCommand "b" "Toggle Breakpoint" "editor.debug.action.toggleBreakpoint")
+      (whichKeyCommand "c" "Continue" "workbench.action.debug.continue")
+      (whichKeyCommand "i" "Step Into" "workbench.action.debug.stepInto")
+      (whichKeyCommand "o" "Step Over" "workbench.action.debug.stepOver")
+      (whichKeyCommand "O" "Step Out" "workbench.action.debug.stepOut")
+      (whichKeyCommand "u" "Debug View" "workbench.view.debug")
+    ])
+    (whichKeyCommand "l" "Installed Extensions" "workbench.extensions.action.showInstalledExtensions")
+  ];
+
   vscodeNeovimInit = pkgs.writeText "vscode-neovim-init.lua" ''
     if not vim.g.vscode then
       return
@@ -77,123 +151,18 @@ let
     map("x", "<", "<gv", opts("Indent Left"))
     map("x", ">", ">gv", opts("Indent Right"))
 
-    ---- Explorer / picker / file
-
-    -- Replace neo-tree
-    map("n", "<leader>e", vsc("workbench.view.explorer"), opts("Explorer"))
-    map(
-      "n",
-      "<leader>fe",
-      vsc("workbench.files.action.focusFilesExplorer"),
-      opts("Focus File Explorer")
-    )
-
-    -- Replace Snacks picker
-    map(
-      "n",
-      "<leader>ff",
-      vsc("workbench.action.quickOpen"),
-      opts("Find Files")
-    )
-    map(
-      "n",
-      "<leader>fg",
-      vsc("workbench.action.findInFiles"),
-      opts("Find in Files")
-    )
-    map(
-      "n",
-      "<leader>fb",
-      vsc("workbench.action.showAllEditors"),
-      opts("Find Buffers")
-    )
-    map(
-      "n",
-      "<leader>fr",
-      vsc("workbench.action.openRecent"),
-      opts("Recent Files")
-    )
-    map(
-      "n",
-      "<leader>fn",
-      vsc("workbench.action.files.newUntitledFile"),
-      opts("New File")
-    )
-
-    map(
-      "n",
-      "<leader>?",
-      vsc("workbench.action.showCommands"),
-      opts("Command Palette")
-    )
-
     ---- Buffer / VSCode editor tab
 
     local previous_editor = vsc("workbench.action.previousEditor")
     local next_editor = vsc("workbench.action.nextEditor")
-    local alternate_editor = vsc("workbench.action.openPreviousRecentlyUsedEditor")
 
     map("n", "<S-h>", previous_editor, opts("Previous Buffer"))
     map("n", "<S-l>", next_editor, opts("Next Buffer"))
     map("n", "[b", previous_editor, opts("Previous Buffer"))
     map("n", "]b", next_editor, opts("Next Buffer"))
 
-    map("n", "<leader>bb", alternate_editor, opts("Other Buffer"))
-    map("n", "<leader>`", alternate_editor, opts("Other Buffer"))
-
-    map(
-      "n",
-      "<leader>bd",
-      vsc("workbench.action.closeActiveEditor"),
-      opts("Delete Buffer")
-    )
-    map(
-      "n",
-      "<leader>bo",
-      vsc("workbench.action.closeOtherEditors"),
-      opts("Delete Other Buffers")
-    )
-
-    map(
-      "n",
-      "<leader>uz",
-      vsc("workbench.action.toggleZenMode"),
-      opts("Toggle Zen Mode")
-    )
-
     ---- Code actions / LSP
 
-    map(
-      "n",
-      "<leader>ca",
-      vsc("editor.action.quickFix"),
-      opts("Code Action")
-    )
-    map(
-      "n",
-      "<leader>cr",
-      vsc("editor.action.rename"),
-      opts("Rename Symbol")
-    )
-    map(
-      "n",
-      "<leader>cs",
-      vsc("workbench.action.gotoSymbol"),
-      opts("Document Symbols")
-    )
-    map(
-      "n",
-      "<leader>sS",
-      vsc("workbench.action.showAllSymbols"),
-      opts("Workspace Symbols")
-    )
-
-    map(
-      "n",
-      "<leader>cf",
-      vsc("editor.action.formatDocument"),
-      opts("Format Document")
-    )
     map(
       "x",
       "<leader>cf",
@@ -202,13 +171,6 @@ let
     )
 
     ---- Diagnostics / quickfix
-
-    map(
-      "n",
-      "<leader>cd",
-      vsc("editor.action.showHover"),
-      opts("Hover Diagnostics")
-    )
 
     map(
       "n",
@@ -236,124 +198,6 @@ let
       opts("Previous Workspace Diagnostic")
     )
 
-    map(
-      "n",
-      "<leader>xx",
-      vsc("workbench.actions.view.problems"),
-      opts("Problems")
-    )
-
-    ---- Git
-
-    map(
-      "n",
-      "<leader>gg",
-      vsc("workbench.view.scm"),
-      opts("Source Control")
-    )
-
-    ---- Terminal
-
-    map(
-      "n",
-      "<leader>ft",
-      vsc("workbench.action.terminal.toggleTerminal"),
-      opts("Terminal")
-    )
-
-    ---- Editor group / Neovim window
-
-    map(
-      "n",
-      "<leader>-",
-      vsc("workbench.action.splitEditorDown"),
-      opts("Split Below")
-    )
-    map(
-      "n",
-      "<leader>|",
-      vsc("workbench.action.splitEditorRight"),
-      opts("Split Right")
-    )
-    map(
-      "n",
-      "<leader>wd",
-      vsc("workbench.action.closeGroup"),
-      opts("Close Editor Group")
-    )
-    map(
-      "n",
-      "<leader>wm",
-      vsc("workbench.action.toggleMaximizeEditorGroup"),
-      opts("Maximize Editor Group")
-    )
-    map(
-      "n",
-      "<leader>uz",
-      vsc("workbench.action.toggleZenMode"),
-      opts("Zen Mode")
-    )
-
-    ---- Debug
-
-    map(
-      "n",
-      "<leader>db",
-      vsc("editor.debug.action.toggleBreakpoint"),
-      opts("Toggle Breakpoint")
-    )
-    map(
-      "n",
-      "<leader>dc",
-      vsc("workbench.action.debug.continue"),
-      opts("Debug Continue")
-    )
-    map(
-      "n",
-      "<leader>di",
-      vsc("workbench.action.debug.stepInto"),
-      opts("Debug Step Into")
-    )
-    map(
-      "n",
-      "<leader>do",
-      vsc("workbench.action.debug.stepOver"),
-      opts("Debug Step Over")
-    )
-    map(
-      "n",
-      "<leader>dO",
-      vsc("workbench.action.debug.stepOut"),
-      opts("Debug Step Out")
-    )
-    map(
-      "n",
-      "<leader>du",
-      vsc("workbench.view.debug"),
-      opts("Debug View")
-    )
-
-    ---- Miscellaneous
-
-    map("n", "<leader>l", function()
-      vscode.action("workbench.extensions.search", {
-        args = { "@installed" },
-      })
-    end, opts("Installed Extensions"))
-
-    map(
-      "n",
-      "<leader>uw",
-      vsc("editor.action.toggleWordWrap"),
-      opts("Toggle Word Wrap")
-    )
-
-    map(
-      "n",
-      "<leader>ui",
-      vsc("editor.action.inspectTMScopes"),
-      opts("Inspect Tokens and Scopes")
-    )
   '';
 in
 {
@@ -368,6 +212,7 @@ in
       extensions = with pkgs.vscode-extensions; [
         asvetliakov.vscode-neovim
         jnoortheen.nix-ide
+        vspacecode.whichkey
       ];
 
       userSettings = {
@@ -425,9 +270,25 @@ in
         "extensions.experimental.affinity" = {
           "asvetliakov.vscode-neovim" = 1;
         };
+
+        # -- Which Key
+        "whichkey.bindings" = whichKeyBindings;
+        "whichkey.sortOrder" = "custom";
       };
 
       keybindings = [
+        # -- Which Key
+        {
+          key = "space";
+          command = "whichkey.show";
+          when = "editorTextFocus && neovim.mode == normal";
+        }
+        {
+          key = "backspace";
+          command = "whichkey.undoKey";
+          when = "whichkeyVisible";
+        }
+
         # -- Window focus
         {
           key = "ctrl+h";
