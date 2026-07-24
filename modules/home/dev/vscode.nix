@@ -20,7 +20,26 @@ let
   };
 
   whichKeyBindings = [
-    (whichKeyCommand "e" "Explorer" "workbench.view.explorer")
+    {
+      key = "e";
+      name = "Explorer";
+      type = "conditional";
+      bindings = [
+        {
+          key = "when:sideBarVisible && activeViewlet == 'workbench.view.explorer'";
+          name = "Hide Explorer";
+          type = "command";
+          command = "workbench.action.toggleSidebarVisibility";
+        }
+        {
+          key = "";
+          name = "Show Explorer";
+          type = "command";
+          command = "workbench.view.explorer";
+        }
+      ];
+    }
+
     (whichKeyGroup "f" "File..." [
       (whichKeyCommand "e" "Focus File Explorer" "workbench.files.action.focusFilesExplorer")
       (whichKeyCommand "f" "Find Files" "workbench.action.quickOpen")
@@ -30,18 +49,24 @@ let
       (whichKeyCommand "n" "New File" "workbench.action.files.newUntitledFile")
       (whichKeyCommand "t" "Terminal" "workbench.action.terminal.toggleTerminal")
     ])
+
     (whichKeyCommand "?" "Command Palette" "workbench.action.showCommands")
+
     (whichKeyGroup "b" "Buffer..." [
       (whichKeyCommand "b" "Other Buffer" "workbench.action.openPreviousRecentlyUsedEditor")
       (whichKeyCommand "`" "Other Buffer" "workbench.action.openPreviousRecentlyUsedEditor")
+      (whichKeyCommand "h" "Previous Buffer" "workbench.action.previousEditor")
+      (whichKeyCommand "l" "Next Buffer" "workbench.action.nextEditor")
       (whichKeyCommand "d" "Delete Buffer" "workbench.action.closeActiveEditor")
       (whichKeyCommand "o" "Delete Other Buffers" "workbench.action.closeOtherEditors")
     ])
+
     (whichKeyGroup "u" "UI..." [
       (whichKeyCommand "z" "Toggle Zen Mode" "workbench.action.toggleZenMode")
       (whichKeyCommand "w" "Toggle Word Wrap" "editor.action.toggleWordWrap")
       (whichKeyCommand "i" "Inspect Tokens and Scopes" "editor.action.inspectTMScopes")
     ])
+
     (whichKeyGroup "c" "Code..." [
       (whichKeyCommand "a" "Code Action" "editor.action.quickFix")
       (whichKeyCommand "r" "Rename Symbol" "editor.action.rename")
@@ -49,21 +74,38 @@ let
       (whichKeyCommand "f" "Format Document" "editor.action.formatDocument")
       (whichKeyCommand "d" "Hover Diagnostics" "editor.action.showHover")
     ])
+
     (whichKeyGroup "s" "Search..." [
       (whichKeyCommand "S" "Workspace Symbols" "workbench.action.showAllSymbols")
     ])
+
     (whichKeyGroup "x" "Diagnostics..." [
       (whichKeyCommand "x" "Problems" "workbench.actions.view.problems")
     ])
+
     (whichKeyGroup "g" "Git..." [
       (whichKeyCommand "g" "Source Control" "workbench.view.scm")
     ])
+
     (whichKeyCommand "-" "Split Below" "workbench.action.splitEditorDown")
     (whichKeyCommand "|" "Split Right" "workbench.action.splitEditorRight")
+
     (whichKeyGroup "w" "Window..." [
+      (whichKeyCommand "h" "Focus Left Group" "workbench.action.focusLeftGroup")
+      (whichKeyCommand "j" "Focus Below Group" "workbench.action.focusBelowGroup")
+      (whichKeyCommand "k" "Focus Above Group" "workbench.action.focusAboveGroup")
+      (whichKeyCommand "l" "Focus Right Group" "workbench.action.focusRightGroup")
+      (whichKeyCommand "p" "Focus Previous Group" "workbench.action.focusPreviousGroup")
+
+      (whichKeyCommand "H" "Decrease Group Width" "workbench.action.decreaseViewWidth")
+      (whichKeyCommand "L" "Increase Group Width" "workbench.action.increaseViewWidth")
+      (whichKeyCommand "J" "Decrease Group Height" "workbench.action.decreaseViewSize")
+      (whichKeyCommand "K" "Increase Group Height" "workbench.action.increaseViewSize")
+
       (whichKeyCommand "d" "Close Editor Group" "workbench.action.closeGroup")
       (whichKeyCommand "m" "Maximize Editor Group" "workbench.action.toggleMaximizeEditorGroup")
     ])
+
     (whichKeyGroup "d" "Debug..." [
       (whichKeyCommand "b" "Toggle Breakpoint" "editor.debug.action.toggleBreakpoint")
       (whichKeyCommand "c" "Continue" "workbench.action.debug.continue")
@@ -72,6 +114,7 @@ let
       (whichKeyCommand "O" "Step Out" "workbench.action.debug.stepOut")
       (whichKeyCommand "u" "Debug View" "workbench.view.debug")
     ])
+
     (whichKeyCommand "l" "Installed Extensions" "workbench.extensions.action.showInstalledExtensions")
   ];
 
@@ -297,12 +340,37 @@ in
         {
           key = "space";
           command = "whichkey.show";
-          when = "editorTextFocus && neovim.mode == normal";
+          when = ''
+            (editorTextFocus && neovim.mode == normal)
+            || (
+              !editorTextFocus
+              && !inputFocus
+              && !terminalFocus
+              && (
+                activeEditor
+                || sideBarFocus
+              )
+            )
+          '';
         }
         {
           key = "backspace";
           command = "whichkey.undoKey";
           when = "whichkeyVisible";
+        }
+        # Send condition to whichkey
+        {
+          key = "e";
+          command = "whichkey.triggerKey";
+          args = {
+            key = "e";
+            when = "sideBarVisible && activeViewlet == 'workbench.view.explorer'";
+          };
+          when = ''
+            whichkeyVisible
+            && sideBarVisible
+            && activeViewlet == 'workbench.view.explorer'
+          '';
         }
 
         # -- Window focus
@@ -385,41 +453,6 @@ in
               sideBarFocus
               || panelFocus
               || auxiliaryBarFocus
-            )
-          '';
-        }
-
-        # -- File explorer
-        {
-          key = "space e";
-          command = "workbench.action.toggleSidebarVisibility";
-          when = ''
-            (sideBarFocus ||
-              activeEditor
-              && !editorTextFocus
-              && !sideBarFocus
-              && !panelFocus
-              && !auxiliaryBarFocus
-              && !terminalFocus)
-            && !inputFocus
-            && activeViewlet == 'workbench.view.explorer'
-          '';
-        }
-        {
-          key = "space e";
-          command = "workbench.view.explorer";
-          when = ''
-            (sideBarFocus ||
-              activeEditor
-              && !editorTextFocus
-              && !sideBarFocus
-              && !panelFocus
-              && !auxiliaryBarFocus
-              && !terminalFocus)
-            && !inputFocus
-            && (
-              !sideBarVisible
-              || activeViewlet != 'workbench.view.explorer'
             )
           '';
         }
