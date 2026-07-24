@@ -223,6 +223,7 @@ in
       extensions = with pkgs.vscode-extensions; [
         asvetliakov.vscode-neovim
         jnoortheen.nix-ide
+        mkhl.direnv
         vspacecode.whichkey
       ];
 
@@ -285,6 +286,10 @@ in
         # -- Which Key
         "whichkey.bindings" = whichKeyBindings;
         "whichkey.sortOrder" = "custom";
+
+        # -- direnv
+        "direnv.restart.automatic" = true;
+        "direnv.watchForChanges" = true;
       };
 
       keybindings = [
