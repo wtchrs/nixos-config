@@ -259,8 +259,15 @@ in
 
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode;
-    mutableExtensionsDir = false;
+    package = pkgs.vscode.overrideAttrs (old: {
+      # Add execution permission to `vsce-sign`
+      postFixup = (old.postFixup or "") + ''
+        chmod +x "$out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
+      '';
+    });
+
+    # Allow install extensions in vscode
+    mutableExtensionsDir = true;
 
     profiles.default = {
       extensions = with pkgs.vscode-extensions; [
