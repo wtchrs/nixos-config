@@ -187,26 +187,12 @@ let
       background-color: ${nord.backgroundPopup} !important;
     }
   '';
-
-  vibrancy-continued = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
-    mktplcRef = {
-      publisher = "illixion";
-      name = "vscode-vibrancy-continued";
-      version = "1.1.86";
-    };
-
-    vsix = pkgs.fetchurl {
-      url = "https://github.com/illixion/vscode-vibrancy-continued/releases/download/v1.1.86/vscode-vibrancy-continued-1.1.86.vsix";
-      hash = "sha256-iTBCkNJ2iO/9bILGn+B4eYNlJ3JwDBIOxJiklsBQvW8=";
-    };
-  };
 in
 {
   programs.vscode.profiles.default = {
     extensions = with pkgs.vscode-extensions; [
       arcticicestudio.nord-visual-studio-code
-      # illixion.vscode-vibrancy-continued
-      vibrancy-continued
+      illixion.vscode-vibrancy-continued
     ];
 
     userSettings = {
