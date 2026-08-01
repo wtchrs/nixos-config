@@ -196,6 +196,8 @@ in
     ];
 
     userSettings = {
+      "workbench.experimental.modernUI" = true;
+
       # -- VSCode Vibrancy
       "vscode_vibrancy.type" = "transparent";
       "vscode_vibrancy.windowMode" = "frameless-transparent";
