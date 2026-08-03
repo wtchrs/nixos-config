@@ -22,6 +22,7 @@ in
     ./disko.nix
     ./hardware-configuration.nix
     ./network-configuration.nix
+    ./atuin-server.nix
   ];
 
   _module.args = {
