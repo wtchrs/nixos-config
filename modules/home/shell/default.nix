@@ -4,6 +4,7 @@
   imports = [
     ./zsh.nix
     ./starship.nix
+    ./atuin.nix
     ./tmux
     ./zellij
     ./lsd
@@ -30,6 +31,9 @@
       defaultCommand = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
       fileWidget.command = "${pkgs.fd}/bin/fd --hidden --strip-cwd-prefix --exclude .git";
       changeDirWidget.command = "${pkgs.fd}/bin/fd --type=d --hidden --strip-cwd-prefix --exclude .git";
+
+      # Disable fzf Ctrl+R binding to avoid conflicts with atuin
+      historyWidget.command = "";
     };
 
     broot = {
