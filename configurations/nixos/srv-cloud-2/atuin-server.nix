@@ -6,7 +6,7 @@
     port = 8888;
 
     # Change to false after create a account
-    openRegistration = true;
+    openRegistration = false;
 
     openFirewall = false;
     database.createLocally = true;
