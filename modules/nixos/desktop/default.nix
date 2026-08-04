@@ -34,7 +34,13 @@
   };
 
   security = {
+    # policy kit
     polkit.enable = true;
+
+    # GTK4-based polkit authentication agent
+    soteria.enable = true;
+
+    # Asign limited real-time scheduling priorities to time-sensitive processes like audio
     rtkit.enable = true;
   };
 
