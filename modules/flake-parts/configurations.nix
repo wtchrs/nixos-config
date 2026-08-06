@@ -28,7 +28,7 @@ in
     };
 
     homeConfigurations = {
-      "wtchrs@archlinux" = mkHome "x86_64-linux" (../../configurations/home + "/wtchrs@archlinux");
+      "archlinux@notebook" = mkHome "x86_64-linux" (../../configurations/home + "/archlinux@notebook");
       "ubuntu@srv-cloud-1" = mkHome "aarch64-linux" (../../configurations/home + "/ubuntu@srv-cloud-1");
     };
   };

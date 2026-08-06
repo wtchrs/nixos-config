@@ -2,7 +2,7 @@
 
 let
   inherit (flake) inputs self;
-  username = "wtchrs";
+  username = "nixos";
   hostName = "srv-cloud-2";
 in
 {

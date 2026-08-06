@@ -2,8 +2,8 @@
 
 let
   inherit (flake) self;
-  username = "wtchrs";
-  hostName = "archlinux";
+  username = "archlinux";
+  hostName = "notebook";
 in
 {
   imports = [
