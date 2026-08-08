@@ -35,6 +35,10 @@ in
     ]
     ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
 
+  home.sessionPath = [
+    "$HOME/.local/share/JetBrains/Toolbox/scripts"
+  ];
+
   programs = {
     vesktop.enable = true;
   };
