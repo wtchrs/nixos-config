@@ -41,6 +41,12 @@
       enableZshIntegration = true;
     };
 
+    zoxide = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+    };
+
     bash = {
       enable = true;
       enableCompletion = true;
