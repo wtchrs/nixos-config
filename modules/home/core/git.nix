@@ -19,7 +19,7 @@ in
 
         user = {
           name = "wtchrs";
-          email = "wtchr_@hotmail.com";
+          email = "wtchr_@outlook.com";
         };
       };
     };
