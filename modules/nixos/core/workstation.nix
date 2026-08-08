@@ -42,6 +42,9 @@ in
       enable = true;
       settings.PasswordAuthentication = false;
     };
+
+    # Resolve executables under /bin and /usr/bin through PATH
+    envfs.enable = true;
   };
 
   virtualisation.docker.enable = true;
