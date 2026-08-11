@@ -34,6 +34,7 @@
       niri = inputs.niri.overlays.niri;
       catnap = import ../../overlays/catnap.nix;
       tmux-dotbar = import ../../overlays/tmux-dotbar.nix;
+      gnome-top-bar-organizer-plus = import ../../overlays/gnome-top-bar-organizer-plus.nix;
     };
   };
 }
