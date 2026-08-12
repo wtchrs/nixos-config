@@ -21,6 +21,7 @@ in
     ./misc/fonts.nix
     ./misc/input.nix
     ./misc/cursor.nix
+    ./misc/gtk.nix
     ./misc/clipboard.nix
   ];
 
