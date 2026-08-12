@@ -34,11 +34,6 @@ _lsc_add '1;33'  bd cd    # block/char device: yellow bold
 _lsc_add '1;32'  ex       # executable: green bold
 _lsc_add '31'    or       # broken symlink: red
 
-# eza mount_point = blue bold underline.
-# Standard LS_COLORS does not have a portable mount-point key.
-# Some parsers may accept mp, but lsd/GNU ls compatibility is not guaranteed.
-_lsc_add '1;4;34' mp
-
 # ------------------------------------------------------------
 # eza README prefix rule, approximated with lsd-compatible suffix rules.
 # eza treats case-insensitive names starting with "readme" as Build.
@@ -74,10 +69,10 @@ _lsc_add_lsd_name '1;4;33' \
 # ------------------------------------------------------------
 # eza temp filename rules
 # name ending in ~, or #...#
-# lsd does not handle #*# as a full glob; *# preserves the common Emacs
-# autosave suffix case, with the tradeoff that any name ending in # is dimmed.
+# *# preserves the common Emacs autosave suffix case, with the tradeoff that
+# any name ending in # is dimmed. Unlike #*#, it is also valid for GNU ls.
 # ------------------------------------------------------------
-_lsc_add '2' '*~' '#*#' '*#'
+_lsc_add '2' '*~' '*#'
 
 # ------------------------------------------------------------
 # Exact filename rules
