@@ -9,7 +9,7 @@
     ./file-manager.nix
     ./flatpak.nix
     ./keyring.nix
-    ./gnome.nix
+    ./desktop-manager.nix
     ./input-method.nix
   ];
 
@@ -42,12 +42,5 @@
 
     # Asign limited real-time scheduling priorities to time-sensitive processes like audio
     rtkit.enable = true;
-  };
-
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-gnome ];
-    config.common.default = "gnome";
   };
 }
