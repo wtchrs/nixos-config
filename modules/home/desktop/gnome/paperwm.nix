@@ -16,7 +16,7 @@
       default-focus-mode = 1; # center
       only-scratch-in-overview = true;
       selection-border-radius-bottom = 12;
-      selection-border-size = 5;
+      selection-border-size = 2;
       show-window-position-bar = false;
       show-workspace-indicator = false;
     };
