@@ -33,35 +33,49 @@ normalize_refresh_rate() {
 }
 
 detect_refresh_rate() {
-  local refresh=""
+  local desktop refresh=""
 
-  if command -v niri >/dev/null 2>&1; then
-    refresh=$(
-      niri msg -j outputs 2>/dev/null \
-        | jq -r '[.. | objects | select(has("current_mode")) | .current_mode.refresh_rate? // empty][0] // empty' \
-        | normalize_refresh_rate
-    ) || refresh=""
-    if [ -n "$refresh" ]; then
-      printf '%s\n' "$refresh"
-      return 0
-    fi
-  fi
+  desktop=$(printf '%s' "${XDG_CURRENT_DESKTOP:-}" | tr '[:upper:]' '[:lower:]')
 
-  if command -v kscreen-doctor >/dev/null 2>&1; then
-    refresh=$(
-      kscreen-doctor -o 2>/dev/null \
-        | awk 'match($0, /@[0-9.]+\*/) { value = substr($0, RSTART + 1, RLENGTH - 2); print value; exit }' \
-        | normalize_refresh_rate
-    ) || refresh=""
-    if [ -n "$refresh" ]; then
-      printf '%s\n' "$refresh"
-      return 0
-    fi
+  case "$desktop" in
+    *niri*)
+      if command -v niri >/dev/null 2>&1; then
+        refresh=$(
+          timeout 2s niri msg -j outputs 2>/dev/null \
+            | jq -r '
+                [
+                  .. | objects
+                  | select(has("current_mode") and has("modes"))
+                  | .current_mode as $mode
+                  | if ($mode | type) == "number"
+                    then .modes[$mode].refresh_rate? // empty
+                    else $mode.refresh_rate? // empty
+                    end
+                ][0] // empty
+              ' \
+            | normalize_refresh_rate
+        ) || refresh=""
+      fi
+      ;;
+    *kde* | *plasma*)
+      if command -v kscreen-doctor >/dev/null 2>&1; then
+        refresh=$(
+          timeout 2s kscreen-doctor -o 2>/dev/null \
+            | awk 'match($0, /@[0-9.]+\*/) { value = substr($0, RSTART + 1, RLENGTH - 2); print value; exit }' \
+            | normalize_refresh_rate
+        ) || refresh=""
+      fi
+      ;;
+  esac
+
+  if [ -n "$refresh" ]; then
+    printf '%s\n' "$refresh"
+    return 0
   fi
 
   if command -v xrandr >/dev/null 2>&1; then
     refresh=$(
-      xrandr --current 2>/dev/null \
+      timeout 2s xrandr --current 2>/dev/null \
         | awk '/\*/ { for (i = 1; i <= NF; i++) if ($i ~ /\*/) { gsub(/[+*]/, "", $i); print $i; exit } }' \
         | normalize_refresh_rate
     ) || refresh=""
