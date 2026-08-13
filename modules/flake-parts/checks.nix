@@ -31,9 +31,20 @@ in
         statix check .
         touch $out
       '';
+
+      winRunCheck = pkgs.runCommand "win-run-check" { nativeBuildInputs = [ pkgs.python3 ]; } ''
+        python ${root}/modules/home/gaming/test_win_run.py ${root}/modules/home/gaming/win-run.py
+        touch $out
+      '';
     in
     {
       formatter = pkgs.nixfmt;
-      checks = hostChecks // homeChecks // { statix = statixCheck; };
+      checks =
+        hostChecks
+        // homeChecks
+        // {
+          statix = statixCheck;
+          win-run = winRunCheck;
+        };
     };
 }

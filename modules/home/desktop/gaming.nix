@@ -1,7 +1,10 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
+let
+  winRunProvider = pkgs.writeShellScript "nereid-win-run-provider" ''
+    ${config.home.profileDirectory}/bin/win-run list
+  '';
+in
 {
-  programs.nereid-shell.programProviders = [
-    "${config.home.profileDirectory}/bin/umu-exe-list"
-  ];
+  programs.nereid-shell.programProviders = [ winRunProvider ];
 }
