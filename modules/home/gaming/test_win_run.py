@@ -131,7 +131,7 @@ class WinRunTest(unittest.TestCase):
         result = self.invoke("list")
         catalog = json.loads(result.stdout)
         self.assertEqual(len(catalog), 1)
-        self.assertEqual(catalog[0]["name"], "앱 이름 (한국어)")
+        self.assertEqual(catalog[0]["name"], "win-run: 앱 이름 (한국어)")
         self.assertEqual(catalog[0]["description"], "Windows application")
         self.assertIn("/256x256/", catalog[0]["icon"])
         self.assertRegex(catalog[0]["exec"], r"^win-run launch wr1-[0-9a-f]{24}$")

@@ -180,7 +180,7 @@ def entries(root: Path, *, include_hidden: bool = False) -> list[dict[str, str |
 def list_command() -> int:
     projected = [
         {
-            "name": item["name"],
+            "name": f"win-run: {item['name']}",
             "exec": f"win-run launch {item['id']}",
             "icon": item["icon"],
             "description": item["description"],
