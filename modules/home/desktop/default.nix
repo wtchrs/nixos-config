@@ -14,7 +14,7 @@ in
     ./gnome
     ./kde-plasma
     ./desktopShell.nix
-    ./ghostty.nix
+    ./ghostty
     ./dunst.nix
     ./obsidian.nix
 

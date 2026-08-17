@@ -1,13 +1,31 @@
-_:
-
 {
+  xdg.configFile."ghostty/shaders/snappy-caret.glsl".source = ./snappy-caret.glsl;
+
   programs.ghostty = {
     enable = true;
 
     settings = {
       theme = "nord";
-      # title = " Ghostty";
       term = "xterm-256color";
+
+      # Hide Ghostty's native cursor. The custom shader redraws it.
+      cursor-opacity = 0;
+      cursor-style = "block";
+      cursor-style-blink = false;
+
+      # Required by the shader's glyph reconstruction. This makes
+      # iCursorText follow the foreground color of the current cursor cell.
+      cursor-text = "cell-foreground";
+
+      # Prevent Ghostty shell integration from forcing a bar cursor at
+      # the shell prompt. Terminal applications may still explicitly
+      # request their own cursor shape.
+      shell-integration-features = "no-cursor";
+
+      adjust-cursor-thickness = 1;
+
+      custom-shader-animation = true;
+      custom-shader = "shaders/snappy-caret.glsl";
 
       # Ghostty has its own nerd font support
       font-family = "Sarasa Mono K";
@@ -43,10 +61,6 @@ _:
         foreground = "#eceff4";
         cursor-color = "#d8dee9";
         background-opacity = 0.65;
-
-        cursor-style = "block";
-        shell-integration-features = "no-cursor";
-        adjust-cursor-thickness = 1;
 
         palette = [
           # black
