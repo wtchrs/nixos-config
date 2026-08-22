@@ -23,8 +23,10 @@
         "$scala$swift$terraform$typst$vagrant$zig[ ](fg:nord0 bg:nord7))"
         "[](bg:nord4 fg:nord7)"
         "$cmd_duration"
-        "[](fg:nord4)"
+        "[](bg:none fg:nord4)"
+
         "$line_break"
+
         "$character"
       ];
 
