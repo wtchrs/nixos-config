@@ -15,6 +15,11 @@
         "gtk"
       ];
 
+      labwc.default = [
+        "gnome"
+        "gtk"
+      ];
+
       common.default = "*";
     };
   };

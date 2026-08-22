@@ -33,6 +33,9 @@ in
       kdePackages.qt6ct
       nautilus
       loupe
+      grim
+      slurp
+      wlrctl
     ]
     ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
 
