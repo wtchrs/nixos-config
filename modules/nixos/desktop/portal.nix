@@ -4,23 +4,16 @@
   xdg.portal = {
     enable = true;
     wlr.enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-gnome ];
-
-    configPackages = with pkgs; [
-      gnome-session
-      kdePackages.plasma-workspace
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gnome
+      xdg-desktop-portal-gtk
     ];
 
     config = {
-      niri = {
-        default = [
-          "gnome"
-          "gtk"
-        ];
-
-        "org.freedesktop.impl.portal.ScreenCast" = "wlr";
-        "org.freedesktop.impl.portal.Screenshot" = "wlr";
-      };
+      niri.default = [
+        "gnome"
+        "gtk"
+      ];
 
       common.default = "*";
     };

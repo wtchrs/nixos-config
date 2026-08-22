@@ -7,7 +7,6 @@
 
 {
   imports = [
-    ./desktop-manager.nix
     ./portal.nix
     ./file-manager.nix
     ./flatpak.nix
@@ -18,6 +17,8 @@
   environment.systemPackages = with pkgs; [
     glib.bin
   ];
+
+  programs.labwc.enable = true;
 
   services = {
     seatd = {
