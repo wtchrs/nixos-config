@@ -1,0 +1,83 @@
+# Niri-inspired Labwc theme
+
+border.width: 2
+window.titlebar.padding.width: 2
+window.titlebar.padding.height: 2
+
+window.active.border.color: #33ccffee
+window.inactive.border.color: #595959aa
+window.active.indicator.toggled-keybind.color: #00ff99ee
+
+window.active.title.bg: Vertical
+window.active.title.bg.color: #202632
+window.active.title.bg.colorTo: #19363a
+window.inactive.title.bg: Solid
+window.inactive.title.bg.color: #181c24
+
+window.active.label.text.color: #ffffff
+window.inactive.label.text.color: #a9afb9
+window.label.text.justify: center
+
+window.button.width: 24
+window.button.height: 24
+window.button.spacing: 2
+window.button.hover.bg.color: #00ff9940
+window.button.hover.bg.corner-radius: 4
+window.active.button.unpressed.image.color: #e8ffff
+window.inactive.button.unpressed.image.color: #89919d
+window.active.button.close.unpressed.image.color: #ff7a90
+
+window.active.shadow.size: 8
+window.inactive.shadow.size: 6
+window.active.shadow.color: #00000070
+window.inactive.shadow.color: #00000050
+
+menu.width.min: 160
+menu.width.max: 360
+menu.border.width: 2
+menu.border.color: #33ccffee
+menu.items.bg.color: #202632
+menu.items.text.color: #ffffff
+menu.items.active.bg.color: #244a4d
+menu.items.active.text.color: #baffea
+menu.items.padding.x: 10
+menu.items.padding.y: 6
+menu.separator.width: 1
+menu.separator.padding.width: 8
+menu.separator.padding.height: 4
+menu.separator.color: #595959aa
+menu.title.bg.color: #19363a
+menu.title.text.color: #ffffff
+menu.title.text.justify: center
+
+osd.bg.color: #202632f2
+osd.border.color: #33ccffee
+osd.border.width: 2
+osd.label.text.color: #ffffff
+
+osd.window-switcher.style-thumbnail.width.max: 75%
+osd.window-switcher.style-thumbnail.padding: 10
+osd.window-switcher.style-thumbnail.item.width: 280
+osd.window-switcher.style-thumbnail.item.height: 190
+osd.window-switcher.style-thumbnail.item.padding: 8
+osd.window-switcher.style-thumbnail.item.active.border.width: 2
+osd.window-switcher.style-thumbnail.item.active.border.color: #00ff99ee
+osd.window-switcher.style-thumbnail.item.active.bg.color: #33ccff28
+osd.window-switcher.style-thumbnail.item.icon.size: 48
+osd.window-switcher.preview.border.width: 2
+osd.window-switcher.preview.border.color: #202632,#33ccff,#00ff99
+
+osd.workspace-switcher.boxes.width: 24
+osd.workspace-switcher.boxes.height: 16
+osd.workspace-switcher.boxes.border.width: 2
+
+snapping.overlay.region.bg.enabled: yes
+snapping.overlay.edge.bg.enabled: yes
+snapping.overlay.region.border.enabled: yes
+snapping.overlay.edge.border.enabled: yes
+snapping.overlay.region.bg.color: #33ccff28
+snapping.overlay.edge.bg.color: #00ff9928
+snapping.overlay.region.border.width: 2
+snapping.overlay.edge.border.width: 2
+snapping.overlay.region.border.color: #202632,#33ccff,#00ff99
+snapping.overlay.edge.border.color: #202632,#00ff99,#33ccff

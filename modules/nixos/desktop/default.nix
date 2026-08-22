@@ -1,15 +1,17 @@
 {
   pkgs,
+  lib,
   username,
   ...
 }:
 
 {
   imports = [
+    ./desktop-manager.nix
+    ./portal.nix
     ./file-manager.nix
     ./flatpak.nix
     ./keyring.nix
-    ./desktop-manager.nix
     ./input-method.nix
   ];
 
@@ -42,5 +44,10 @@
 
     # Asign limited real-time scheduling priorities to time-sensitive processes like audio
     rtkit.enable = true;
+  };
+
+  systemd.user.services.polkit-soteria = {
+    wants = lib.mkForce [ ];
+    partOf = [ "graphical-session.target" ];
   };
 }
