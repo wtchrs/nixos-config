@@ -40,6 +40,7 @@ in
 {
   home.packages = [
     screenshot
+    pkgs.swaybg
     pkgs.swaylock
     pkgs.wlopm
   ];
@@ -54,6 +55,7 @@ in
 
     autostart = [
       "${lib.getExe pkgs.wlr-randr} --output eDP-1 --scale 1.25"
+      "${lib.getExe pkgs.swaybg} -i ~/Pictures/wallpapers/wallpaper -m fill >/dev/null 2>&1 &"
       "${lib.getExe pkgs.vesktop} &"
     ]
     ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.spotify) "NIXOS_OZONE_WL=1 ${lib.getExe pkgs.spotify} --ozone-platform=wayland &";
