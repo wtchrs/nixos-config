@@ -12,7 +12,6 @@ in
   imports = [
     ./niri
     ./gnome
-    ./kde-plasma
     ./desktopShell.nix
     ./ghostty
     ./dunst.nix

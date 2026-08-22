@@ -1,10 +1,7 @@
 { pkgs, ... }:
 
 {
-  services.desktopManager = {
-    gnome.enable = true;
-    plasma6.enable = true;
-  };
+  services.desktopManager.gnome.enable = true;
 
   xdg.portal = {
     enable = true;
