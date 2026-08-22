@@ -36,6 +36,15 @@ let
     // {
       "@allowWhenLocked" = "yes";
     };
+
+  confirmExit = key: {
+    "@key" = key;
+    action = {
+      "@name" = "If";
+      prompt."@message" = "Exit labwc?";
+      "then".action."@name" = "Exit";
+    };
+  };
 in
 {
   home.packages = [
@@ -151,31 +160,10 @@ in
 
       regions.region = [
         {
-          "@name" = "center-third";
-          "@x" = "33.333%";
-          "@y" = "0%";
-          "@width" = "33.334%";
-          "@height" = "100%";
-        }
-        {
           "@name" = "center-half";
           "@x" = "25%";
           "@y" = "0%";
           "@width" = "50%";
-          "@height" = "100%";
-        }
-        {
-          "@name" = "center-three-quarter";
-          "@x" = "12.5%";
-          "@y" = "0%";
-          "@width" = "75%";
-          "@height" = "100%";
-        }
-        {
-          "@name" = "full";
-          "@x" = "0%";
-          "@y" = "0%";
-          "@width" = "100%";
           "@height" = "100%";
         }
       ];
@@ -186,7 +174,6 @@ in
         keybind = [
           (execute "Hangul" "fcitx5-remote -t")
           (execute "W-Return" "ghostty")
-          (execute "W-S-Return" "ghostty")
           (execute "W-A-l" "swaylock")
           (execute "W-e" "nautilus")
           (action "W-p" "ToggleOmnipresent")
@@ -217,14 +204,38 @@ in
           }
           (action "W-q" "Close")
 
-          (action "W-Left" "PreviousWindowImmediate")
-          (action "W-h" "PreviousWindowImmediate")
-          (action "W-Up" "PreviousWindowImmediate")
-          (action "W-k" "PreviousWindowImmediate")
-          (action "W-Right" "NextWindowImmediate")
-          (action "W-l" "NextWindowImmediate")
-          (action "W-Down" "NextWindowImmediate")
-          (action "W-j" "NextWindowImmediate")
+          (actionWith "W-Left" "ToggleSnapToEdge" {
+            direction = "left";
+            combine = "yes";
+          })
+          (actionWith "W-h" "ToggleSnapToEdge" {
+            direction = "left";
+            combine = "yes";
+          })
+          (actionWith "W-Down" "ToggleSnapToEdge" {
+            direction = "down";
+            combine = "yes";
+          })
+          (actionWith "W-j" "ToggleSnapToEdge" {
+            direction = "down";
+            combine = "yes";
+          })
+          (actionWith "W-Up" "ToggleSnapToEdge" {
+            direction = "up";
+            combine = "yes";
+          })
+          (actionWith "W-k" "ToggleSnapToEdge" {
+            direction = "up";
+            combine = "yes";
+          })
+          (actionWith "W-Right" "ToggleSnapToEdge" {
+            direction = "right";
+            combine = "yes";
+          })
+          (actionWith "W-l" "ToggleSnapToEdge" {
+            direction = "right";
+            combine = "yes";
+          })
 
           (actionWith "W-C-Left" "MoveToEdge" { direction = "left"; })
           (actionWith "W-C-h" "MoveToEdge" { direction = "left"; })
@@ -253,25 +264,41 @@ in
           (actionWith "W-C-S-Right" "MoveToOutput" { direction = "right"; })
           (actionWith "W-C-S-l" "MoveToOutput" { direction = "right"; })
 
-          (actionWith "W-Page_Down" "GoToDesktop" { to = "right"; })
-          (actionWith "W-u" "GoToDesktop" { to = "right"; })
-          (actionWith "W-Page_Up" "GoToDesktop" { to = "left"; })
-          (actionWith "W-i" "GoToDesktop" { to = "left"; })
+          (actionWith "W-Page_Down" "GoToDesktop" {
+            to = "right";
+            wrap = "no";
+          })
+          (actionWith "W-u" "GoToDesktop" {
+            to = "right";
+            wrap = "no";
+          })
+          (actionWith "W-Page_Up" "GoToDesktop" {
+            to = "left";
+            wrap = "no";
+          })
+          (actionWith "W-i" "GoToDesktop" {
+            to = "left";
+            wrap = "no";
+          })
           (actionWith "W-C-Page_Down" "SendToDesktop" {
             to = "right";
             follow = "yes";
+            wrap = "no";
           })
           (actionWith "W-C-u" "SendToDesktop" {
             to = "right";
             follow = "yes";
+            wrap = "no";
           })
           (actionWith "W-C-Page_Up" "SendToDesktop" {
             to = "left";
             follow = "yes";
+            wrap = "no";
           })
           (actionWith "W-C-i" "SendToDesktop" {
             to = "left";
             follow = "yes";
+            wrap = "no";
           })
         ]
         ++ map (desktop: actionWith "W-${toString desktop}" "GoToDesktop" { to = toString desktop; }) (
@@ -286,12 +313,12 @@ in
         ) (lib.range 1 9)
         ++ [
           (actionWith "W-r" "ToggleSnapToRegion" { region = "center-half"; })
-          (actionWith "W-S-r" "ToggleSnapToRegion" { region = "center-three-quarter"; })
-          (actionWith "W-C-r" "ToggleSnapToRegion" { region = "center-third"; })
+          (actionWith "W-S-r" "ToggleMaximize" { direction = "vertical"; })
+          (action "W-C-r" "UnSnap")
           (action "W-f" "ToggleMaximize")
           (action "W-S-f" "ToggleFullscreen")
-          (actionWith "W-C-f" "ToggleSnapToRegion" { region = "full"; })
-          (actionWith "W-c" "ToggleSnapToRegion" { region = "center-half"; })
+          (actionWith "W-C-f" "ToggleMaximize" { direction = "horizontal"; })
+          (actionWith "W-c" "AutoPlace" { policy = "center"; })
           (actionWith "W-Minus" "ResizeRelative" {
             left = "-5%";
             right = "-5%";
@@ -312,16 +339,15 @@ in
           (execute "W-S-s" "labwc-screenshot area")
           (execute "Print" "labwc-screenshot area")
           (execute "C-Print" "labwc-screenshot screen")
-          (execute "A-Print" "labwc-screenshot area")
 
           {
             "@key" = "W-Escape";
             "@overrideInhibition" = "yes";
             action."@name" = "ToggleKeybinds";
           }
-          (action "W-S-e" "Exit")
-          (action "C-A-Delete" "Exit")
-          (execute "W-S-p" "wlopm --off '*'")
+          (confirmExit "W-S-e")
+          (confirmExit "C-A-Delete")
+          (execute "W-S-p" "wlopm --toggle '*'")
         ];
       };
 
