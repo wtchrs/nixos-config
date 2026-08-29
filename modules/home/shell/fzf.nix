@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   fzfLsdPreview = pkgs.writeShellScript "fzf-lsd-preview" ''
@@ -53,4 +53,25 @@ in
     # Disable fzf Ctrl+R binding to avoid conflicts with atuin
     historyWidget.command = "";
   };
+
+  # Override the default zoxide `zi` command with fzf directory picker
+  programs.zsh.initContent = lib.mkOrder 1100 ''
+    function zi() {
+      setopt localoptions pipefail no_aliases 2>/dev/null
+
+      local result
+      local query="''${(j: :)@}"
+
+      result="$(
+        FZF_DEFAULT_COMMAND=''${FZF_ALT_C_COMMAND:-} \
+        FZF_DEFAULT_OPTS=$(__fzf_defaults \
+          "--reverse --walker=dir,follow,hidden --scheme=path" \
+          "''${FZF_ALT_C_OPTS-} +m") \
+        FZF_DEFAULT_OPTS_FILE="" \
+          $(__fzfcmd) --query "$query" < /dev/tty
+      )" || return
+
+      [[ -n "$result" ]] && builtin cd -- "$result"
+    }
+  '';
 }
