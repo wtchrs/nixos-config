@@ -16,17 +16,41 @@ let
 
   fzfAltCCommand = pkgs.writeShellScript "fzf-alt-c-command" ''
     {
-      # zoxide items
+      # Recently visited directories from zoxide.
       ${pkgs.zoxide}/bin/zoxide query --list --score |
-        ${pkgs.gawk}/bin/awk '{
+        ${pkgs.gawk}/bin/awk -v home="$HOME" '{
           score = $1
           sub(/^[[:space:]]*[^[:space:]]+[[:space:]]+/, "")
-          printf "%s\t%s\n", $0, score
+
+          path = $0
+          display = path
+
+          if (path == home)
+            display = "~"
+          else if (index(path, home "/") == 1)
+            display = "~" substr(path, length(home) + 1)
+
+          printf "%s\trecent\t%s\t%s\n", path, score, display
         }'
 
-      # all directories
-      ${pkgs.fd}/bin/fd --absolute-path --type=d --hidden --exclude .git |
-        ${pkgs.gawk}/bin/awk '{ printf "%s\t-\n", $0 }'
+      # Directories below the current working directory.
+      ${pkgs.fd}/bin/fd \
+        --absolute-path \
+        --type=d \
+        --hidden \
+        --exclude .git |
+        ${pkgs.gawk}/bin/awk -v cwd="$PWD" '{
+          path = $0
+
+          if (cwd == "/")
+            display = "." path
+          else if (index(path, cwd "/") == 1)
+            display = "." substr(path, length(cwd) + 1)
+          else
+            display = path
+
+          printf "%s\tlocal\t-\t%s\n", path, display
+        }'
     } | ${pkgs.gawk}/bin/awk -F '\t' '!seen[$1]++'
   '';
 in
@@ -40,13 +64,30 @@ in
 
     changeDirWidget = {
       command = "${fzfAltCCommand}";
+
       options = [
         "--no-sort"
-        "--scheme=history"
-        "--with-nth='{2}\t{1}'"
+        "--scheme=path"
+        "--filepath-word"
+        "--highlight-line"
+
+        "--delimiter='\\t'"
+
+        # --nth is evaluated after --with-nth.
+        "--with-nth='{2}\t{3}\t{4}'"
+        "--nth=3"
+
         "--accept-nth=1"
+
+        "--prompt='search> '"
+        "--info=inline-right"
+        "--bind='ctrl-s:toggle-sort'"
+        "--bind='ctrl-/:toggle-preview'"
+
+        "--header='Enter: move  Esc: cancel  Ctrl-S: sort  Ctrl-/: preview'"
+
         "--preview '${fzfLsdPreview} {1}'"
-        "--preview-window=down,30%,sharp"
+        "--preview-window='right,50%,sharp,<80(down,40%,sharp)'"
       ];
     };
 
