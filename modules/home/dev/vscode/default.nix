@@ -255,7 +255,7 @@ let
   '';
 in
 {
-  imports = [ ./vscodeTheme.nix ];
+  imports = [ ./theme.nix ];
 
   programs.vscode = {
     enable = true;

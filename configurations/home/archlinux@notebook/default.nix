@@ -15,6 +15,7 @@ in
     self.homeModules.graphics-desktop-gaming
     self.homeModules.graphics-desktop-nvidia
     self.homeModules.graphics-develop-vscode
+    self.homeModules.develop
     self.homeModules.identity-git-gpg
     ../../nixos/notebook/home/display-outputs.nix
   ];

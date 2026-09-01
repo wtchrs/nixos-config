@@ -22,7 +22,9 @@
       graphics-desktop-gaming = import ../home/desktop/gaming.nix;
       graphics-desktop-nvidia = import ../home/desktop/nvidia.nix;
       graphics-gaming = import ../home/gaming;
-      graphics-develop-vscode = import ../home/dev/vscode.nix;
+      graphics-develop-vscode = import ../home/dev/vscode;
+
+      develop = import ../home/dev;
 
       identity-git-gpg = import ../home/identity/git-gpg.nix;
     };
