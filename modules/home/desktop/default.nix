@@ -27,15 +27,32 @@ in
   home.packages =
     with pkgs;
     [
-      jetbrains-toolbox
-      flake.inputs.zen-browser.packages.${system}.default
+      # Control brightness
       brightnessctl
+
+      # Control wlroots
+      wlrctl
+
+      # Set theme for QT apps
       kdePackages.qt6ct
+
+      # Manage JetBrains IDEs
+      jetbrains-toolbox
+
+      # browser
+      flake.inputs.zen-browser.packages.${system}.default
+
+      # file manager
       nautilus
+
+      # image viewer
       loupe
+
+      # screenshot
       grim
       slurp
-      wlrctl
+
+      # efficient learning using flashcards
       anki
     ]
     ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
