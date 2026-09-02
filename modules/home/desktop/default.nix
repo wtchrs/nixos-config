@@ -36,6 +36,7 @@ in
       grim
       slurp
       wlrctl
+      anki
     ]
     ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
 
