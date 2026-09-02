@@ -54,6 +54,9 @@ in
 
       # efficient learning using flashcards
       anki
+
+      # CLI music player
+      cliamp
     ]
     ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform spotify) spotify;
 
