@@ -10,8 +10,13 @@
       sync_frequency = "5m";
       sync_address = "http://srv-cloud-2:8888";
 
-      search_mode = "skim";
+      search_mode = "daemon-fuzzy";
       filter_mode = "host";
+
+      daemon = {
+        enabled = true;
+        autostart = true;
+      };
 
       store_failed = true;
     };
