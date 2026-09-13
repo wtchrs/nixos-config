@@ -10,6 +10,11 @@
     ];
 
     config = {
+      Hyprland.default = [
+        "gnome"
+        "gtk"
+      ];
+
       niri.default = [
         "gnome"
         "gtk"

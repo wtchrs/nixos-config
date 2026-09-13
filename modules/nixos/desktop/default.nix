@@ -19,6 +19,8 @@
   ];
 
   programs.labwc.enable = true;
+  programs.hyprland.enable = true;
+  security.pam.services.swaylock = { };
 
   services = {
     seatd = {

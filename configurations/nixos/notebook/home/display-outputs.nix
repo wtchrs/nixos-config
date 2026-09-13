@@ -1,6 +1,10 @@
 _:
 
 {
+  wayland.windowManager.hyprland.settings.monitor = [
+    "eDP-1,1920x1080@60.008,1280x0,1.25"
+  ];
+
   # Display settings for niri
   programs.niri.settings.outputs = {
     "eDP-1" = {

@@ -11,6 +11,7 @@ in
 {
   imports = [
     ./niri
+    ./hyprland
     ./labwc
     ./desktopShell.nix
     ./ghostty
