@@ -19,7 +19,6 @@
       nixos = import ../home/nixos.nix;
 
       graphics-desktop = import ../home/desktop;
-      graphics-desktop-gaming = import ../home/desktop/gaming.nix;
       graphics-desktop-nvidia = import ../home/desktop/nvidia.nix;
       graphics-gaming = import ../home/gaming;
       graphics-develop-vscode = import ../home/dev/vscode;

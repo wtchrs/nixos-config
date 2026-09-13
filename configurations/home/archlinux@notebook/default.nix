@@ -12,7 +12,6 @@ in
     self.homeModules.core
     self.homeModules.graphics-desktop
     self.homeModules.graphics-gaming
-    self.homeModules.graphics-desktop-gaming
     self.homeModules.graphics-desktop-nvidia
     self.homeModules.graphics-develop-vscode
     self.homeModules.develop

@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   ...
 }:
@@ -28,8 +29,13 @@
     };
 
     "Mod+Alt+L" = {
-      hotkey-overlay.title = "Lock the Screen: swaylock";
-      action.spawn = [ "swaylock" ];
+      hotkey-overlay.title = "Toggle Lock Screen";
+      action.spawn = [
+        "dms"
+        "ipc"
+        "lock"
+        "lock"
+      ];
     };
 
     "Mod+E" = {
@@ -37,7 +43,7 @@
       action.spawn = [ "nautilus" ];
     };
 
-    "Mod+P" = {
+    "Mod+P" = lib.mkForce {
       hotkey-overlay.title = "Toggle float sticky";
       action.spawn = [
         "niri-float-sticky"
@@ -48,43 +54,25 @@
 
     # volume controls and media controls
     # The allow-when-locked=true property makes them work even when the session is locked.
-    "XF86AudioRaiseVolume" = {
+    "XF86AudioRaiseVolume" = lib.mkForce {
       allow-when-locked = true;
       action.spawn = [
-        "wpctl"
-        "set-volume"
-        "@DEFAULT_AUDIO_SINK@"
-        "0.01+"
+        "dms"
+        "ipc"
+        "audio"
+        "increment"
+        "1"
       ];
     };
 
-    "XF86AudioLowerVolume" = {
+    "XF86AudioLowerVolume" = lib.mkForce {
       allow-when-locked = true;
       action.spawn = [
-        "wpctl"
-        "set-volume"
-        "@DEFAULT_AUDIO_SINK@"
-        "0.01-"
-      ];
-    };
-
-    "XF86AudioMute" = {
-      allow-when-locked = true;
-      action.spawn = [
-        "wpctl"
-        "set-mute"
-        "@DEFAULT_AUDIO_SINK@"
-        "toggle"
-      ];
-    };
-
-    "XF86AudioMicMute" = {
-      allow-when-locked = true;
-      action.spawn = [
-        "wpctl"
-        "set-mute"
-        "@DEFAULT_AUDIO_SOURCE@"
-        "toggle"
+        "dms"
+        "ipc"
+        "audio"
+        "decrement"
+        "1"
       ];
     };
 
@@ -120,21 +108,27 @@
       ];
     };
 
-    "XF86MonBrightnessUp" = {
+    "XF86MonBrightnessUp" = lib.mkForce {
       allow-when-locked = true;
       action.spawn = [
-        "brightnessctl"
-        "set"
-        "1%+"
+        "dms"
+        "ipc"
+        "brightness"
+        "increment"
+        "1"
+        ""
       ];
     };
 
-    "XF86MonBrightnessDown" = {
+    "XF86MonBrightnessDown" = lib.mkForce {
       allow-when-locked = true;
       action.spawn = [
-        "brightnessctl"
-        "set"
-        "1%-"
+        "dms"
+        "ipc"
+        "brightness"
+        "decrement"
+        "1"
+        ""
       ];
     };
 
@@ -270,7 +264,9 @@
     "Mod+BracketRight".action.consume-or-expel-window-right = [ ];
 
     # Consume one window from the right to the bottom of the focused column.
-    "Mod+Comma".action.consume-window-into-column = [ ];
+    "Mod+Comma" = lib.mkForce {
+      action.consume-window-into-column = [ ];
+    };
 
     # Expel the bottom window from the focused column to the right.
     "Mod+Period".action.expel-window-from-column = [ ];
@@ -294,7 +290,7 @@
     "Mod+Shift+Equal".action.set-window-height = "+10%";
 
     # Move the focused window between the floating and the tiling layout.
-    "Mod+V" = {
+    "Mod+V" = lib.mkForce {
       hotkey-overlay.title = "Toggle floating";
       action.toggle-window-floating = [ ];
     };
