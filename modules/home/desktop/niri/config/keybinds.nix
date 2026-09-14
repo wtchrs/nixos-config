@@ -316,10 +316,24 @@
     "Mod+W".action.toggle-column-tabbed-display = [ ];
 
     # Screenshots
-    "Mod+Shift+S".action.screenshot = [ ];
-    "Print".action.screenshot = [ ];
-    "Ctrl+Print".action.screenshot-screen = [ ];
-    "Alt+Print".action.screenshot-window = [ ];
+    "Mod+Shift+S".action.spawn = [
+      "dms"
+      "screenshot"
+    ];
+    "Print".action.spawn = [
+      "dms"
+      "screenshot"
+    ];
+    "Ctrl+Print".action.spawn = [
+      "dms"
+      "screenshot"
+      "full"
+    ];
+    "Alt+Print".action.spawn = [
+      "dms"
+      "screenshot"
+      "window"
+    ];
 
     # Escape hatch for inhibitor
     "Mod+Escape" = {
@@ -328,8 +342,26 @@
     };
 
     # Quit / power
-    "Mod+Shift+E".action.quit = [ ];
-    "Ctrl+Alt+Delete".action.quit = [ ];
-    "Mod+Shift+P".action.power-off-monitors = [ ];
+    "Mod+Shift+E".action.spawn = [
+      "dms"
+      "ipc"
+      "call"
+      "powermenu"
+      "toggle"
+    ];
+    "Ctrl+Alt+Delete".action.spawn = [
+      "dms"
+      "ipc"
+      "call"
+      "powermenu"
+      "toggle"
+    ];
+    "Mod+Shift+P".action.spawn = [
+      "dms"
+      "ipc"
+      "call"
+      "lock"
+      "lockAndOutputsOff"
+    ];
   };
 }

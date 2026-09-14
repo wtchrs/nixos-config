@@ -5,7 +5,8 @@ _:
     layer-rules = [
       {
         matches = [
-          { namespace = "^quickshell:backdrop$"; }
+          # DMS's wallpaper uses Quickshell's default namespace.
+          { namespace = "^quickshell$"; }
         ];
         place-within-backdrop = true;
       }

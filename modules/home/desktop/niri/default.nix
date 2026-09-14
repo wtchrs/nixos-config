@@ -25,8 +25,7 @@ let
   };
 in
 {
-  # `programs.niri.settings.outputs` (display configuration) should be in host-specific overrides.
-  # See `configurations/nixos/notebook/home/display-outputs.nix`.
+  # Let niri auto-configure monitors until DMS saves a local display configuration.
   imports = [
     flake.inputs.niri.homeModules.niri
     ./config/input.nix

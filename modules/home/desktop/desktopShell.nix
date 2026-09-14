@@ -100,7 +100,14 @@
 
     niri = {
       enableKeybinds = true;
-      includes.enable = false;
+      includes = {
+        enable = true;
+        # Keep static keybinds; only these DMS-managed fragments are included.
+        filesToInclude = [
+          "alttab"
+          "outputs"
+        ];
+      };
     };
   };
 

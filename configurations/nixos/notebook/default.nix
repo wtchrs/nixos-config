@@ -107,6 +107,5 @@ in
         stateVersion = "26.05";
       };
     })
-    ./home/display-outputs.nix
   ];
 }

@@ -5,28 +5,6 @@ blur {
   saturation 1.7
 }
 
-layer-rule {
-  match namespace="^quickshell:bar$"
-  background-effect {
-    blur true;
-    xray false;
-  }
-}
-
-// Rule for ext-background-effect-v1 region blur from quickshell
-layer-rule {
-  match namespace="^quickshell:panel$"
-  background-effect { xray false; }
-}
-
-layer-rule {
-  match namespace="^quickshell:launcher$"
-  background-effect {
-    blur true;
-    xray true;
-  }
-}
-
 window-rule {
   match app-id="com.mitchellh.ghostty"
   background-effect {
