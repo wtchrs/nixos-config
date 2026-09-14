@@ -22,7 +22,6 @@ in
     })
 
     self.nixosModules.graphics-desktop
-    self.nixosModules.graphics-display-manager
     self.nixosModules.graphics-nvidia
     self.nixosModules.graphics-gaming
 

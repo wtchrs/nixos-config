@@ -1,19 +1,21 @@
-{
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, username, ... }:
 
 let
-  sddmKwinConfig = pkgs.writeTextDir "kwinrc" ''
-    [Plugins]
-    shakecursorEnabled=false
+  greeterConfig = "/var/lib/dms-greeter/.config/labwc";
+  cursorEnvironment = pkgs.writeText "dms-greeter-cursor-environment" ''
+    XCURSOR_THEME=Bibata-Modern-Ice
+    XCURSOR_SIZE=24
+    XCURSOR_PATH=${pkgs.bibata-cursors}/share/icons
   '';
 in
 {
-  environment.systemPackages = with pkgs; [
-    sddm-astronaut
-    bibata-cursors
+  environment.systemPackages = [ pkgs.bibata-cursors ];
+
+  # Configure labwc inside the greeter session, after greetd sets its environment.
+  systemd.tmpfiles.rules = [
+    "d /var/lib/dms-greeter/.config 0750 dms-greeter dms-greeter -"
+    "d ${greeterConfig} 0750 dms-greeter dms-greeter -"
+    "L+ ${greeterConfig}/environment - - - - ${cursorEnvironment}"
   ];
 
   services.displayManager = {
@@ -21,29 +23,10 @@ in
       pkgs.niri
     ];
 
-    sddm = {
+    dms-greeter = {
       enable = true;
-
-      wayland = {
-        enable = true;
-        compositor = "kwin";
-        compositorCommand = "${lib.getExe' pkgs.coreutils "env"} XDG_CONFIG_HOME=${sddmKwinConfig} ${lib.getExe' pkgs.kdePackages.kwin "kwin_wayland"} --no-global-shortcuts --no-kactivities --no-lockscreen --locale1";
-      };
-
-      theme = "sddm-astronaut-theme";
-
-      settings = {
-        Theme = {
-          CursorTheme = "Bibata-Modern-Ice";
-          CursorSize = "24";
-        };
-      };
-
-      extraPackages = with pkgs; [
-        kdePackages.qtsvg
-        kdePackages.qtmultimedia
-        kdePackages.qtvirtualkeyboard
-      ];
+      compositor.name = "labwc";
+      configHome = "/home/${username}";
     };
   };
 }

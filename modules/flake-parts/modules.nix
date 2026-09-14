@@ -6,7 +6,6 @@
       default = import ../nixos;
 
       graphics-desktop = import ../nixos/desktop;
-      graphics-display-manager = import ../nixos/desktop/display-manager.nix;
       graphics-gaming = import ../nixos/gaming.nix;
       graphics-grub-theme = import ../nixos/desktop/grub-theme.nix;
       graphics-nvidia = import ../nixos/nvidia.nix;
