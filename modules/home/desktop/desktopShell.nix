@@ -30,6 +30,7 @@
       syncModeWithPortal = false;
       # Delegate lock-screen authentication to the system's PAM policy.
       lockPamExternallyManaged = true;
+      lockBeforeSuspend = true;
 
       dockOpenOnOverview = true;
       dockSpacing = 8;

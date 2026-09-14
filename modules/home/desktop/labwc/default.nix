@@ -5,16 +5,6 @@
 }:
 
 let
-  screenshot = pkgs.writeShellApplication {
-    name = "labwc-screenshot";
-    runtimeInputs = [
-      pkgs.coreutils
-      pkgs.grim
-      pkgs.slurp
-    ];
-    text = builtins.readFile ./scripts/screenshot.sh;
-  };
-
   action = key: name: {
     "@key" = key;
     action."@name" = name;
@@ -37,23 +27,8 @@ let
       "@allowWhenLocked" = "yes";
     };
 
-  confirmExit = key: {
-    "@key" = key;
-    action = {
-      "@name" = "If";
-      prompt."@message" = "Exit labwc?";
-      "then".action."@name" = "Exit";
-    };
-  };
 in
 {
-  home.packages = [
-    screenshot
-    pkgs.swaybg
-    pkgs.swaylock
-    pkgs.wlopm
-  ];
-
   wayland.windowManager.labwc = {
     enable = true;
 
@@ -71,6 +46,7 @@ in
 
     systemd.variables = [
       "QT_QPA_PLATFORM"
+      "LABWC_PID"
       "DISPLAY"
       "WAYLAND_DISPLAY"
       "XDG_CURRENT_DESKTOP"
@@ -155,7 +131,7 @@ in
 
       desktops = {
         "@number" = 9;
-        "@popupTime" = 600;
+        "@popupTime" = 0;
         "@prefix" = "Workspace";
       };
 
@@ -187,10 +163,10 @@ in
           (executeWhenLocked "XF86AudioLowerVolume" "dms ipc call audio decrement 1")
           (executeWhenLocked "XF86AudioMute" "dms ipc call audio mute")
           (executeWhenLocked "XF86AudioMicMute" "dms ipc call audio micmute")
-          (executeWhenLocked "XF86AudioPlay" "playerctl play-pause")
-          (executeWhenLocked "XF86AudioPause" "playerctl play-pause")
-          (executeWhenLocked "XF86AudioNext" "playerctl next")
-          (executeWhenLocked "XF86AudioPrev" "playerctl previous")
+          (executeWhenLocked "XF86AudioPlay" "dms ipc call mpris playPause")
+          (executeWhenLocked "XF86AudioPause" "dms ipc call mpris playPause")
+          (executeWhenLocked "XF86AudioNext" "dms ipc call mpris next")
+          (executeWhenLocked "XF86AudioPrev" "dms ipc call mpris previous")
           (executeWhenLocked "XF86MonBrightnessUp" "dms ipc call brightness increment 1 \"\"")
           (executeWhenLocked "XF86MonBrightnessDown" "dms ipc call brightness decrement 1 \"\"")
 
@@ -341,18 +317,16 @@ in
             bottom = "5%";
           })
 
-          (execute "W-S-s" "labwc-screenshot area")
-          (execute "Print" "labwc-screenshot area")
-          (execute "C-Print" "labwc-screenshot screen")
+          (execute "W-S-s" "dms screenshot")
 
           {
             "@key" = "W-Escape";
             "@overrideInhibition" = "yes";
             action."@name" = "ToggleKeybinds";
           }
-          (confirmExit "W-S-e")
-          (confirmExit "C-A-Delete")
-          (execute "W-S-p" "wlopm --toggle '*'")
+          (execute "W-S-e" "dms ipc call powermenu toggle")
+          (execute "C-A-Delete" "dms ipc call powermenu toggle")
+          (execute "W-S-p" "dms ipc call lock lockAndOutputsOff")
         ];
       };
 
@@ -377,132 +351,93 @@ in
 
     # Keep the root menu aligned with the most useful niri/labwc keybindings.
     # This is written as XML because Home Manager's labwc menu generator cannot
-    # express action attributes such as direction, combine, region, or prompts.
-    configFile."labwc/menu.xml".text =
-      let
-        workspaceItems = lib.concatMapStringsSep "\n" (desktop: ''
-          <item label="Workspace ${toString desktop}  [Super+${toString desktop}]">
-            <action name="GoToDesktop" to="${toString desktop}" />
+    # express action attributes such as direction, combine, or region.
+    configFile."labwc/menu.xml".text = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <openbox_menu>
+        <menu id="root-menu" label="">
+          <item label="_Applications  [Super+Space]" icon="applications-other">
+            <action name="Execute" command="dms ipc call spotlight toggle" />
           </item>
-        '') (lib.range 1 9);
-      in
-      ''
-        <?xml version="1.0" encoding="UTF-8"?>
-        <openbox_menu>
-          <menu id="root-menu" label="">
-            <item label="_Terminal  [Super+Enter]" icon="com.mitchellh.ghostty">
-              <action name="Execute" command="ghostty" />
-            </item>
-            <item label="_Files  [Super+E]" icon="org.gnome.Nautilus">
-              <action name="Execute" command="nautilus" />
-            </item>
-            <item label="_Zen Browser" icon="zen">
-              <action name="Execute" command="zen" />
-            </item>
+          <item label="_Settings  [Super+,]">
+            <action name="Execute" command="dms ipc call settings focusOrToggle" />
+          </item>
 
-            <menu
-              id="applications-menu"
-              label="_Applications"
-              icon="applications-other"
-              execute="${lib.getExe pkgs.labwc-menu-generator} -p -I"
-            />
+          <separator />
 
+          <menu id="windows-menu" label="_Windows">
+            <!--
+              Built-in dynamic menus must be referenced by id only. Adding a
+              label makes labwc parse these as new, empty inline menus.
+            -->
+            <menu id="client-list-combined-menu" />
+            <menu id="client-send-to-menu" />
             <separator />
-
-            <menu id="windows-menu" label="_Windows">
-              <!--
-                Built-in dynamic menus must be referenced by id only. Adding a
-                label makes labwc parse these as new, empty inline menus.
-              -->
-              <menu id="client-list-combined-menu" />
-              <menu id="client-send-to-menu" />
-              <separator />
-              <item label="Show on _all workspaces  [Super+P]">
-                <action name="ToggleOmnipresent" />
-              </item>
-              <item label="_Close  [Super+Q]">
-                <action name="Close" />
-              </item>
-            </menu>
-
-            <menu id="workspace-menu" label="W_orkspace">
-              <item label="_Previous  [Super+I]">
-                <action name="GoToDesktop" to="left" wrap="no" />
-              </item>
-              <item label="_Next  [Super+U]">
-                <action name="GoToDesktop" to="right" wrap="no" />
-              </item>
-              <separator />
-              ${workspaceItems}
-            </menu>
-
-            <menu id="layout-menu" label="_Layout">
-              <item label="Snap _left  [Super+Left]">
-                <action name="ToggleSnapToEdge" direction="left" combine="yes" />
-              </item>
-              <item label="Snap _right  [Super+Right]">
-                <action name="ToggleSnapToEdge" direction="right" combine="yes" />
-              </item>
-              <item label="Snap _up  [Super+Up]">
-                <action name="ToggleSnapToEdge" direction="up" combine="yes" />
-              </item>
-              <item label="Snap _down  [Super+Down]">
-                <action name="ToggleSnapToEdge" direction="down" combine="yes" />
-              </item>
-              <separator />
-              <item label="Center _half  [Super+R]">
-                <action name="ToggleSnapToRegion" region="center-half" />
-              </item>
-              <item label="_Center  [Super+C]">
-                <action name="AutoPlace" policy="center" />
-              </item>
-              <item label="_Maximize  [Super+F]">
-                <action name="ToggleMaximize" />
-              </item>
-              <item label="_Fullscreen  [Super+Shift+F]">
-                <action name="ToggleFullscreen" />
-              </item>
-              <item label="_Restore  [Super+Ctrl+R]">
-                <action name="UnSnap" />
-              </item>
-            </menu>
-
-            <menu id="capture-menu" label="_Capture">
-              <item label="Select _area  [Super+Shift+S]">
-                <action name="Execute" command="labwc-screenshot area" />
-              </item>
-              <item label="Entire _screen  [Ctrl+Print]">
-                <action name="Execute" command="labwc-screenshot screen" />
-              </item>
-            </menu>
-
-            <separator />
-
-            <item label="Disable compositor _shortcuts  [Super+Escape]">
-              <action name="ToggleKeybinds" />
+            <item label="Show on _all workspaces  [Super+P]">
+              <action name="ToggleOmnipresent" />
             </item>
-            <item label="_Lock  [Super+Alt+L]">
-              <action name="Execute" command="dms ipc call lock lock" />
-            </item>
-            <item label="Turn displays _off  [Super+Shift+P]">
-              <action name="Execute" command="wlopm --toggle '*'" />
-            </item>
-
-            <item label="_Reconfigure">
-              <action name="Reconfigure" />
-            </item>
-
-            <item label="_Exit labwc  [Super+Shift+E]">
-              <action name="If">
-                <prompt message="Exit labwc?" />
-                <then>
-                  <action name="Exit" />
-                </then>
-              </action>
+            <item label="_Close  [Super+Q]">
+              <action name="Close" />
             </item>
           </menu>
-        </openbox_menu>
-      '';
+
+          <menu id="layout-menu" label="_Layout">
+            <item label="Snap _left  [Super+Left]">
+              <action name="ToggleSnapToEdge" direction="left" combine="yes" />
+            </item>
+            <item label="Snap _right  [Super+Right]">
+              <action name="ToggleSnapToEdge" direction="right" combine="yes" />
+            </item>
+            <item label="Snap _up  [Super+Up]">
+              <action name="ToggleSnapToEdge" direction="up" combine="yes" />
+            </item>
+            <item label="Snap _down  [Super+Down]">
+              <action name="ToggleSnapToEdge" direction="down" combine="yes" />
+            </item>
+            <separator />
+            <item label="Center _half  [Super+R]">
+              <action name="ToggleSnapToRegion" region="center-half" />
+            </item>
+            <item label="_Center  [Super+C]">
+              <action name="AutoPlace" policy="center" />
+            </item>
+            <item label="_Maximize  [Super+F]">
+              <action name="ToggleMaximize" />
+            </item>
+            <item label="_Fullscreen  [Super+Shift+F]">
+              <action name="ToggleFullscreen" />
+            </item>
+            <item label="_Restore  [Super+Ctrl+R]">
+              <action name="UnSnap" />
+            </item>
+          </menu>
+
+          <item label="_Capture region  [Super+Shift+S]">
+            <action name="Execute" command="dms screenshot" />
+          </item>
+
+          <separator />
+
+          <item label="Disable compositor _shortcuts  [Super+Escape]">
+            <action name="ToggleKeybinds" />
+          </item>
+          <item label="_Lock  [Super+Alt+L]">
+            <action name="Execute" command="dms ipc call lock lock" />
+          </item>
+          <item label="Lock and turn displays _off  [Super+Shift+P]">
+            <action name="Execute" command="dms ipc call lock lockAndOutputsOff" />
+          </item>
+
+          <item label="_Reconfigure">
+            <action name="Reconfigure" />
+          </item>
+
+          <item label="_Power menu  [Super+Shift+E]">
+            <action name="Execute" command="dms ipc call powermenu toggle" />
+          </item>
+        </menu>
+      </openbox_menu>
+    '';
 
     dataFile."themes/Niri/labwc/themerc".source = ./themerc;
   };
