@@ -14,7 +14,6 @@ in
     ./labwc
     ./desktopShell.nix
     ./ghostty.nix
-    ./dunst.nix
     ./obsidian.nix
 
     ./misc/fonts.nix
