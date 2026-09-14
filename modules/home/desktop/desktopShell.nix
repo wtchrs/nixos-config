@@ -28,6 +28,8 @@
       appIdSubstitutions = [ ];
       launcherStyle = "island";
       syncModeWithPortal = false;
+      # Delegate lock-screen authentication to the system's PAM policy.
+      lockPamExternallyManaged = true;
 
       dockOpenOnOverview = true;
       dockSpacing = 8;

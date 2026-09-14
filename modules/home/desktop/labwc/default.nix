@@ -58,18 +58,19 @@ in
     enable = true;
 
     environment = [
+      "QT_QPA_PLATFORM=wayland"
       "XKB_DEFAULT_LAYOUT=us"
       "XKB_DEFAULT_OPTIONS=ctrl:nocaps,korean:ralt_hangul,korean:rctrl_hanja"
     ];
 
     autostart = [
       "${lib.getExe pkgs.wlr-randr} --output eDP-1 --scale 1.25"
-      "${lib.getExe pkgs.swaybg} -i ~/Pictures/wallpapers/wallpaper -m fill >/dev/null 2>&1 &"
       "${lib.getExe pkgs.vesktop} &"
     ]
     ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.spotify) "NIXOS_OZONE_WL=1 ${lib.getExe pkgs.spotify} --ozone-platform=wayland &";
 
     systemd.variables = [
+      "QT_QPA_PLATFORM"
       "DISPLAY"
       "WAYLAND_DISPLAY"
       "XDG_CURRENT_DESKTOP"
@@ -174,20 +175,24 @@ in
         keybind = [
           (execute "Hangul" "fcitx5-remote -t")
           (execute "W-Return" "ghostty")
-          (execute "W-A-l" "swaylock")
+          (execute "W-space" "dms ipc call spotlight toggle")
+          (execute "W-v" "dms ipc call clipboard toggle")
+          (execute "W-comma" "dms ipc call settings focusOrToggle")
+          (execute "W-n" "dms ipc call notifications toggle")
+          (execute "W-A-l" "dms ipc call lock lock")
           (execute "W-e" "nautilus")
           (action "W-p" "ToggleOmnipresent")
 
-          (executeWhenLocked "XF86AudioRaiseVolume" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01+")
-          (executeWhenLocked "XF86AudioLowerVolume" "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.01-")
-          (executeWhenLocked "XF86AudioMute" "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
-          (executeWhenLocked "XF86AudioMicMute" "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle")
+          (executeWhenLocked "XF86AudioRaiseVolume" "dms ipc call audio increment 1")
+          (executeWhenLocked "XF86AudioLowerVolume" "dms ipc call audio decrement 1")
+          (executeWhenLocked "XF86AudioMute" "dms ipc call audio mute")
+          (executeWhenLocked "XF86AudioMicMute" "dms ipc call audio micmute")
           (executeWhenLocked "XF86AudioPlay" "playerctl play-pause")
           (executeWhenLocked "XF86AudioPause" "playerctl play-pause")
           (executeWhenLocked "XF86AudioNext" "playerctl next")
           (executeWhenLocked "XF86AudioPrev" "playerctl previous")
-          (executeWhenLocked "XF86MonBrightnessUp" "brightnessctl set 1%+")
-          (executeWhenLocked "XF86MonBrightnessDown" "brightnessctl set 1%-")
+          (executeWhenLocked "XF86MonBrightnessUp" "dms ipc call brightness increment 1 \"\"")
+          (executeWhenLocked "XF86MonBrightnessDown" "dms ipc call brightness decrement 1 \"\"")
 
           (action "A-Tab" "NextWindow")
           (action "A-S-Tab" "PreviousWindow")
@@ -477,7 +482,7 @@ in
               <action name="ToggleKeybinds" />
             </item>
             <item label="_Lock  [Super+Alt+L]">
-              <action name="Execute" command="swaylock" />
+              <action name="Execute" command="dms ipc call lock lock" />
             </item>
             <item label="Turn displays _off  [Super+Shift+P]">
               <action name="Execute" command="wlopm --toggle '*'" />
