@@ -13,7 +13,7 @@ in
     ./niri
     ./labwc
     ./desktopShell.nix
-    ./ghostty
+    ./ghostty.nix
     ./dunst.nix
     ./obsidian.nix
 
