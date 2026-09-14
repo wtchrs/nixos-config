@@ -87,7 +87,6 @@
 
           island = true;
           islandHomeCompactTight = true;
-          islandNotificationExpand = true;
           islandSatellitePosition = "island";
           islandSatelliteSwoopRadius = 12;
           islandSatelliteTransparency = 0.65;
