@@ -79,23 +79,32 @@
     "XF86AudioPlay" = {
       allow-when-locked = true;
       action.spawn = [
-        "playerctl"
-        "play-pause"
+        "dms"
+        "ipc"
+        "call"
+        "mpris"
+        "playPause"
       ];
     };
 
     "XF86AudioPause" = {
       allow-when-locked = true;
       action.spawn = [
-        "playerctl"
-        "play-pause"
+        "dms"
+        "ipc"
+        "call"
+        "mpris"
+        "pause"
       ];
     };
 
     "XF86AudioNext" = {
       allow-when-locked = true;
       action.spawn = [
-        "playerctl"
+        "dms"
+        "ipc"
+        "call"
+        "mpris"
         "next"
       ];
     };
@@ -103,7 +112,10 @@
     "XF86AudioPrev" = {
       allow-when-locked = true;
       action.spawn = [
-        "playerctl"
+        "dms"
+        "ipc"
+        "call"
+        "mpris"
         "previous"
       ];
     };
