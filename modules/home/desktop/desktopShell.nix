@@ -19,7 +19,7 @@
       windSpeedUnit = "ms";
       springBounce = 0;
       animationVariant = 2;
-      blurEnabled = true;
+      blurEnabled = false;
       controlCenterShowMicPercent = true;
       showOccupiedWorkspacesOnly = true;
       workspaceFocusedBorderEnabled = true;
@@ -52,10 +52,13 @@
           screenPreferences = [ "all" ];
           showOnLastDisplay = true;
           leftWidgets = [
-            "launcherButton"
-            "workspaceSwitcher"
+            {
+              id = "focusedWindow";
+              focusedWindowSize = 0; # Small
+            }
             "runningApps"
-            "focusedWindow"
+            "workspaceSwitcher"
+            "launcherButton"
           ];
           centerWidgets = [
             "music"
@@ -77,15 +80,16 @@
             "battery"
             "controlCenterButton"
           ];
-          widgetTransparency = 0.65;
+          widgetTransparency = 1;
 
           island = true;
           islandHomeCompactTight = true;
           islandNotificationExpand = true;
+          islandSatellitePosition = "island";
           islandSatelliteSwoopRadius = 12;
           islandSatelliteTransparency = 0.65;
           islandSatelliteGap = 32;
-          islandTransparency = 0.85;
+          islandTransparency = 1;
           islandHighContrast = false;
         }
       ];
@@ -97,5 +101,5 @@
     };
   };
 
-  programs.niri.settings.layout.struts.top = lib.mkForce (-10);
+  programs.niri.settings.layout.struts.top = lib.mkForce 0;
 }
