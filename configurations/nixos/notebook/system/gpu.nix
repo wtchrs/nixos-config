@@ -1,7 +1,27 @@
 { pkgs, ... }:
 
 {
-  hardware.intel-gpu-tools.enable = true;
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+
+      extraPackages = with pkgs; [
+        intel-media-driver
+      ];
+    };
+
+    intel-gpu-tools.enable = true;
+
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = true;
+      open = false;
+      nvidiaSettings = true;
+    };
+  };
+
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   security.wrappers.btop = {
     source = "${pkgs.btop-cuda}/bin/btop";

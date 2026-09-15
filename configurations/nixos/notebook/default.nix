@@ -22,7 +22,6 @@ in
     })
 
     self.nixosModules.graphics-desktop
-    self.nixosModules.graphics-nvidia
     self.nixosModules.graphics-gaming
 
     inputs.grub2-themes.nixosModules.default

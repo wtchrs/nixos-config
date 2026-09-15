@@ -8,7 +8,6 @@
       graphics-desktop = import ../nixos/desktop;
       graphics-gaming = import ../nixos/gaming.nix;
       graphics-grub-theme = import ../nixos/desktop/grub-theme.nix;
-      graphics-nvidia = import ../nixos/nvidia.nix;
     };
 
     homeModules = {
