@@ -14,6 +14,7 @@
       # Prevent legacy migrations from changing defaults in this sparse config.
       configVersion = 18;
 
+      clockFormat = "24h";
       dockTransparency = 0.65;
       cornerRadius = 12;
       windSpeedUnit = "ms";
