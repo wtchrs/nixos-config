@@ -7,6 +7,20 @@
 
 let
   inherit (pkgs.stdenv.hostPlatform) system;
+
+  zenUnwrapped = flake.inputs.zen-browser.packages.${system}.zen-browser-unwrapped;
+
+  zenFixed =
+    pkgs.wrapFirefox
+      (zenUnwrapped.overrideAttrs (old: {
+        passthru = (old.passthru or { }) // {
+          # Changed attrname from ffmpegSupport to withFFmpeg
+          withFFmpeg = true;
+        };
+      }))
+      {
+        pname = "zen-browser";
+      };
 in
 {
   imports = [
@@ -39,7 +53,8 @@ in
       jetbrains-toolbox
 
       # browser
-      flake.inputs.zen-browser.packages.${system}.default
+      #flake.inputs.zen-browser.packages.${system}.default
+      zenFixed
 
       # file manager
       nautilus
