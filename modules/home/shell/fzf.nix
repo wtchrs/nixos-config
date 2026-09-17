@@ -53,6 +53,31 @@ let
         }'
     } | ${pkgs.gawk}/bin/awk -F '\t' '!seen[$1]++'
   '';
+
+  fzfAltCOptions = [
+    "--no-sort"
+    "--scheme=path"
+    "--filepath-word"
+    "--highlight-line"
+
+    "--delimiter='\\t'"
+
+    # --nth is evaluated after --with-nth.
+    "--with-nth='{2}\t{3}\t{4}'"
+    "--nth=3"
+
+    "--accept-nth=1"
+
+    "--prompt='search> '"
+    "--info=inline-right"
+    "--bind='ctrl-s:toggle-sort'"
+    "--bind='ctrl-/:toggle-preview'"
+
+    "--header='Enter: move  Esc: cancel  Ctrl-S: sort  Ctrl-/: preview'"
+
+    "--preview '${fzfLsdPreview} {1}'"
+    "--preview-window='right,50%,sharp,<80(down,40%,sharp)'"
+  ];
 in
 {
   programs.fzf = {
@@ -65,30 +90,8 @@ in
     changeDirWidget = {
       command = "${fzfAltCCommand}";
 
-      options = [
-        "--no-sort"
-        "--scheme=path"
-        "--filepath-word"
-        "--highlight-line"
-
-        "--delimiter='\\t'"
-
-        # --nth is evaluated after --with-nth.
-        "--with-nth='{2}\t{3}\t{4}'"
-        "--nth=3"
-
-        "--accept-nth=1"
-
-        "--prompt='search> '"
-        "--info=inline-right"
-        "--bind='ctrl-s:toggle-sort'"
-        "--bind='ctrl-/:toggle-preview'"
-
-        "--header='Enter: move  Esc: cancel  Ctrl-S: sort  Ctrl-/: preview'"
-
-        "--preview '${fzfLsdPreview} {1}'"
-        "--preview-window='right,50%,sharp,<80(down,40%,sharp)'"
-      ];
+      bash.options = fzfAltCOptions;
+      zsh.options = fzfAltCOptions;
     };
 
     # Disable fzf Ctrl+R binding to avoid conflicts with atuin
