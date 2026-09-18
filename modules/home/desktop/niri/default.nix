@@ -51,6 +51,8 @@ in
       prefer-no-csd = true;
       screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
       cursor.size = 20;
+
+      debug.honor-xdg-activation-with-invalid-serial = true;
     };
 
     config = lib.mkOptionDefault (
