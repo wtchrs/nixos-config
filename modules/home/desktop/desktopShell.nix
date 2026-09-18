@@ -1,4 +1,4 @@
-{ flake, lib, ... }:
+{ flake, ... }:
 
 {
   imports = [
@@ -87,7 +87,9 @@
           widgetTransparency = 1;
 
           island = true;
-          islandHomeCompactTight = true;
+          islandInteractionMode = "click";
+          islandCompactThickness = 36;
+          islandHomeCompactTight = false;
           islandSatellitePosition = "island";
           islandSatelliteSwoopRadius = 12;
           islandSatelliteTransparency = 0.65;
@@ -110,6 +112,4 @@
       };
     };
   };
-
-  programs.niri.settings.layout.struts.top = lib.mkForce 0;
 }

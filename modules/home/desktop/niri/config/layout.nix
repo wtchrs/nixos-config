@@ -5,10 +5,10 @@ _:
     gaps = 10;
 
     struts = {
-      top = 10;
-      bottom = 10;
-      left = 10;
-      right = 10;
+      top = 0;
+      bottom = 0;
+      left = 5;
+      right = 5;
     };
 
     center-focused-column = "always";
