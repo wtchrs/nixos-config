@@ -1,0 +1,433 @@
+#!/usr/bin/env bash
+# Standalone tmux session manager. See README.md for dependencies and integration.
+set -uo pipefail
+
+mux() {
+  local args=()
+  [[ -z ${TMS_SOCKET:-} ]] || args=(-S "$TMS_SOCKET")
+  command tmux "${args[@]}" "$@"
+}
+
+# Metadata is presentation only; all commands target stable tmux IDs.
+clean() {
+  local value=$1
+  value=${value//$'\t'/ }
+  value=${value//$'\n'/ }
+  value=${value//$'\r'/ }
+  value=${value//$'\033'/ }
+  printf '%s' "$value"
+}
+
+git_info() {
+  command -v git >/dev/null || return 0
+  local branch common actual
+  branch=$(git -C "$1" symbolic-ref --quiet --short HEAD 2>/dev/null) ||
+    branch=$(git -C "$1" rev-parse --short HEAD 2>/dev/null) || return 0
+  actual=$(git -C "$1" rev-parse --absolute-git-dir 2>/dev/null)
+  common=$(git -C "$1" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)
+  [[ $actual == "$common" ]] || branch+=" [worktree]"
+  clean "$branch"
+}
+
+row() {
+  local key=$1 label=$2 path=$3 cmd=$4
+  if [[ ! -v git_cache[$path] ]]; then
+    if [[ ! -f $TMS_STATE/git-$key ]]; then git_info "$path" > "$TMS_STATE/git-$key"; fi
+    git_cache[$path]=$(cat "$TMS_STATE/git-$key")
+  fi
+  printf '%s\t%s  %s  %s  %s\n' "$key" "$(clean "$label")" \
+    "$(clean "$path")" "$(clean "$cmd")" "${git_cache[$path]}"
+}
+
+# Keep the first observed order, appending new IDs without moving existing ones.
+ordered() {
+  local file=$1 id rest
+  local -A live=() seen=()
+  local ids=()
+  while IFS=$'\t' read -r id rest; do
+    [[ -n $id ]] || continue
+    live[$id]=$rest
+    ids+=("$id")
+  done
+  if [[ -f $file ]]; then
+    while IFS= read -r id; do
+      [[ -n $id && -v live[$id] ]] || continue
+      printf '%s\t%s\n' "$id" "${live[$id]}"
+      seen[$id]=1
+    done < "$file"
+  fi
+  for id in "${ids[@]}"; do
+    [[ -v seen[$id] ]] && continue
+    printf '%s\t%s\n' "$id" "${live[$id]}"
+    printf '%s\n' "$id" >> "$file"
+  done
+}
+
+refresh_snapshot() {
+  mux list-panes -a -F $'#{session_id}\t#{window_id}\t#{pane_id}\t#{?session_last_attached,#{session_last_attached},0}\t#{window_active}\t#{pane_active}\t#{window_index}\t#{pane_index}\t#{session_name}\t#{session_path}\t#{window_name}\t#{?pane_title,#{pane_title},-}\t#{pane_current_path}\t#{?pane_current_command,#{pane_current_command},-}' \
+    > "$TMS_STATE/snapshot" 2>/dev/null || :
+  rm -f -- "$TMS_STATE"/preview-* "$TMS_STATE"/git-*
+}
+
+list_rows() {
+  local query=${1:-} sid stamp wid pane name path cmd label record
+  local sname spath wname ptitle active_window active_pane windex pindex
+  local -A sessions=() windows=() panes=() session_pane=() window_pane=()
+  local -A git_cache=()
+  local -a session_ids=() pane_ids=()
+  # Search and expansion only reshape the cached snapshot.
+  [[ -f $TMS_STATE/snapshot ]] || refresh_snapshot
+  while IFS=$'\t' read -r sid wid pane stamp active_window active_pane windex pindex sname spath wname ptitle path cmd; do
+    [[ -n $sid ]] || continue
+    if [[ ! -v sessions[$sid] ]]; then session_ids+=("$sid"); fi
+    sessions[$sid]=$stamp
+    windows[$sid:$wid]=$windex
+    panes[$sid:$pane]="$sid"$'\t'"$wid"$'\t'"$pindex"$'\t'"$sname"$'\t'"$spath"$'\t'"$wname"$'\t'"$ptitle"$'\t'"$path"$'\t'"$cmd"
+    pane_ids+=("$sid:$wid:$pane")
+    if [[ $active_pane == 1 ]]; then
+      window_pane[$sid:$wid]=$pane
+      if [[ $active_window == 1 ]]; then session_pane[$sid]=$pane; fi
+    fi
+  done < "$TMS_STATE/snapshot"
+  printf 'new\t+ New session\nother\t+ New session in other directory\n'
+  while IFS=$'\t' read -r sid stamp; do
+    [[ -n $sid ]] || continue
+    pane=${session_pane[$sid]:-}
+    [[ -n $pane ]] || continue
+    IFS=$'\t' read -r _ _ _ name path _ _ _ cmd <<< "${panes[$sid:$pane]}"
+    label="▾ $name"
+    [[ ! -f $TMS_STATE/closed-$sid ]] || label="▸ $name"
+    row "s:$sid" "$label" "$path" "$cmd"
+    [[ -n $query || ! -f $TMS_STATE/closed-$sid ]] || continue
+    while IFS=$'\t' read -r wid stamp; do
+      [[ -n $wid ]] || continue
+      pane=${window_pane[$sid:$wid]:-}
+      [[ -n $pane ]] || continue
+      IFS=$'\t' read -r _ _ _ _ _ name _ path cmd <<< "${panes[$sid:$pane]}"
+      name="$stamp: $name"
+      label="  ▸ $name"
+      [[ ! -f $TMS_STATE/open-$sid-$wid ]] || label="  ▾ $name"
+      row "w:$sid:$wid" "$label" "$path" "$cmd"
+      [[ -n $query || -f $TMS_STATE/open-$sid-$wid ]] || continue
+      while IFS=$'\t' read -r pane _; do
+        IFS=$'\t' read -r _ _ pindex _ _ _ name path cmd <<< "${panes[$sid:$pane]}"
+        name="$pindex: $name"
+        row "p:$sid:$wid:$pane" "    · $name" "$path" "$cmd"
+      done < <(
+        for record in "${pane_ids[@]}"; do
+          [[ $record == "$sid:$wid:"* ]] && printf '%s\t-\n' "${record##*:}"
+        done | ordered "$TMS_STATE/panes-$sid-$wid"
+      )
+    done < <(
+      for record in "${!windows[@]}"; do
+        [[ $record == "$sid:"* ]] && printf '%s\t%s\n' "${record#*:}" "${windows[$record]}"
+      done | sort -t $'\t' -k2,2n | ordered "$TMS_STATE/windows-$sid"
+    )
+  done < <(
+    for sid in "${session_ids[@]}"; do printf '%s\t%s\n' "$sid" "${sessions[$sid]}"; done |
+      sort -t $'\t' -k2,2nr | ordered "$TMS_STATE/sessions"
+  )
+  return 0
+}
+
+parse_key() {
+  IFS=: read -r kind sid wid pane <<< "$1"
+  case $kind in
+    s) target=$sid ;;
+    w) target=$sid:$wid ;;
+    p) target=$pane ;;
+    *) return 1 ;;
+  esac
+}
+
+toggle() {
+  local kind sid wid pane target file
+  parse_key "$1" || return 0
+  case $kind in
+    s) file=$TMS_STATE/closed-$sid ;;
+    w) file=$TMS_STATE/open-$sid-$wid ;;
+    *) return 0 ;;
+  esac
+  if [[ -f $file ]]; then rm -f -- "$file"; else : > "$file"; fi
+}
+
+preview() {
+  local kind sid wid pane target file output
+  parse_key "$1" || { printf 'Create a new session.\n'; return; }
+  file=$TMS_STATE/preview-$1
+  if [[ ! -f $file ]]; then
+    if output=$(mux capture-pane -p -e -t "$target" -S "-${FZF_PREVIEW_LINES:-30}" 2>/dev/null); then
+      printf '%s\n' "$output" > "$file"
+    else
+      printf 'This item no longer exists. Press Enter to refresh and choose again.\n' > "$file"
+    fi
+  fi
+  cat "$file"
+}
+
+target_exists() {
+  local kind sid wid pane target live_sid live_wid live_pane
+  parse_key "$1" || return 1
+  # Check the entire ancestry: a pane may have moved to another window/session.
+  while IFS=$'\t' read -r live_sid live_wid live_pane; do
+    [[ $sid == "$live_sid" ]] || continue
+    [[ -z $wid || $wid == "$live_wid" ]] || continue
+    [[ -z $pane || $pane == "$live_pane" ]] || continue
+    return 0
+  done < <(mux list-panes -a -F $'#{session_id}\t#{window_id}\t#{pane_id}' 2>/dev/null)
+  return 1
+}
+
+require_target() {
+  target_exists "$1" && return 0
+  refresh_snapshot
+  printf 'Selected item no longer exists. List refreshed; choose again.' > "$TMS_STATE/message"
+  return 1
+}
+
+# fzf's walker supplies local directories; zoxide is optional and only supplies history.
+directories() {
+  local path
+  local -A seen=()
+  while IFS= read -r -d '' path; do
+    [[ -d $path ]] || continue
+    [[ -v seen[$path] ]] && continue
+    seen[$path]=1
+    printf '%s\0' "$path"
+  done < <(
+    if command -v zoxide >/dev/null; then
+      while IFS= read -r path; do printf '%s\0' "$path"; done < <(zoxide query --list 2>/dev/null)
+    fi
+    fzf --walker=dir,hidden --walker-skip=.git --walker-root "$TMS_CWD" \
+      --filter '' --print0 < /dev/tty
+  )
+}
+
+input() {
+  local prompt=$1 initial=${2:-}
+  # An empty, disabled picker is an editable input with consistent Esc semantics.
+  fzf --disabled --print-query --query "$initial" --prompt "$prompt" \
+    --header 'Enter: confirm  Esc: cancel' --bind 'enter:print-query' < /dev/null
+}
+
+notice() {
+  printf '%s\n' "$1" | fzf --disabled --prompt 'Continue> ' --header 'Enter or Esc: return' >/dev/null
+}
+
+choose_directory() {
+  local key path result
+  result=$TMS_STATE/directory-result
+  directories | fzf --read0 --print0 --no-sort --scheme=path --filepath-word \
+    --prompt 'Directory> ' --header 'Enter: choose  Ctrl-L: enter path  Ctrl-S: sort  Esc: cancel' \
+    --bind 'ctrl-s:toggle-sort' --expect ctrl-l > "$result" || return 1
+  { IFS= read -r -d '' key; IFS= read -r -d '' path || :; } < "$result"
+  if [[ $key == ctrl-l ]]; then
+    while :; do
+      path=$(input 'Directory path> ' "${path:-$TMS_CWD/}") || return 1
+      # Match a literal tilde; never evaluate user input as shell syntax.
+      # shellcheck disable=SC2088
+      case $path in '~') path=$HOME ;; '~/'*) path=$HOME/${path:2} ;; esac
+      [[ $path == /* ]] || path=$TMS_CWD/$path
+      if [[ -d $path ]]; then break; fi
+      notice "Directory does not exist: $path"
+    done
+  fi
+  [[ -d $path ]] || { notice 'The selected directory no longer exists.'; return 1; }
+  (cd -- "$path" && pwd -P)
+}
+
+new_session() {
+  local path=$1 base name n=1
+  [[ -d $path ]] || { notice "Directory does not exist: $path"; return 1; }
+  base=${path##*/}
+  base=${base//[^[:alnum:]_-]/_}
+  base=${base:-root}
+  name=$base
+  while mux has-session -t "=$name" 2>/dev/null; do name=$base-$n; ((n+=1)); done
+  name=$(input 'Session name> ' "$name") || return 1
+  [[ -n $name ]] || return 1
+  base=$name; n=1
+  while mux has-session -t "=$name" 2>/dev/null; do name=$base-$n; ((n+=1)); done
+  if ! sid=$(mux new-session -d -P -F '#{session_id}' -s "$name" -c "$path" 2> "$TMS_STATE/error"); then
+    notice "$(cat "$TMS_STATE/error")"
+    return 1
+  fi
+  connect "s:$sid"
+}
+
+connect() {
+  local kind sid wid pane target
+  parse_key "$1" || return 1
+  require_target "$1" || return 1
+  if [[ -n $wid ]]; then mux select-window -t "$sid:$wid" || return 1; fi
+  if [[ -n $pane ]]; then mux select-pane -t "$pane" || return 1; fi
+  if [[ -n ${TMS_CLIENT:-} ]]; then
+    mux switch-client -c "$TMS_CLIENT" -t "$sid"
+  else
+    mux attach-session -t "$sid"
+  fi
+}
+
+rename_target() {
+  local kind sid wid pane target name format
+  parse_key "$1" || return 0
+  case $kind in s) format='#{session_name}' ;; w) format='#{window_name}' ;; p) format='#{pane_title}' ;; esac
+  name=$(mux display-message -p -t "$target" "$format") || return 0
+  name=$(input 'New name/title> ' "$name") || return 0
+  [[ -n $name ]] || return 0
+  require_target "$1" || return 0
+  case $kind in
+    s) mux rename-session -t "$target" "$name" ;;
+    w) mux rename-window -t "$target" "$name" ;;
+    p) mux select-pane -t "$target" -T "$name" ;;
+  esac 2> "$TMS_STATE/error" || { notice "$(cat "$TMS_STATE/error")"; return 0; }
+  refresh_snapshot
+}
+
+delete_target() {
+  local kind sid wid pane target description current='' alternative='' answer session_count
+  parse_key "$1" || return 0
+  description=$(mux display-message -p -t "$target" '#{session_name}:#{window_index}.#{pane_index}') || return 0
+  case $kind in s) description="session $description" ;; w) description="window $description" ;; p) description="pane $description" ;; esac
+  if [[ $sid == "${TMS_ORIGIN_SESSION:-}" ]]; then
+    current=' [current session]'
+  fi
+  session_count=$(mux list-sessions -F '#{session_id}' | wc -l)
+  [[ $kind != s || $session_count -ne 1 ]] || current+=' [last session: tmux will close]'
+  answer=$(printf 'Cancel\nDelete\n' | fzf --no-sort --disabled --prompt 'Confirm> ' \
+    --header "Delete $description$current? Running processes may terminate.") || return 0
+  [[ $answer == Delete ]] || return 0
+  require_target "$1" || return 0
+  if [[ $kind == s && $sid == "${TMS_ORIGIN_SESSION:-}" && -n ${TMS_CLIENT:-} ]]; then
+    while IFS= read -r alternative; do [[ $alternative != "$sid" ]] && break; alternative=''; done \
+      < <(mux list-sessions -F '#{session_id}')
+    if [[ -n $alternative ]]; then mux switch-client -c "$TMS_CLIENT" -t "$alternative" || return 0; fi
+  fi
+  case $kind in
+    s) mux kill-session -t "$target" ;;
+    w) mux kill-window -t "$target" ;;
+    p) mux kill-pane -t "$target" ;;
+  esac 2> "$TMS_STATE/error" || { notice "$(cat "$TMS_STATE/error")"; return 0; }
+  refresh_snapshot
+}
+
+main() {
+  local socket_name='' socket_path='' in_popup=0 arg version major minor
+  while [[ $# -gt 0 ]]; do
+    arg=$1; shift
+    case $arg in
+      -L|-S) [[ $# -gt 0 ]] || { printf 'Missing socket argument\n' >&2; return 2; }
+        if [[ $arg == -L ]]; then socket_name=$1; else socket_path=$1; fi; shift ;;
+      --inline) in_popup=1 ;;
+      -h|--help) printf 'Usage: tms [-L socket-name | -S socket-path]\n'; return ;;
+      *) printf 'Unknown option: %s\n' "$arg" >&2; return 2 ;;
+    esac
+  done
+  if ! command -v tmux >/dev/null || ! command -v fzf >/dev/null; then
+    printf 'tms requires tmux and fzf.\n' >&2
+    return 127
+  fi
+  version=$(fzf --version); version=${version%% *}
+  IFS=. read -r major minor _ <<< "$version"
+  (( major > 0 || minor >= 74 )) || { printf 'tms requires fzf 0.74 or newer.\n' >&2; return 1; }
+  local inherited_tmux=${TMUX:-}
+  export TMS_SOCKET=${socket_path:-${inherited_tmux%%,*}}
+  if [[ -n $socket_name && -z $socket_path ]]; then
+    TMS_SOCKET=${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)/$socket_name
+  fi
+  export TMS_CWD=${TMS_CWD:-$PWD}
+  export TMS_CLIENT=${TMS_CLIENT:-} TMS_ORIGIN_SESSION=${TMS_ORIGIN_SESSION:-}
+  if [[ -n ${TMUX:-} && $in_popup == 0 ]]; then
+    # The launching client's identity must be preserved across popup subprocesses.
+    TMS_CLIENT=$(command tmux display-message -p '#{client_name}')
+    TMS_ORIGIN_SESSION=$(command tmux display-message -p '#{session_id}')
+    TMS_CWD=$(command tmux display-message -p '#{pane_current_path}')
+    if [[ $TMS_SOCKET != "${TMUX%%,*}" ]]; then
+      printf 'Open another server with tms from outside tmux.\n' >&2
+      return 2
+    fi
+    local popup_command
+    printf -v popup_command '%q --inline' "$TMS_SELF"
+    command tmux display-popup -d "$TMS_CWD" -w90% -h80% -E \
+      -e "TMS_CLIENT=$TMS_CLIENT" -e "TMS_ORIGIN_SESSION=$TMS_ORIGIN_SESSION" \
+      -e "TMS_CWD=$TMS_CWD" -e "TMS_SOCKET=$TMS_SOCKET" "$popup_command"
+    return
+  fi
+  TMS_CWD=$(cd -- "$TMS_CWD" && pwd -P) || return 1
+  export TMS_STATE
+  TMS_STATE=$(mktemp -d "${TMPDIR:-/tmp}/tms.XXXXXXXX") || return 1
+  trap 'rm -rf -- "$TMS_STATE"' EXIT
+  local query='' key selected result position=1 _line id path count=0 preferred='' first='' helper header message
+  printf -v helper '%q' "$TMS_SELF"
+  list_rows '' > "$TMS_STATE/initial"
+  while IFS=$'\t' read -r id _line; do
+    ((count+=1))
+    [[ $id == s:* ]] || continue
+    [[ -n $first ]] || first=$id
+    path=$(mux display-message -p -t "${id#s:}" '#{session_path}')
+    if [[ $path == "$TMS_CWD" && -z $preferred ]]; then preferred=$id; fi
+  done < "$TMS_STATE/initial"
+  printf '%s' "${preferred:-${first:-new}}" > "$TMS_STATE/focus"
+  while :; do
+    list_rows "$query" > "$TMS_STATE/rows"
+    selected=$(cat "$TMS_STATE/focus")
+    position=1; count=0
+    while IFS=$'\t' read -r id _line; do
+      ((count+=1)); [[ $id != "$selected" ]] || position=$count
+    done < "$TMS_STATE/rows"
+    result=$TMS_STATE/result
+    header=$'Enter: open  Tab: expand/collapse  Ctrl-N/P or Ctrl-J/K: move\nCtrl-R: rename  Ctrl-X: delete  Ctrl-/: preview'
+    if [[ -f $TMS_STATE/message ]]; then
+      message=$(cat "$TMS_STATE/message")
+      header="$message"$'\n'"$header"
+      rm -f -- "$TMS_STATE/message"
+    fi
+    # FZF_QUERY belongs to fzf's event subprocess.
+    # shellcheck disable=SC2016
+    fzf --sync --layout=reverse --border --no-sort --highlight-line --cycle \
+      --delimiter=$'\t' --with-nth=2.. --id-nth=1 --query "$query" \
+      --prompt 'tms> ' --print-query --expect ctrl-r,ctrl-x \
+      --header "$header" \
+      --preview "$helper --internal preview {1}" \
+      --preview-window 'right,50%,follow,<80(down,40%,follow)' \
+      --bind "start:pos($position)" \
+      --bind "focus:execute-silent($helper --internal focus {1})" \
+      --bind "tab:execute-silent($helper --internal toggle {1})+track-current+reload-sync($helper --internal list {q})" \
+      --bind "change:untrack-current+reload($helper --internal list {q})" \
+      --bind 'ctrl-n:down,ctrl-p:up,ctrl-j:down,ctrl-k:up,ctrl-/:toggle-preview,esc:transform:if test -n "$FZF_QUERY"; then echo clear-query; else echo abort; fi' \
+      < "$TMS_STATE/rows" > "$result" || break
+    { IFS= read -r query; IFS= read -r key; IFS=$'\t' read -r selected _line || :; } < "$result"
+    case $selected in
+      s:*|w:*|p:*) require_target "$selected" || continue ;;
+    esac
+    case $key in
+      ctrl-r) rename_target "$selected"; continue ;;
+      ctrl-x) delete_target "$selected"; continue ;;
+    esac
+    case $selected in
+      new) new_session "$TMS_CWD" && break ;;
+      other) path=$(choose_directory) && new_session "$path" && break ;;
+      '') ;;
+      *) connect "$selected" && break
+        # The target can disappear between validation and the tmux command.
+        require_target "$selected" || : ;;
+    esac
+  done
+}
+
+# Keep inherited fzf integration commands and bindings out of this application.
+export FZF_DEFAULT_OPTS='--layout=reverse' FZF_DEFAULT_OPTS_FILE='' FZF_DEFAULT_COMMAND=''
+export TMS_SELF
+TMS_SELF=$(realpath -- "${BASH_SOURCE[0]}")
+if [[ ${1:-} == --internal ]]; then
+  shift
+  case ${1:-} in
+    list) list_rows "${2:-}" ;;
+    toggle) toggle "${2:-}" ;;
+    preview) preview "${2:-}" ;;
+    focus) printf '%s' "${2:-}" > "$TMS_STATE/focus" ;;
+    directories) directories ;;
+  esac
+else
+  main "$@"
+fi

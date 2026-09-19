@@ -1,7 +1,10 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./shell-integration.nix ];
+  imports = [
+    ./shell-integration.nix
+    ./session
+  ];
 
   programs.tmux = {
     enable = true;
