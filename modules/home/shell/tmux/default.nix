@@ -98,7 +98,7 @@
       # terminal overrides
       set -sa terminal-overrides ",*-256color:Tc"
 
-      set -g extended-keys always
+      set -g extended-keys on
       set -g extended-keys-format csi-u
       set -as terminal-features ',xterm*:extkeys'
 

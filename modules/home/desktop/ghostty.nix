@@ -4,7 +4,6 @@
 
     settings = {
       theme = "nord";
-      term = "xterm-256color";
 
       cursor-style = "block";
       cursor-style-blink = true;
