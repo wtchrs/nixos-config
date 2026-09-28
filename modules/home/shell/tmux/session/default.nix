@@ -1,33 +1,35 @@
 { pkgs, ... }:
 
 let
-  tms = pkgs.stdenvNoCC.mkDerivation {
+  tms = pkgs.buildGoModule {
     pname = "tms";
     version = "0.1.0";
 
     src = pkgs.lib.fileset.toSource {
       root = ./.;
       fileset = pkgs.lib.fileset.unions [
-        ./tms
+        ./go.mod
+        ./go.sum
+        ./manager/app.go
+        ./manager/main.go
+        ./preview/main.go
+        ./preview/main_test.go
       ];
     };
 
+    vendorHash = "sha256-tu7F1okmXaT/VsO5heKRLV3bczPjBJJo1ML2hYou2EE=";
+    subPackages = [ "manager" ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
-    installPhase = ''
-      runHook preInstall
-      install -Dm755 tms "$out/bin/tms"
-      patchShebangs "$out/bin/tms"
+    postInstall = ''
+      mv "$out/bin/manager" "$out/bin/tms"
       wrapProgram "$out/bin/tms" \
         --prefix PATH : ${
           pkgs.lib.makeBinPath [
-            pkgs.bash
-            pkgs.coreutils
             pkgs.tmux
             pkgs.fzf
           ]
         }
-      runHook postInstall
     '';
   };
 in
@@ -36,5 +38,6 @@ in
 
   programs.tmux.extraConfig = ''
     bind s run-shell '${tms}/bin/tms'
+    bind S choose-tree -Zs
   '';
 }

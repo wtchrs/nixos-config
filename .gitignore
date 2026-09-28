@@ -3,3 +3,7 @@ result
 
 # direnv directory
 .direnv
+
+# go.work
+go.work
+go.work.sum
