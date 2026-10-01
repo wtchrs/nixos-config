@@ -16,6 +16,8 @@ in
         ];
         shell = pkgs.zsh;
       };
+
+      environment.enableAllTerminfo = true;
     })
 
     inputs.disko.nixosModules.disko
