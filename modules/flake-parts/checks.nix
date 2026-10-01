@@ -32,10 +32,14 @@ in
         touch $out
       '';
 
-      winRunCheck = pkgs.runCommand "win-run-check" { nativeBuildInputs = [ pkgs.python3 ]; } ''
-        python ${root}/modules/home/gaming/test_win_run.py ${root}/modules/home/gaming/win-run.py
-        touch $out
-      '';
+      proton = flakeConfig.flake.lib.proton-runtime { inherit lib pkgs; };
+      winRunPackage = pkgs.callPackage ../home/programs/win-run/package.nix {
+        protonRuntime = proton.package.steamcompattool;
+      };
+      winRunCheck = winRunPackage.overrideAttrs {
+        doCheck = true;
+      };
+
     in
     {
       formatter = pkgs.nixfmt;

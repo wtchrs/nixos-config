@@ -7,7 +7,7 @@
 
 let
   inherit (flake) self;
-  proton = self.lib.gaming-proton { inherit lib pkgs; };
+  proton = self.lib.proton-runtime { inherit lib pkgs; };
 in
 {
   inherit (proton) assertions;

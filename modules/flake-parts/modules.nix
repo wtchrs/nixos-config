@@ -19,6 +19,7 @@
       graphics-desktop = import ../home/desktop;
       graphics-desktop-nvidia = import ../home/desktop/nvidia.nix;
       graphics-gaming = import ../home/gaming;
+      programs-win-run = import ../home/programs/win-run;
       graphics-develop-vscode = import ../home/dev/vscode;
 
       develop = import ../home/dev;
@@ -26,7 +27,7 @@
       identity-git-gpg = import ../home/identity/git-gpg.nix;
     };
 
-    lib.gaming-proton = import ../../lib/gaming-proton.nix;
+    lib.proton-runtime = import ../../lib/proton-runtime.nix;
 
     overlays = {
       cachyos-kernel = inputs.nix-cachyos-kernel.overlays.pinned;

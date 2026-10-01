@@ -19,7 +19,7 @@ Personal Nix flake for NixOS hosts and standalone Home Manager profiles.
 - `modules/nixos/`: shared NixOS modules.
 - `modules/home/`: shared Home Manager modules.
 - `overlays/`: local package overlays.
-- `lib/gaming-proton.nix`: shared gaming helper exported as `lib.gaming-proton`.
+- `lib/proton-runtime.nix`: shared Proton runtime helper exported as `lib.proton-runtime`.
 
 ## Usage
 
@@ -40,6 +40,12 @@ Run checks:
 ```bash
 nix flake check
 ```
+
+## Windows Programs
+
+Both notebook Home Manager profiles import the independent `homeModules.programs-win-run` module. Default EXE/MSI associations are user settings; the module does not manage `mimeapps.list`. The Go launcher supports `open`, `launch`, and a manually started `watch`; no watcher service or prefix migration is installed. Existing prefixes are left untouched by activation.
+
+See [win-run setup, commands, environment, and checks](modules/home/programs/win-run/README.md). The shared runtime is exported as `lib.proton-runtime` for both Steam and win-run.
 
 ## Adding Configurations
 

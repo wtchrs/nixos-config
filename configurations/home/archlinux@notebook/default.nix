@@ -11,6 +11,7 @@ in
     self.homeModules.standalone-graphics
     self.homeModules.core
     self.homeModules.graphics-desktop
+    self.homeModules.programs-win-run
     self.homeModules.graphics-gaming
     self.homeModules.graphics-desktop-nvidia
     self.homeModules.graphics-develop-vscode

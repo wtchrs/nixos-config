@@ -1,5 +1,4 @@
 {
-  config,
   flake,
   lib,
   pkgs,
@@ -9,26 +8,12 @@
 
 let
   inherit (flake) self;
-  proton = self.lib.gaming-proton { inherit lib pkgs; };
+  proton = self.lib.proton-runtime { inherit lib pkgs; };
   steamCompatManagedByNixOS = osConfig != null && (osConfig.programs.steam.enable or false);
-  cfg = config.programs.win-run;
 
-  winRunText =
-    builtins.replaceStrings
-      [
-        "@protonPath@"
-        "@umuRun@"
-      ]
-      [
-        "${proton.package.steamcompattool}"
-        (lib.getExe pkgs.umu-launcher)
-      ]
-      (builtins.readFile ./win-run.py);
-
-  winRun = pkgs.writeScriptBin "win-run" ''
-    #!${pkgs.python3}/bin/python3
-    ${winRunText}
-  '';
+  winRun = pkgs.callPackage ./package.nix {
+    protonRuntime = proton.package.steamcompattool;
+  };
 
   windowsMimeTypes = {
     exe = [
@@ -48,9 +33,6 @@ let
   allWindowsMimeTypes = windowsMimeTypes.exe ++ windowsMimeTypes.msi;
 in
 {
-  options.programs.win-run.mimeAssociations.enable =
-    lib.mkEnableOption "win-run as the default EXE and MSI handler";
-
   config = {
     inherit (proton) assertions;
 
@@ -70,21 +52,13 @@ in
       desktopEntries.win-run = {
         name = "Win Run (${proton.name})";
         genericName = "Windows Program Launcher";
-        comment = "Open Windows executables in the default win-run workspace";
+        comment = "Open Windows executables in the default win-run prefix";
         exec = "${winRun}/bin/win-run open %f";
         terminal = false;
         type = "Application";
-        categories = [
-          "Game"
-          "Utility"
-        ];
+        categories = [ "Utility" ];
         mimeType = allWindowsMimeTypes;
-        noDisplay = false;
-      };
-
-      mimeApps = lib.mkIf cfg.mimeAssociations.enable {
-        enable = true;
-        defaultApplications = lib.genAttrs allWindowsMimeTypes (_: [ "win-run.desktop" ]);
+        noDisplay = true;
       };
     };
   };

@@ -14,11 +14,11 @@ proton
   assertions = [
     {
       assertion = proton.package ? steamcompattool;
-      message = "gaming proton package must provide a steamcompattool output.";
+      message = "Proton runtime package must provide a steamcompattool output.";
     }
     {
       assertion = lib.all (package: package ? steamcompattool) proton.extraPackages;
-      message = "Every gaming proton extra package must provide a steamcompattool output.";
+      message = "Every Proton runtime extra package must provide a steamcompattool output.";
     }
   ];
 }
