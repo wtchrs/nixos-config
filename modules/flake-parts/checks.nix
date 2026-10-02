@@ -48,6 +48,8 @@ in
         // homeChecks
         // {
           statix = statixCheck;
+        }
+        // lib.optionalAttrs (system == "x86_64-linux") {
           win-run = winRunCheck;
         };
     };

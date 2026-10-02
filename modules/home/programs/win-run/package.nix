@@ -32,6 +32,6 @@ buildGoModule {
   meta = {
     description = "Launch Windows programs with Proton and UMU";
     mainProgram = "win-run";
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
