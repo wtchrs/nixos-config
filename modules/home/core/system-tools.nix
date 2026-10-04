@@ -17,7 +17,15 @@
     catnap
     fastfetch
     strace
-    ltrace
+    # TODO: Remove once nixpkgs includes the upstream fix and tests pass without this override.
+    (ltrace.overrideAttrs (old: {
+      postPatch = (old.postPatch or "") + ''
+        substituteInPlace testsuite/ltrace.minor/demangle.exp \
+          --replace-fail \
+            '[list debug c++]' \
+            '[list debug c++ additional_flags=-std=gnu++17]'
+      '';
+    }))
     lsof
     pciutils
     usbutils
