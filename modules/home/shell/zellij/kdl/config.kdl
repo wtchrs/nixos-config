@@ -4,6 +4,8 @@ default_mode "locked"
 theme "nord"
 
 pane_frames true
+pane_frame_style "full" // "titles", "full", "none"
+
 mouse_mode true
 mouse_click_through true
 
