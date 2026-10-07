@@ -40,6 +40,61 @@ plugins {
     welcome-screen location="zellij:session-manager" {
         welcome_screen true
     }
+
+    zjstatus location="file:@zjstatus@" {
+        // Match tmux-dotbar while keeping Zellij's tab names and keybindings.
+        color_fg "#d8dee9"
+        color_dim "#616e88"
+        color_session "#8fbcbb"
+        color_prefix "#81a1c1"
+        color_dark "#2e3440"
+
+        // Disable autowrap in the plugin pane: keep the first line and clip its tail.
+        format_left "\u{1b}[?7l {mode} {command_host}#[fg=$session]:{session} {tabs} "
+        format_center ""
+        format_right "{datetime}"
+        format_space " "
+        border_enabled "false"
+
+        // Hide whole overlapping regions; the count limit is independent of width.
+        format_hide_on_overlength "true"
+        format_precedence "lcr"
+
+        command_host_command "@hostname@"
+        command_host_format "#[fg=$session]{stdout}"
+        command_host_interval "0"
+        command_host_rendermode "static"
+
+        // These hints describe config.kdl, not Zellij's default bindings.
+        mode_locked "#[fg=$dim][LOCKED]"
+        mode_tmux "#[fg=$prefix]#[fg=$dark,bg=$prefix,bold][TMUX]#[fg=$prefix]"
+        mode_normal "#[fg=$fg][NORMAL p:pane t:tab r:resize s:scroll Ctrl-g:lock]"
+        mode_pane "#[fg=$fg][PANE hjkl:focus n:new r/d:split x:close Esc:lock]"
+        mode_tab "#[fg=$fg][TAB h/l:prev/next n:new r:rename s:sync Esc:lock]"
+        mode_resize "#[fg=$fg][RESIZE hjkl:grow HJKL:shrink +/-:size Esc:lock]"
+        mode_move "#[fg=$fg][MOVE hjkl:move n/p:next/prev Esc:lock]"
+        mode_scroll "#[fg=$fg][SCROLL jk:scroll hl:page f:search Ctrl-c:bottom/lock]"
+        mode_search "#[fg=$fg][SEARCH n/p:next/prev c:case o:word w:wrap Ctrl-c:bottom/lock]"
+        mode_enter_search "#[fg=$fg][ENTER_SEARCH Enter:search Esc:scroll]"
+        mode_rename_tab "#[fg=$fg][RENAME_TAB Enter:finish Esc:undo Ctrl-c:lock]"
+        mode_rename_pane "#[fg=$fg][RENAME_PANE Enter:finish Esc:undo Ctrl-c:lock]"
+        mode_session "#[fg=$fg][SESSION w:sessions p:plugins d:detach Esc:lock]"
+        mode_prompt "#[fg=$fg][PROMPT Enter/Esc:lock]"
+
+        // Both indicators can be present on the same tab.
+        tab_normal "#[fg=$dim] {name}{fullscreen_indicator}{sync_indicator} "
+        tab_active "#[fg=$fg] {name}{fullscreen_indicator}{sync_indicator} "
+        tab_separator "#[fg=$dim] • "
+        tab_fullscreen_indicator " 󰊓"
+        tab_sync_indicator " 󰓦"
+        tab_display_count "5"
+        tab_truncate_start_format "#[fg=$dim]‹ +{count} "
+        tab_truncate_end_format "#[fg=$dim] +{count} ›"
+
+        datetime "#[fg=$session] {format} "
+        datetime_format "%H:%M"
+        datetime_timezone "Asia/Seoul"
+    }
 }
 
 // Background plugins loaded when a session starts.

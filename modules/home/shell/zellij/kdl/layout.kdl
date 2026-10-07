@@ -3,8 +3,8 @@ layout {
         children
 
         pane size=1 borderless=true {
-            // Use the alias so its tooltip configuration is inherited.
-            plugin location="compact-bar"
+            // Keep the bar's appearance and hints in the plugin alias.
+            plugin location="zjstatus"
         }
     }
 }
