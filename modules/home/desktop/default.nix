@@ -5,23 +5,6 @@
   ...
 }:
 
-let
-  inherit (pkgs.stdenv.hostPlatform) system;
-
-  zenUnwrapped = flake.inputs.zen-browser.packages.${system}.zen-browser-unwrapped;
-
-  zenFixed =
-    pkgs.wrapFirefox
-      (zenUnwrapped.overrideAttrs (old: {
-        passthru = (old.passthru or { }) // {
-          # Changed attrname from ffmpegSupport to withFFmpeg
-          withFFmpeg = true;
-        };
-      }))
-      {
-        pname = "zen-browser";
-      };
-in
 {
   imports = [
     ./niri
@@ -53,8 +36,7 @@ in
       jetbrains-toolbox
 
       # browser
-      #flake.inputs.zen-browser.packages.${system}.default
-      zenFixed
+      flake.inputs.zen-browser.packages.${stdenv.hostPlatform.system}.default
 
       # file manager
       nautilus
