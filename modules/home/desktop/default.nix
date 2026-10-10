@@ -62,6 +62,9 @@ in
       # image viewer
       loupe
 
+      # video player
+      celluloid
+
       # screenshot
       grim
       slurp
