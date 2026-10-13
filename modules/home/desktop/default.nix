@@ -37,6 +37,7 @@
 
       # browser
       flake.inputs.zen-browser.packages.${stdenv.hostPlatform.system}.default
+      chromium
 
       # file manager
       nautilus
