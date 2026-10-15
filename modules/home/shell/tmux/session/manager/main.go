@@ -89,8 +89,10 @@ func (a *app) deleteTarget(key string) {
 	if len(ids) == 1 {
 		current += " [last session: tmux will close]"
 	}
-	output, err := a.fzf([]string{"--no-sort", "--disabled", "--prompt", "Confirm> ",
-		"--header", fmt.Sprintf("Delete session %s%s? Running processes may terminate.", description, current)},
+	output, err := a.fzf([]string{
+		"--no-sort", "--disabled", "--prompt", "Confirm> ",
+		"--header", fmt.Sprintf("Delete session %s%s? Running processes may terminate.", description, current),
+	},
 		[]byte("Cancel\nDelete\n"))
 	if err != nil || strings.TrimSuffix(string(output), "\n") != "Delete" || !a.requireTarget(key) {
 		return
@@ -120,7 +122,7 @@ func (a *app) picker(rows []string, position int) (query, key, selected string, 
 	}
 	helper := shellQuote(a.self)
 	args := []string{
-		"--sync", "--layout=reverse", "--no-sort", "--highlight-line", "--ansi", "--cycle",
+		"--sync", "--layout=reverse", "--no-sort", "--highlight-line", "--ansi", "--no-cycle",
 		"--delimiter=\t", "--with-nth=2..", "--id-nth=1", "--query", a.query,
 		"--prompt", "tms> ", "--print-query", "--expect", "ctrl-r,ctrl-x",
 		"--header", header,
@@ -144,7 +146,7 @@ func (a *app) picker(rows []string, position int) (query, key, selected string, 
 
 func (a *app) runPicker() {
 	a.refreshSnapshot()
-	_ = os.WriteFile(filepath.Join(a.state, "focus"), []byte("new"), 0600)
+	_ = os.WriteFile(filepath.Join(a.state, "focus"), []byte("new"), 0o600)
 	for {
 		rows := a.rows()
 		focused, _ := os.ReadFile(filepath.Join(a.state, "focus"))
@@ -218,7 +220,7 @@ func (a *app) internal(args []string) int {
 		if a.state == "" {
 			return 1
 		}
-		if err := os.WriteFile(filepath.Join(a.state, "focus"), []byte(key), 0600); err != nil {
+		if err := os.WriteFile(filepath.Join(a.state, "focus"), []byte(key), 0o600); err != nil {
 			return 1
 		}
 		return 0
