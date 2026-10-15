@@ -125,6 +125,9 @@
       set -g status-interval 5
       set -g status-left-length 30
 
+      # message style
+      set -g message-style "bg=#3b4252,fg=#eceff4,fill=#3b4252"
+
       # pane border setting
       set -g pane-border-status bottom
       set -g pane-border-format ""
