@@ -30,7 +30,6 @@
     lib.proton-runtime = import ../../lib/proton-runtime.nix;
 
     overlays = {
-      cachyos-kernel = inputs.nix-cachyos-kernel.overlays.pinned;
       niri = inputs.niri.overlays.niri;
       catnap = import ../../overlays/catnap.nix;
       twintaillauncher = import ../../overlays/twintaillauncher;
