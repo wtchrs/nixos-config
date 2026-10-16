@@ -16,6 +16,11 @@ in
 
     # Nix tooling
     nix-output-monitor
+
+    # Typst
+    typst
+    typstyle
+    tinymist
   ];
 
   programs = {
