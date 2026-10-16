@@ -18,12 +18,19 @@
     glib.bin
   ];
 
-  programs.labwc.enable = true;
+  programs = {
+    labwc.enable = true;
 
-  programs.localsend = {
-    enable = true;
-    # LocalSend requires TCP/UDP port 53317 to receive files
-    openFirewall = true;
+    appimage = {
+      enable = true;
+      binfmt = true;
+    };
+
+    localsend = {
+      enable = true;
+      # LocalSend requires TCP/UDP port 53317 to receive files
+      openFirewall = true;
+    };
   };
 
   services = {
@@ -49,5 +56,4 @@
     # Asign limited real-time scheduling priorities to time-sensitive processes like audio
     rtkit.enable = true;
   };
-
 }
