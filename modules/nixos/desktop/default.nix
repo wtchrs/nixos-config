@@ -20,6 +20,12 @@
 
   programs.labwc.enable = true;
 
+  programs.localsend = {
+    enable = true;
+    # LocalSend requires TCP/UDP port 53317 to receive files
+    openFirewall = true;
+  };
+
   services = {
     seatd = {
       enable = true;

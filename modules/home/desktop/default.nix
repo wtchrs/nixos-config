@@ -42,6 +42,10 @@
       # file manager
       nautilus
 
+      # file sharing
+      # Open TCP/UDP port 53317 if you can't receive files
+      localsend
+
       # image viewer
       loupe
 
