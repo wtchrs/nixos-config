@@ -8,6 +8,9 @@ in
 {
   imports = [
     self.nixosModules.default
+    self.nixosModules.cli
+    self.nixosModules.remote-access
+    self.nixosModules.docker
     ({ pkgs, ... }: {
       users.users.${username} = {
         isNormalUser = true;
@@ -71,6 +74,9 @@ in
 
   home-manager.users.${username}.imports = [
     self.homeModules.core
+    self.homeModules.editors
+    self.homeModules.development
+    self.homeModules.documents
     self.homeModules.nixos
     self.homeModules.identity-git-gpg
     (_: {

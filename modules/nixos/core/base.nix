@@ -21,4 +21,7 @@
       options = "ctrl:nocaps";
     };
   };
+
+  # Resolve executables under /bin and /usr/bin through PATH
+  services.envfs.enable = true;
 }

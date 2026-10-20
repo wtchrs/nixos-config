@@ -14,6 +14,7 @@
     lm_sensors
 
     # System inspection and tracing
+    binutils
     catnap
     fastfetch
     strace

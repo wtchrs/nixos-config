@@ -21,6 +21,14 @@ Personal Nix flake for NixOS hosts and standalone Home Manager profiles.
 - `overlays/`: local package overlays.
 - `lib/proton-runtime.nix`: shared Proton runtime helper exported as `lib.proton-runtime`.
 
+## Shared Modules
+
+Configurations select exported feature modules explicitly:
+
+- `nixosModules.default` imports the base system, cache, and Home Manager integration. Each NixOS configuration explicitly imports `nixosModules.cli`, `remote-access`, and `docker`. The CLI module includes the configured Neovim.
+- `homeModules.core` imports the shared shell and CLI configuration. All five Home Manager profiles explicitly import `homeModules.editors`, `development`, and `documents`.
+- `homeModules.development-database-tools` configures pgcli and mycli and is explicitly imported by both notebook profiles.
+
 ## Usage
 
 Apply a NixOS host:

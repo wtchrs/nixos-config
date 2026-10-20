@@ -9,6 +9,9 @@ in
   imports = [
     self.homeModules.standalone
     self.homeModules.core
+    self.homeModules.editors
+    self.homeModules.development
+    self.homeModules.documents
     self.homeModules.identity-git-gpg
   ];
 

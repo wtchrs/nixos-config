@@ -5,9 +5,8 @@
     ../shell
     ../programs/btop.nix
     ./git.nix
-    ./development.nix
+    ./environment.nix
     ./networking.nix
-    ./productivity.nix
     ./security.nix
     ./system-tools.nix
   ];
@@ -40,8 +39,7 @@
     gnutar
     gawk
 
-    # Document and content tools
-    hugo
+    # Markdown viewer
     glow
   ];
 

@@ -11,7 +11,6 @@ in
 
     ./core/base.nix
     ./core/cache.nix
-    ./core/workstation.nix
   ];
 
   nixpkgs = {
