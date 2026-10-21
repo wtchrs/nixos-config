@@ -2,7 +2,10 @@
 
 {
   services = {
-    tlp.enable = true;
+    tlp = {
+      enable = true;
+      pd.enable = true;
+    };
     power-profiles-daemon.enable = false;
   };
 
