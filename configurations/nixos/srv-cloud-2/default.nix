@@ -10,7 +10,6 @@ in
     self.nixosModules.default
     self.nixosModules.cli
     self.nixosModules.remote-access
-    self.nixosModules.docker
     ({ pkgs, ... }: {
       users.users.${username} = {
         isNormalUser = true;

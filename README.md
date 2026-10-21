@@ -25,8 +25,8 @@ Personal Nix flake for NixOS hosts and standalone Home Manager profiles.
 
 Configurations select exported feature modules explicitly:
 
-- `nixosModules.default` imports the base system, cache, and Home Manager integration. Each NixOS configuration explicitly imports `nixosModules.cli`, `remote-access`, and `docker`. The CLI module includes the configured Neovim.
-- `homeModules.core` imports the shared shell and CLI configuration. All five Home Manager profiles explicitly import `homeModules.editors`, `development`, and `documents`.
+- `nixosModules.default` imports the base system, cache, and Home Manager integration. `nixosModules.cli` includes the configured Neovim. `remote-access` enables SSH and Tailscale, and `docker` enables Docker.
+- `homeModules.core` imports the shared shell and CLI configuration. `homeModules.editors` installs Neovim and Vim, `development` installs Node.js and pnpm, and `documents` provides typesetting and document processing tools.
 - `homeModules.development-database-tools` configures pgcli and mycli and is explicitly imported by both notebook profiles.
 
 ## Usage

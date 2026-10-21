@@ -1,4 +1,4 @@
-{ flake, ... }:
+{ flake, pkgs, ... }:
 
 let
   inherit (flake) inputs self;
@@ -31,10 +31,9 @@ in
     self.nixosModules.graphics-grub-theme
 
     ./hardware-configuration.nix
-    ./system/kernel.nix
-    ./system/gpu.nix
-    ./system/nix-ld.nix
-    ./system/power.nix
+    ./gpu.nix
+    ./nix-ld.nix
+    ./power.nix
   ];
 
   _module.args = {
@@ -60,6 +59,9 @@ in
       efiSysMountPoint = "/boot";
     };
   };
+
+  # Use latest linux kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking = {
     networkmanager.enable = true;
