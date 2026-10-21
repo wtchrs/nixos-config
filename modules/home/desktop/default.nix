@@ -23,6 +23,9 @@
   home.packages =
     with pkgs;
     [
+      # D-Bus prompt service for pinentry-gnome3 outside GNOME.
+      gcr_3
+
       # Control brightness
       brightnessctl
 
@@ -80,5 +83,8 @@
     };
   };
 
-  services.tailscale-systray.enable = true;
+  services = {
+    gpg-agent.pinentry.package = pkgs.pinentry-gnome3;
+    tailscale-systray.enable = true;
+  };
 }

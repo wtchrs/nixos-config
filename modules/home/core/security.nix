@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -10,7 +10,8 @@
 
   services.gpg-agent = {
     enable = true;
-    pinentry.package = pkgs.pinentry-tty; # or `pinentry-curses`, `pkgs.pinentry-gnome3`
+    enableSshSupport = true;
+    pinentry.package = lib.mkDefault pkgs.pinentry-tty;
 
     defaultCacheTtl = 0;
     maxCacheTtl = 0;
