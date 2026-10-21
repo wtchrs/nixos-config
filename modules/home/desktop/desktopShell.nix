@@ -9,6 +9,7 @@
   programs.dank-material-shell = {
     enable = true;
     systemd.enable = true;
+    enableCalendarEvents = false;
 
     settings = {
       # Prevent legacy migrations from changing defaults in this sparse config.

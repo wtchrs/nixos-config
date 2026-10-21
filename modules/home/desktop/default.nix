@@ -39,7 +39,23 @@
       jetbrains-toolbox
 
       # browser
-      flake.inputs.zen-browser.packages.${stdenv.hostPlatform.system}.default
+
+      #flake.inputs.zen-browser.packages.${stdenv.hostPlatform.system}.default
+
+      # FIX: remove override once the hash of zen-browser-unwrapped is fixed
+      (
+        let
+          zenPackages = flake.inputs.zen-browser.packages.${stdenv.hostPlatform.system};
+        in
+        zenPackages.default.override {
+          zen-browser-unwrapped = zenPackages.zen-browser-unwrapped.override (
+            lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+              hash = "sha256-uyBF0+IWVNQP6EElAJLurf0sH8gx7vtQkiJ3PIvcoUk=";
+            }
+          );
+        }
+      )
+
       chromium
 
       # file manager
