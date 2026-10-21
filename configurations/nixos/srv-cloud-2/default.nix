@@ -48,6 +48,8 @@ in
       efiSupport = true;
       efiInstallAsRemovable = true;
       useOSProber = false;
+
+      configurationLimit = 10;
     };
 
     efi = {
