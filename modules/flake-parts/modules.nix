@@ -39,7 +39,6 @@
       catnap = import ../../overlays/catnap.nix;
       twintaillauncher = import ../../overlays/twintaillauncher;
       tmux-dotbar = import ../../overlays/tmux-dotbar.nix;
-      gnome-top-bar-organizer-plus = import ../../overlays/gnome-top-bar-organizer-plus.nix;
     };
   };
 }

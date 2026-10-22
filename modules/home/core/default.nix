@@ -26,7 +26,6 @@
     ripgrep
     jq
     yq-go
-    eza
     fzf
 
     # Command-line utilities
