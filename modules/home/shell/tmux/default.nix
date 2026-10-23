@@ -34,39 +34,22 @@
         '';
       }
 
-      {
-        plugin = vim-tmux-navigator;
-        extraConfig = ''
-          bind C-h send-keys C-h
-          bind C-l send-keys C-l
-          bind C-k send-keys C-k
-          bind C-j send-keys C-j
-        '';
-      }
       yank
     ];
 
     extraConfig = ''
       set-option -g renumber-windows on
 
-      # Keep Neovim split navigation first, then cross tmux window boundaries.
-      is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
-        | grep -iqE '^[^TXZ ]+ +([^[:space:]]+/)?g?[.]?(view|l?n?vim?x?|fzf)(diff)?(-wrapped)?$'"
+      # Move between panes, then windows at the left and right edges.
+      bind -n M-h if-shell -F '#{pane_at_left}' 'previous-window' 'select-pane -L'
+      bind -n M-j select-pane -D
+      bind -n M-k select-pane -U
+      bind -n M-l if-shell -F '#{pane_at_right}' 'next-window' 'select-pane -R'
 
-      bind -n C-h if-shell "$is_vim" {
-        send-keys C-h
-      } {
-        if-shell -F '#{pane_at_left}' 'previous-window' 'select-pane -L'
-      }
-
-      bind -n C-l if-shell "$is_vim" {
-        send-keys C-l
-      } {
-        if-shell -F '#{pane_at_right}' 'next-window' 'select-pane -R'
-      }
-
-      bind -T copy-mode-vi C-h if-shell -F '#{pane_at_left}' 'previous-window' 'select-pane -L'
-      bind -T copy-mode-vi C-l if-shell -F '#{pane_at_right}' 'next-window' 'select-pane -R'
+      bind -T copy-mode-vi M-h if-shell -F '#{pane_at_left}' 'previous-window' 'select-pane -L'
+      bind -T copy-mode-vi M-j select-pane -D
+      bind -T copy-mode-vi M-k select-pane -U
+      bind -T copy-mode-vi M-l if-shell -F '#{pane_at_right}' 'next-window' 'select-pane -R'
 
       bind C-s new-session -c "#{pane_current_path}"
       bind C-c new-window -c "#{pane_current_path}"
