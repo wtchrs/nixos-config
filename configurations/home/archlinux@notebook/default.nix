@@ -14,6 +14,7 @@ in
     self.homeModules.development
     self.homeModules.documents
     self.homeModules.graphics-desktop
+    self.homeModules.programs-neru
     self.homeModules.programs-win-run
     self.homeModules.graphics-gaming
     self.homeModules.graphics-desktop-nvidia

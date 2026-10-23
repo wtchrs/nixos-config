@@ -33,6 +33,7 @@ in
     ./hardware-configuration.nix
     ./gpu.nix
     ./nix-ld.nix
+    ./neru.nix
     ./power.nix
   ];
 

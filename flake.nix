@@ -36,6 +36,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    neru = {
+      url = "github:y3owk1n/neru";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     dms = {
       url = "github:AvengeMedia/DankMaterialShell/stable-1.6";
       inputs.nixpkgs.follows = "nixpkgs";

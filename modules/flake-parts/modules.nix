@@ -26,6 +26,7 @@
       graphics-desktop = import ../home/desktop;
       graphics-desktop-nvidia = import ../home/desktop/nvidia.nix;
       graphics-gaming = import ../home/gaming;
+      programs-neru = import ../home/programs/neru.nix;
       programs-win-run = import ../home/programs/win-run;
       graphics-develop-vscode = import ../home/desktop/dev/vscode;
 

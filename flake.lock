@@ -174,6 +174,26 @@
         "type": "github"
       }
     },
+    "neru": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792421382,
+        "narHash": "sha256-HGpX1AsH4Oc1EFkAFCoWzw/bFiYetlpxoZKGi/FviRY=",
+        "owner": "y3owk1n",
+        "repo": "neru",
+        "rev": "ca35d3142db8b0615745df4f6104cc5477161911",
+        "type": "github"
+      },
+      "original": {
+        "owner": "y3owk1n",
+        "repo": "neru",
+        "type": "github"
+      }
+    },
     "niri": {
       "inputs": {
         "niri-stable": "niri-stable",
@@ -308,6 +328,7 @@
         "grub2-themes": "grub2-themes",
         "home-manager": "home-manager",
         "neovim-flake": "neovim-flake",
+        "neru": "neru",
         "niri": "niri",
         "niri-float-sticky": "niri-float-sticky",
         "nixos-unified": "nixos-unified",
