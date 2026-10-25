@@ -1,11 +1,16 @@
-{ lib, username, ... }:
+{ lib, ... }:
 
 {
+  systemd.services.tailscaled.serviceConfig.Environment = [
+    "TS_SSH_DISABLE_FORWARDING=true"
+  ];
+
   services = {
     tailscale = {
       enable = lib.mkDefault true;
       extraSetFlags = [
-        "--operator=${username}"
+        # Use sudo to access tailscale CLI
+        "--operator="
       ];
     };
 
