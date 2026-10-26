@@ -46,11 +46,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    dms-greeter = {
-      url = "github:duxlabs-dev/dux-greeter/v2.0.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     neovim-flake = {
       url = "github:wtchrs/neovim-flake";
       inputs.nixpkgs.follows = "nixpkgs";

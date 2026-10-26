@@ -1,5 +1,4 @@
 {
-  flake,
   pkgs,
   username,
   ...
@@ -28,9 +27,8 @@ in
       pkgs.niri
     ];
 
-    dms-greeter = {
+    dux-greeter = {
       enable = true;
-      package = flake.inputs.dms-greeter.packages.${pkgs.stdenv.hostPlatform.system}.default;
       compositor.name = "labwc";
       # DMS 2.0 stores its configuration under dms instead of DankMaterialShell.
       configFiles = [

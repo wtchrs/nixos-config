@@ -6,7 +6,7 @@
 
 {
   imports = [
-    ./display-manager.nix
+    ./greeter.nix
     ./portal.nix
     ./file-manager.nix
     ./flatpak.nix
