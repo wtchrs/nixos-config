@@ -1,4 +1,9 @@
-{ pkgs, username, ... }:
+{
+  flake,
+  pkgs,
+  username,
+  ...
+}:
 
 let
   greeterConfig = "/var/lib/dms-greeter/.config/labwc";
@@ -25,8 +30,14 @@ in
 
     dms-greeter = {
       enable = true;
+      package = flake.inputs.dms-greeter.packages.${pkgs.stdenv.hostPlatform.system}.default;
       compositor.name = "labwc";
-      configHome = "/home/${username}";
+      # DMS 2.0 stores its configuration under dms instead of DankMaterialShell.
+      configFiles = [
+        "/home/${username}/.config/dms/settings.json"
+        "/home/${username}/.local/state/dms/session.json"
+        "/home/${username}/.cache/dms/dms-colors.json"
+      ];
     };
   };
 }

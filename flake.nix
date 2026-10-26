@@ -42,7 +42,12 @@
     };
 
     dms = {
-      url = "github:AvengeMedia/DankMaterialShell/stable-1.6";
+      url = "github:duxlabs-dev/dux-shell/stable-2.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    dms-greeter = {
+      url = "github:duxlabs-dev/dux-greeter/v2.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
