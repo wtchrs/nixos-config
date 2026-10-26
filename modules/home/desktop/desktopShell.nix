@@ -254,23 +254,23 @@ in
         {
           id = "notifications";
           w = 3;
-          h = 2;
-          col = 3;
-          row = 0;
+          h = 4;
+          col = 0;
+          row = 1;
         }
         {
           id = "calendar";
           w = 3;
           h = 3;
-          col = 0;
-          row = 1;
+          col = 3;
+          row = 0;
         }
         {
           id = "media";
           w = 3;
           h = 2;
           col = 3;
-          row = 2;
+          row = 3;
         }
       ];
 
