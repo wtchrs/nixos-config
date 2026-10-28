@@ -1,0 +1,79 @@
+Count unique Nix store paths in profile and system closures separately.
+
+diff --git a/src/common/definitions.nim b/src/common/definitions.nim
+--- a/src/common/definitions.nim
++++ b/src/common/definitions.nim
+@@ -55,7 +55,7 @@
+         "postmarketos": "apk",
+         "evolution": "xbps",
+         "void": "xbps",
+-        "nixos": "nix",
++        "nixos": "nix-profile",
+         "crux": "pkgutils",
+         "guix": "guix",
+         "slackware": "slpkg",
+@@ -77,7 +77,8 @@
+         "slpkg": "ls /var/log/packages | wc -l",
+         "guix": "guix package --list-installed | wc -l",
+         "pkgutils": "pkginfo -i | wc -l",
+-        "nix": "nix-env --query --installed | wc -l",
++        "nix-profile": "bash -o pipefail -c 'nix-store -q --requisites \"$HOME/.nix-profile\" | sort -u | wc -l'",
++        "nix-system": "bash -o pipefail -c 'nix-store -q --requisites /run/current-system | sort -u | wc -l'",
+         "xbps": "xbps-query -l | wc -l",
+         "emerge": "equery list '*' | wc -l",
+         "dnf": "dnf list installed | wc -l",
+diff --git a/src/system/probe.nim b/src/system/probe.nim
+--- a/src/system/probe.nim
++++ b/src/system/probe.nim
+@@ -363,35 +363,29 @@
+ 
+     return "Unknown"
+ 
+-proc getPackages*(osInfo: OsInfo = getOs()): string =
+-    # Returns the installed package count
+-    let cacheFile = "packages".toCachePath
++proc getPackageCount(pkgManager: string): string =
++    if not PKGCOUNTCOMMANDS.hasKey(pkgManager):
++        return "Unknown"
+ 
++    let cacheFile = ("packages-" & pkgManager).toCachePath
+     result = readCache(cacheFile)
+     if result != "":
+         return
+ 
+-    let pkgManager = getPkgManager(osInfo)
+-    if pkgManager == "Unknown":
+-        return "Unknown"
++    let (output, exitCode) = execCmdEx(PKGCOUNTCOMMANDS[pkgManager])
++    if exitCode != 0:
++        logError(&"Failed to fetch {pkgManager} pkg count: {output.strip()}", fatal=false)
++        return "N/A [" & pkgManager & "]"
+ 
+-    var foundPkgCmd = false
+-    for key in PKGCOUNTCOMMANDS.keys:
+-        if pkgManager == key:
+-            foundPkgCmd = true
+-            break
+-    if not foundPkgCmd:
+-        return "Unknown"
++    result = output.strip() & " [" & pkgManager & "]"
++    writeCache(cacheFile, result, initDuration(hours=2))
+ 
+-    let tmpFile = "packages.txt".toTmpPath
+-    let cmd: string = PKGCOUNTCOMMANDS[pkgManager] & " > " & tmpFile
+-    if execCmd(cmd) != 0:
+-        logError("Failed to fetch pkg count!", fatal=false)
+-        return "N/A"
++proc getPackages*(osInfo: OsInfo = getOs()): string =
++    let pkgManager = getPkgManager(osInfo)
++    result = getPackageCount(pkgManager)
+ 
+-    let count = readFile(tmpFile).strip()
+-    result = count & " [" & pkgManager & "]"
+-    writeCache(cacheFile, result, initDuration(hours=2))
++    if pkgManager == "nix-profile" and dirExists("/run/current-system"):
++        result &= ", " & getPackageCount("nix-system")
+ 
+ proc cleanGpuName(raw: string): string =
+     # Strip parenthesised technical details
+ 

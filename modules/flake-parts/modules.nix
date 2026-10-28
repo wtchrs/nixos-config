@@ -37,7 +37,7 @@
 
     overlays = {
       niri = inputs.niri.overlays.niri;
-      catnap = import ../../overlays/catnap.nix;
+      catnap = import ../../overlays/catnap;
       twintaillauncher = import ../../overlays/twintaillauncher;
       tmux-dotbar = import ../../overlays/tmux-dotbar.nix;
     };

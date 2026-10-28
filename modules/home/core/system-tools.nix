@@ -24,8 +24,8 @@
     usbutils
   ];
 
-  xdg.configFile = {
-    "catnap/config.toml".source = "${pkgs.catnap}/share/catnap/config.toml";
-    "catnap/distros.toml".source = "${pkgs.catnap}/share/catnap/distros.toml";
+  xdg.configFile."catnap" = {
+    source = "${pkgs.catnap}/share/catnap";
+    recursive = true;
   };
 }

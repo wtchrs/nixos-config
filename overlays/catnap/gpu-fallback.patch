@@ -1,0 +1,47 @@
+Fall back to PCI device names when GLX cannot create a rendering context.
+
+diff --git a/src/system/probe.nim b/src/system/probe.nim
+--- a/src/system/probe.nim
++++ b/src/system/probe.nim
+@@ -460,6 +460,22 @@
+         if gb <= t: return $t & "GB"
+     return $gb & "GB"
+ 
++proc getPciGpu(): string =
++    let (output, exitCode) = execCmdEx("lspci -mm")
++    if exitCode != 0:
++        return ""
++
++    var devices: seq[string]
++    for line in output.splitLines():
++        let fields = line.split('"')
++        if fields.len < 6:
++            continue
++        if fields[1] notin ["VGA compatible controller", "3D controller", "Display controller"]:
++            continue
++        devices.add(fields[3] & " " & fields[5])
++
++    result = devices.join(" / ")
++
+ proc getGpu*(): string =
+     # Returns the gpu name
+     let cacheFile = "gpu".toCachePath
+@@ -472,11 +488,13 @@
+         let tmpFile = "glxinfo.txt".toTmpPath
+ 
+         if execCmd("glxinfo -B > " & tmpFile & " 2>&1") != 0:
+-            if readFile(tmpFile).strip() == "Error: unable to open display":
+-                result = "Unknown"
+-            else:
+-                logError("Failed to fetch GPU!", fatal=false)
+-                result = "N/A"
++            result = getPciGpu()
++            if result == "":
++                if readFile(tmpFile).strip() == "Error: unable to open display":
++                    result = "Unknown"
++                else:
++                    logError("Failed to fetch GPU!", fatal=false)
++                    result = "N/A"
+         else:
+             var rawDevice    = "Unknown"
+             var unifiedMemory = ""
