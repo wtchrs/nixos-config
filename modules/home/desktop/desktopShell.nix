@@ -318,9 +318,51 @@ in
           bottomGap = -8;
           followInterfaceStyle = false;
           transparency = 0.65;
-          indicatorStyle = "line";
+          editOnRightClick = true;
           launcherLogoMode = "apps";
           showTrash = true;
+          trashFileManager = "nautilus";
+          order = [
+            "dock_launcher"
+            "dock_1793174442427"
+            "dock_1793174994061"
+            "dock_1793174461681"
+            "dock_apps"
+            "dock_1793174592402"
+            "dock_trash"
+          ];
+          widgets = [
+            {
+              id = "dock_launcher";
+              widgetId = "dockLauncher";
+            }
+            {
+              id = "dock_apps";
+              widgetId = "appsDock";
+              enabled = false;
+            }
+            {
+              id = "dock_trash";
+              widgetId = "dockTrash";
+            }
+            {
+              id = "dock_1793174442427";
+              widgetId = "clock";
+              clockNotificationBadge = true;
+            }
+            {
+              id = "dock_1793174461681";
+              widgetId = "music";
+            }
+            {
+              id = "dock_1793174592402";
+              widgetId = "colorPicker";
+            }
+            {
+              id = "dock_1793174994061";
+              widgetId = "weather";
+            }
+          ];
         }
       ];
 
