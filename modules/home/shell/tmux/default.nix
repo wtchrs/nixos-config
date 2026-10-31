@@ -79,6 +79,10 @@
       bind L next-window
 
       # Popups
+      # Preserve terminal transparency instead of the tmux theme background.
+      set -gw popup-style "bg=default,fg=default"
+      set -gw popup-border-style "bg=default,fg=default"
+
       bind -n M-t display-popup -d "#{pane_current_path}" -w90% -h80% -E "$SHELL"
       bind -n M-g display-popup -d "#{pane_current_path}" -w90% -h80% -E \
         'zsh -lc "export GPG_TTY=$(tty); gpg-connect-agent updatestartuptty /bye >/dev/null; exec lazygit"'
