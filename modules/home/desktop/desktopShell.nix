@@ -77,7 +77,6 @@ in
   programs.dank-material-shell = {
     enable = true;
     systemd.enable = true;
-    enableCalendarEvents = false;
 
     settings = {
       # Prevent legacy migrations from changing defaults in this sparse config.
@@ -288,7 +287,9 @@ in
 
       lockScreenWidgetInstances = lockScreenWidgets;
       greeterWidgetInstances =
-        builtins.filter (widget: widget.widgetType != "lockNotifications") lockScreenWidgets
+        builtins.map (
+          widget: if widget.widgetType == "lockPower" then widget // { enabled = true; } else widget
+        ) (builtins.filter (widget: widget.widgetType != "lockNotifications") lockScreenWidgets)
         ++ [
           {
             id = "greeter_session";
