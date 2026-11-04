@@ -6,7 +6,8 @@
       default = import ../nixos;
       cli = import ../nixos/core/cli.nix;
       remote-access = import ../nixos/remote-access.nix;
-      docker = import ../nixos/docker.nix;
+      docker = import ../nixos/docker;
+      docker-rootless = import ../nixos/docker/rootless.nix;
 
       graphics-desktop = import ../nixos/desktop;
       graphics-gaming = import ../nixos/gaming.nix;

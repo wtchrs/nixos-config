@@ -10,6 +10,8 @@ in
     self.nixosModules.default
     self.nixosModules.cli
     self.nixosModules.remote-access
+    self.nixosModules.docker-rootless
+
     ({ pkgs, ... }: {
       users.users.${username} = {
         isNormalUser = true;
