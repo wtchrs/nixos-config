@@ -49,7 +49,7 @@ in
       efiInstallAsRemovable = true;
       useOSProber = false;
 
-      configurationLimit = 10;
+      configurationLimit = 5;
     };
 
     efi = {
