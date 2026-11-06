@@ -1,7 +1,13 @@
+{ config, ... }:
+
 let
   gitDomain = "git.wtchrs.xyz";
 in
 {
+  environment.systemPackages = [
+    config.services.forgejo.package
+  ];
+
   services.forgejo = {
     enable = true;
     database.type = "sqlite3";
