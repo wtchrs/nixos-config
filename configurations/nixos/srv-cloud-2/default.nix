@@ -32,6 +32,7 @@ in
     ./caddy.nix
     ./atuin-server.nix
     ./forgejo.nix
+    ./restic.nix
   ];
 
   _module.args = {
