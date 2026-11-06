@@ -28,7 +28,10 @@ in
     ./disko.nix
     ./hardware-configuration.nix
     ./network-configuration.nix
+
+    ./caddy.nix
     ./atuin-server.nix
+    ./forgejo.nix
   ];
 
   _module.args = {
