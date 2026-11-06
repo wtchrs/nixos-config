@@ -10,6 +10,7 @@ in
       email = "wtchr_@outlook.com";
       dnsProvider = "cloudflare";
       environmentFile = "/var/lib/acme-secrets/cloudflare.env";
+      dnsResolver = "1.1.1.1:53";
     };
 
     certs."services" = {
