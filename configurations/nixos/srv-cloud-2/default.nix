@@ -29,10 +29,10 @@ in
     ./hardware-configuration.nix
     ./network-configuration.nix
 
-    ./caddy.nix
-    ./atuin-server.nix
-    ./forgejo.nix
-    ./restic.nix
+    ./services/caddy.nix
+    ./services/atuin-server.nix
+    ./services/forgejo.nix
+    ./services/restic.nix
   ];
 
   _module.args = {
