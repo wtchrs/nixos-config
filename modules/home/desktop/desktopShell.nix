@@ -369,7 +369,8 @@ in
 
       notificationCompactMode = true;
       osdAlwaysShowValue = true;
-      osdMediaPlaybackEnabled = true;
+      osdInputMethodEnabled = false;
+      osdMediaPlaybackEnabled = false;
       osdPowerProfileEnabled = true;
 
       # Bar arrays replace the default configuration rather than merging with it.
@@ -416,6 +417,7 @@ in
 
             island = true;
             islandInteractionMode = "click";
+            islandMediaAutoSwitch = true;
             islandCompactThickness = 36;
             gothCornerRadiusOverride = true;
             islandSatelliteFollowInterfaceStyle = false;
