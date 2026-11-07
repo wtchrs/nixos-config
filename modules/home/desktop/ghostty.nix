@@ -27,8 +27,8 @@
       adjust-cell-height = 1;
       adjust-font-baseline = -1;
 
-      window-padding-x = 6;
-      window-padding-y = 6;
+      window-padding-x = 4;
+      window-padding-y = 4;
       window-padding-balance = false;
 
       unfocused-split-opacity = 0.8;
