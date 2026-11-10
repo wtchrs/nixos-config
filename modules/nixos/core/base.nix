@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   # enable flake
@@ -11,7 +11,8 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   console = {
-    font = "Lat2-Terminus16";
+    packages = [ pkgs.terminus_font ];
+    font = "ter-v20b";
     useXkbConfig = true;
   };
 
