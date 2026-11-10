@@ -50,6 +50,7 @@ in
 
     grub = {
       enable = true;
+      configurationLimit = 5;
       device = "nodev";
       useOSProber = true;
       efiSupport = true;
