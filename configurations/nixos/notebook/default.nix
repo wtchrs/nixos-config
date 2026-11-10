@@ -30,6 +30,8 @@ in
     inputs.grub2-themes.nixosModules.default
     self.nixosModules.graphics-grub-theme
 
+    inputs.bootvine.nixosModules.default
+
     ./hardware-configuration.nix
     ./gpu.nix
     ./nix-ld.nix
@@ -76,8 +78,6 @@ in
     powerOnBoot = true;
   };
 
-  services.blueman.enable = true;
-
   zramSwap = {
     enable = true;
     memoryPercent = 100;
@@ -85,9 +85,14 @@ in
     priority = 100;
   };
 
-  services.earlyoom = {
-    enable = true;
-    enableNotifications = true;
+  services = {
+    # live tree of systemd jobs on the boot/poweroff console.
+    bootvine.enable = true;
+    blueman.enable = true;
+    earlyoom = {
+      enable = true;
+      enableNotifications = true;
+    };
   };
 
   # Do not change after installation.
