@@ -1,5 +1,18 @@
 { pkgs, ... }:
 
+let
+  # Switch to English so the IME does not intercept tmux shortcut keys.
+  enterPrefix = ''
+    run-shell ' \
+      if command -v fcitx5-remote >/dev/null 2>&1; then \
+        fcitx5-remote --check -c >/dev/null 2>&1; \
+      fi; \
+      exit 0 \
+    ' \; \
+    switch-client -T prefix \; \
+    refresh-client -S
+  '';
+in
 {
   imports = [
     ./shell-integration.nix
@@ -39,6 +52,14 @@
 
     extraConfig = ''
       set-option -g renumber-windows on
+
+      # Handle Ctrl+b explicitly so it can deactivate the local IME first.
+      set -g prefix None
+      bind -T root C-b ${enterPrefix}
+      bind -T copy-mode C-b ${enterPrefix}
+      bind -T copy-mode-vi C-b ${enterPrefix}
+      bind -T prefix C-b send-keys C-b
+      bind -T prefix Escape switch-client -T root \; refresh-client -S
 
       # Move between panes, then windows at the left and right edges.
       bind -n M-h if-shell -F '#{pane_at_left}' 'previous-window' 'select-pane -L'
