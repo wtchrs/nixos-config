@@ -7,6 +7,7 @@ in
 {
   home.packages = with pkgs; [
     neovim-flake
+    neopane
     vim
   ];
 }

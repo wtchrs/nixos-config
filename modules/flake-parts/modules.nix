@@ -41,6 +41,7 @@
       catnap = import ../../overlays/catnap;
       twintaillauncher = import ../../overlays/twintaillauncher;
       tmux-dotbar = import ../../overlays/tmux-dotbar.nix;
+      neopane = import ../../overlays/neopane.nix;
     };
   };
 }
