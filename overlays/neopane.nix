@@ -10,7 +10,7 @@ final: prev: {
       hash = "sha256-X70xl065IIIMc8TEUblZmJ5KCyOptwmloT/UOr4fgog=";
     };
 
-    cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
+    cargoHash = "sha256-yzmRA8zQVVz8TdCCws8IXTQ/NwAxuQvaa7ks7ASSNoo=";
 
     # The tests start Neovim and terminal multiplexers, which the build sandbox lacks.
     doCheck = false;
