@@ -1,12 +1,7 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
-  deltaThemes = pkgs.fetchFromGitHub {
-    owner = "dandavison";
-    repo = "delta";
-
-    rev = "0.19.2";
-    hash = "sha256-vW2mPAxlPXdwqyK/QhU/DOx6MD9u6DDVCDm0OEWm4AQ=";
-  };
+  # Take the themes from the delta source so they match the installed version.
+  deltaThemes = config.programs.delta.package.src;
 in
 {
   home.packages = with pkgs; [ lazygit ];

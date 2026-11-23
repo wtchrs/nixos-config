@@ -1,4 +1,9 @@
-{ flake, pkgs, ... }:
+{
+  flake,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (flake) inputs self;
@@ -84,6 +89,9 @@ in
   };
 
   services = {
+    # Do not accept SSH logins. remote-access still provides Tailscale.
+    openssh.enable = lib.mkForce false;
+
     # live tree of systemd jobs on the boot/poweroff console.
     bootvine.enable = true;
     blueman.enable = true;

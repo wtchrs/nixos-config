@@ -6,7 +6,7 @@
     extraConfig =
       lib.replaceStrings
         [ "@zjstatus@" "@hostname@" ]
-        [ "${pkgs.zellijPlugins.zjstatus}" "${pkgs.nettools}/bin/hostname" ]
+        [ "${pkgs.zellijPlugins.zjstatus}" "${pkgs.net-tools}/bin/hostname" ]
         (builtins.readFile ./kdl/config.kdl);
     layouts.default = ./kdl/layout.kdl;
   };

@@ -1,4 +1,4 @@
-{ inputs, ... }:
+_:
 
 {
   flake = {
@@ -36,9 +36,7 @@
     lib.proton-runtime = import ../../lib/proton-runtime.nix;
 
     overlays = {
-      niri = inputs.niri.overlays.niri;
       catnap = import ../../overlays/catnap;
-      tmux-dotbar = import ../../overlays/tmux-dotbar.nix;
       neopane = import ../../overlays/neopane.nix;
     };
   };

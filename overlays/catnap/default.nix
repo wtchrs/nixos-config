@@ -19,6 +19,7 @@ final: prev: {
     nativeBuildInputs = [
       prev.nim
       prev.makeWrapper
+      prev.installShellFiles
     ];
 
     buildPhase = ''
@@ -49,7 +50,7 @@ final: prev: {
       install -Dm755 catnap $out/bin/catnap
       mkdir -p "$out/share/catnap"
       cp -R config/. "$out/share/catnap/"
-      install -Dm644 docs/catnap.1 docs/catnap.5 -t $out/share/man/man1
+      installManPage docs/catnap.1 docs/catnap.5
 
       runHook postInstall
     '';

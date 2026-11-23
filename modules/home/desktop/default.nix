@@ -18,6 +18,7 @@
     ./misc/cursor.nix
     ./misc/gtk.nix
     ./misc/clipboard.nix
+    ./misc/portal.nix
   ];
 
   home.packages =
