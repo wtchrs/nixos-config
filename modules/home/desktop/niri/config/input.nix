@@ -1,7 +1,5 @@
-_:
-
 {
-  programs.niri.settings.input = {
+  wayland.windowManager.niri.settings.input = {
     keyboard = {
       xkb = {
         layout = "us";
@@ -11,19 +9,16 @@ _:
     };
 
     touchpad = {
-      tap = true;
-      dwt = true;
-      dwtp = true;
+      tap = { };
+      dwt = { };
+      dwtp = { };
       drag = true;
-      drag-lock = true;
-      natural-scroll = true;
+      drag-lock = { };
+      natural-scroll = { };
       tap-button-map = "left-right-middle";
     };
 
     # Prevent from moving focus if scrolling is required.
-    focus-follows-mouse = {
-      enable = true;
-      max-scroll-amount = "0%";
-    };
+    focus-follows-mouse._props.max-scroll-amount = "0%";
   };
 }

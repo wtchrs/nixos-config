@@ -1,13 +1,10 @@
 {
   flake,
-  lib,
   pkgs,
   ...
 }:
 
 let
-  inherit (flake.inputs.niri.lib) kdl;
-
   inherit (flake.inputs.niri-float-sticky.packages.${pkgs.stdenv.hostPlatform.system})
     niri-float-sticky
     ;
@@ -25,40 +22,42 @@ let
   };
 in
 {
-  # Let niri auto-configure monitors until DMS saves a local display configuration.
   imports = [
-    flake.inputs.niri.homeModules.niri
     ./config/input.nix
     ./config/environments.nix
     ./config/autostarts.nix
     ./config/layout.nix
     ./config/animations.nix
     ./config/rules.nix
+    ./config/effects.nix
     ./config/keybinds.nix
   ];
 
   home.packages = [
-    pkgs.xwayland-satellite
     floatStickyLauncher
     openGhosttyCwd
   ];
 
-  programs.niri = {
+  wayland.windowManager.niri = {
     enable = true;
-    package = pkgs.niri;
+
+    # The system provides the niri session units: NixOS through programs.niri,
+    # other distributions through their niri package.
+    systemd.enable = false;
 
     settings = {
-      prefer-no-csd = true;
+      prefer-no-csd = { };
       screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
-      cursor.size = 20;
+      cursor.xcursor-size = 20;
 
-      debug.honor-xdg-activation-with-invalid-serial = true;
+      debug.honor-xdg-activation-with-invalid-serial = { };
     };
 
-    config = lib.mkOptionDefault (
-      lib.mkAfter [
-        (kdl.leaf "include" "${./kdl/effects.kdl}")
-      ]
-    );
+    # Later configuration overrides earlier configuration, so the DMS files go last.
+    # niri auto-configures monitors until DMS saves outputs.kdl.
+    extraConfig = ''
+      include optional=true "dms/alttab.kdl"
+      include optional=true "dms/outputs.kdl"
+    '';
   };
 }

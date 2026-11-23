@@ -23,10 +23,6 @@ in
   ];
 
   services.displayManager = {
-    sessionPackages = [
-      pkgs.niri
-    ];
-
     dux-greeter = {
       enable = true;
       compositor.name = "labwc";

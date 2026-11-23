@@ -3,7 +3,7 @@
 {
   programs.btop.package = pkgs.btop-cuda;
 
-  programs.niri.settings.environment = {
+  wayland.windowManager.niri.settings.environment = {
     LIBVA_DRIVER_NAME = "nvidia";
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";

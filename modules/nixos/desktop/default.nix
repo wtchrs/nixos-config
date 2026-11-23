@@ -18,6 +18,7 @@
   ];
 
   programs = {
+    niri.enable = true;
     labwc.enable = true;
 
     appimage = {

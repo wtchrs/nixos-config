@@ -1,9 +1,10 @@
 {
-  programs.niri.settings.spawn-at-startup = [
-    { argv = [ "niri-float-sticky-launcher" ]; }
-    { argv = [ "vesktop" ]; }
+  # spawn-at-startup repeats, so each node goes in its own _children entry.
+  wayland.windowManager.niri.settings._children = [
+    { spawn-at-startup = [ "niri-float-sticky-launcher" ]; }
+    { spawn-at-startup = [ "vesktop" ]; }
     {
-      argv = [
+      spawn-at-startup = [
         "env"
         "NIXOS_OZONE_WL=1"
         "spotify"

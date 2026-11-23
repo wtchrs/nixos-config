@@ -71,7 +71,6 @@ in
 {
   imports = [
     flake.inputs.dms.homeModules.dank-material-shell
-    flake.inputs.dms.homeModules.niri
   ];
 
   programs.dank-material-shell = {
@@ -487,18 +486,6 @@ in
             }
           )
         ];
-    };
-
-    niri = {
-      enableKeybinds = true;
-      includes = {
-        enable = true;
-        # Keep static keybinds; only these DMS-managed fragments are included.
-        filesToInclude = [
-          "alttab"
-          "outputs"
-        ];
-      };
     };
   };
 }
