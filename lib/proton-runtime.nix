@@ -3,7 +3,7 @@
 let
   proton = rec {
     name = "DW-Proton";
-    package = pkgs.dwproton-bin.override {
+    package = pkgs.dwproton-bin.overrideAttrs {
       steamDisplayName = name;
     };
     extraPackages = [ ];

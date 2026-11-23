@@ -30,8 +30,6 @@ in
     inputs.grub2-themes.nixosModules.default
     self.nixosModules.graphics-grub-theme
 
-    inputs.bootvine.nixosModules.default
-
     ./hardware-configuration.nix
     ./gpu.nix
     ./nix-ld.nix

@@ -3,7 +3,7 @@
   buildGoModule,
   dwproton-bin,
   umu-launcher,
-  protonRuntime ? (dwproton-bin.override { steamDisplayName = "DW-Proton"; }).steamcompattool,
+  protonRuntime ? (dwproton-bin.overrideAttrs { steamDisplayName = "DW-Proton"; }).steamcompattool,
 }:
 
 buildGoModule {
