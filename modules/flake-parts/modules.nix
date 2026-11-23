@@ -26,7 +26,6 @@
 
       graphics-desktop = import ../home/desktop;
       graphics-desktop-nvidia = import ../home/desktop/nvidia.nix;
-      graphics-gaming = import ../home/gaming;
       programs-neru = import ../home/programs/neru.nix;
       programs-win-run = import ../home/programs/win-run;
       graphics-develop-vscode = import ../home/desktop/dev/vscode;
@@ -39,7 +38,6 @@
     overlays = {
       niri = inputs.niri.overlays.niri;
       catnap = import ../../overlays/catnap;
-      twintaillauncher = import ../../overlays/twintaillauncher;
       tmux-dotbar = import ../../overlays/tmux-dotbar.nix;
       neopane = import ../../overlays/neopane.nix;
     };
