@@ -26,6 +26,7 @@ return {
           explorer = {
             hidden = true,
             ignored = true,
+            git_status_open = true,
             icons = { git = { ignored = "" } },
             formatters = { file = { git_status_hl = true } },
             layout = {
