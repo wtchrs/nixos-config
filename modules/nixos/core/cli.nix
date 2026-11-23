@@ -6,11 +6,11 @@
 
 let
   inherit (pkgs.stdenv.hostPlatform) system;
-  neovim-flake = flake.inputs.neovim-flake.packages.${system}.default;
+  neovim = flake.self.packages.${system}.neovim;
 in
 {
   environment.systemPackages = with pkgs; [
-    neovim-flake
+    neovim
     vim
     git
     curl

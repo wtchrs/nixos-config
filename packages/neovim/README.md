@@ -1,23 +1,25 @@
-# Neovim configuration flake
+# Neovim configuration
 
-This flake provides a wrapped Neovim package whose configuration is bundled into the Nix store.
+This package provides a wrapped Neovim whose configuration is bundled into the Nix store.
+The flake exposes it as `packages.<system>.neovim`.
 
 ## Getting started
 
 Run the following commands:
 
 ```sh
-nix run github:wtchrs/neovim-flake
+nix run github:wtchrs/nixos-config#neovim
 
 # or add this to your profile
-nix profile add github:wtchrs/neovim-flake
+nix profile add github:wtchrs/nixos-config#neovim
 nvim
 ```
 
 > [!NOTE]
 > If `nix-command` and `flakes` features are not enabled, add `--experimental-features 'nix-command flakes'`.
 
-If you want to use this flake in your NixOS configuration, use the following setup:
+This repository installs the package through `homeModules.editors` and `nixosModules.cli`.
+To use it in another NixOS configuration, use the following setup:
 
 ```nix
 # flake.nix
@@ -25,8 +27,8 @@ If you want to use this flake in your NixOS configuration, use the following set
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    neovim-flake = {
-      url = "github:wtchrs/neovim-flake";
+    nixos-config = {
+      url = "github:wtchrs/nixos-config";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -46,7 +48,7 @@ If you want to use this flake in your NixOS configuration, use the following set
 { inputs, pkgs, ... }:
 {
   environment.systemPackages = [
-    inputs.neovim-flake.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.nixos-config.packages.${pkgs.stdenv.hostPlatform.system}.neovim
   ];
 }
 ```
@@ -66,13 +68,19 @@ versions before launching Neovim. Inspect formatter and linter paths with
 
 Treesitter parsers and queries are bundled by Nix and loaded from the Nix store.
 Neovim does not download or compile parsers at startup. Update them by updating
-the flake input and rebuilding the package, rather than running `:TSUpdate` or
-`:TSInstall`.
+the `nixpkgs` flake input and rebuilding the package, rather than running
+`:TSUpdate` or `:TSInstall`.
 
 ## Checks
 
-Run `nix flake check` to verify tool selection, Treesitter, LintInfo, Astro, and
-Java integration.
+The `neovim-tools`, `neovim-java`, `neovim-lintinfo`, and `neovim-treesitter`
+flake checks verify tool selection, Treesitter, LintInfo, Astro, and Java
+integration. They are defined in `nix/checks.nix`. Run one check from the
+repository root:
+
+```sh
+nix build path:.#checks.x86_64-linux.neovim-tools
+```
 
 ## CodeDiff watcher
 
@@ -110,7 +118,8 @@ that the extra would otherwise install with Mason.
 
 ## Dev shell
 
-You can start the Nix development shell with LSPs and formatters for Nix and Lua.
+The repository's default development shell includes LSPs and formatters for Nix
+and Lua. Start it from the repository root.
 
 ```sh
 nix develop

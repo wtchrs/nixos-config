@@ -9,16 +9,18 @@ Personal Nix flake for NixOS hosts and standalone Home Manager profiles.
 - `nixosModules`: reusable NixOS modules exported from `modules/nixos`
 - `homeModules`: reusable Home Manager modules exported from `modules/home`
 - `overlays`: package overlays used by this flake
+- `packages.<system>.neovim`: the configured Neovim; run it with `nix run github:wtchrs/nixos-config#neovim`
 
 ## Layout
 
 - `flake.nix`: delegates flake assembly to `nixos-unified`.
-- `modules/flake-parts/`: defines flake outputs, checks, dev shells, modules, and overlays.
+- `modules/flake-parts/`: defines flake outputs, checks, dev shells, modules, packages, and overlays.
 - `configurations/nixos/<host>/default.nix`: entry point for each NixOS host.
 - `configurations/home/<profile>/default.nix`: entry point for each standalone Home Manager profile.
 - `modules/nixos/`: shared NixOS modules.
 - `modules/home/`: shared Home Manager modules.
 - `overlays/`: local package overlays.
+- `packages/neovim/`: Neovim configuration and package. See [its README](packages/neovim/README.md).
 - `lib/proton-runtime.nix`: shared Proton runtime helper exported as `lib.proton-runtime`.
 
 ## Shared Modules

@@ -128,4 +128,6 @@ pkgs.symlinkJoin {
       --prefix PATH : ${lib.makeBinPath internalTools} \
       --suffix PATH : ${lib.makeBinPath developmentTools}
   '';
+
+  meta.mainProgram = "nvim";
 }

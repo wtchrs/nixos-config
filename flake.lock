@@ -191,26 +191,6 @@
         "type": "github"
       }
     },
-    "neovim-flake": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1793203844,
-        "narHash": "sha256-B16bR8QYxbgCw+wnI+pZ52z0yVJVPgntAexEw+nkarM=",
-        "owner": "wtchrs",
-        "repo": "neovim-flake",
-        "rev": "033a9d3d3e94cb8c8033d574d4a1249ad0bab363",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wtchrs",
-        "repo": "neovim-flake",
-        "type": "github"
-      }
-    },
     "neru": {
       "inputs": {
         "nixpkgs": [
@@ -365,7 +345,6 @@
         "flake-parts": "flake-parts",
         "grub2-themes": "grub2-themes",
         "home-manager": "home-manager",
-        "neovim-flake": "neovim-flake",
         "neru": "neru",
         "niri": "niri",
         "niri-float-sticky": "niri-float-sticky",

@@ -12,7 +12,12 @@ let
 in
 {
   perSystem =
-    { system, pkgs, ... }:
+    {
+      system,
+      pkgs,
+      self',
+      ...
+    }:
     let
       hostChecks = lib.filterAttrs (_: check: check.system == system) (
         lib.mapAttrs' (
@@ -40,12 +45,18 @@ in
         doCheck = true;
       };
 
+      neovimChecks = import ../../packages/neovim/nix/checks.nix {
+        inherit pkgs;
+        inherit (self'.packages) neovim;
+      };
+
     in
     {
       formatter = pkgs.nixfmt;
       checks =
         hostChecks
         // homeChecks
+        // neovimChecks
         // {
           statix = statixCheck;
         }

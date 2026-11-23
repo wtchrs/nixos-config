@@ -262,7 +262,7 @@ in
         };
       };
 
-      # Match neovim-flake:
+      # Match packages/neovim:
       #   vim.g.nord_italic = false
       "editor.tokenColorCustomizations" = {
         "[Nord]" = {

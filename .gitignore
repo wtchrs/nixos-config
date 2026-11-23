@@ -4,6 +4,9 @@ result
 # direnv directory
 .direnv
 
+# Neovim log
+nvim.log
+
 # go.work
 go.work
 go.work.sum

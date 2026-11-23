@@ -10,6 +10,10 @@
           nixfmt
           statix
 
+          # Lua
+          stylua
+          lua-language-server
+
           # Go
           go
           gopls
