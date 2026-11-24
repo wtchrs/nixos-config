@@ -41,9 +41,6 @@ return {
         set_nord_highlights()
       end
     end,
-    on_highlights = function(hl, c)
-      hl.TabLineFill = { bg = c.none }
-    end,
   },
 
   {

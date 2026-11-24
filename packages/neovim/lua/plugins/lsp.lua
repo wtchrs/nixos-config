@@ -106,24 +106,6 @@ return {
       -- Enable awk_ls
       opts.servers.awk_ls = true
 
-      -- Overwrite default lua_ls server settings
-      opts.servers.lua_ls = vim.tbl_deep_extend("force", opts.servers.lua_ls or {}, {
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
-            workspace = {
-              checkThirdParty = false,
-              library = {
-                vim.env.VIMRUNTIME,
-                vim.env.VIMRUNTIME .. "/lua",
-              },
-            },
-          },
-        },
-      })
-
       opts.servers.tailwindcss = vim.tbl_deep_extend("force", opts.servers.tailwindcss or {}, {
         settings = {
           tailwindCSS = {
@@ -138,15 +120,6 @@ return {
           },
         },
       })
-
-      -- Set `mason = false` for all lsp servers
-      for server, server_opts in pairs(opts.servers) do
-        if server_opts == true then
-          opts.servers[server] = { mason = false }
-        elseif type(server_opts) == "table" then
-          server_opts.mason = false
-        end
-      end
 
       -- Use `tiny-inline-diagnostic.nvim` instead
       opts.diagnostics.virtual_text = false

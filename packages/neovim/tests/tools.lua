@@ -109,8 +109,12 @@ vim.schedule(function()
 
     local plugins = require("lazy.core.config").plugins
     local lsp_opts = require("lazy.core.plugin").values(plugins["nvim-lspconfig"], "opts", false)
+
+    -- LazyVim's use_mason is local, so check its input and its effect.
+    -- Without mason-lspconfig, use_mason is false and LazyVim enables each server itself.
+    assert(not LazyVim.has("mason-lspconfig.nvim"), "mason-lspconfig must stay disabled")
     for _, name in ipairs({ "astro", "jsonls" }) do
-      assert(lsp_opts.servers[name].mason == false, name .. " must use the bundled server")
+      assert(vim.lsp.is_enabled(name), name .. " was not enabled with the bundled server")
     end
     local astro_plugin
     for _, plugin in ipairs(lsp_opts.servers.vtsls.settings.vtsls.tsserver.globalPlugins) do

@@ -2,6 +2,8 @@ return {
   {
     -- IME integration
     "keaising/im-select.nvim",
+    -- Servers and SSH sessions have no fcitx5; im-select reports an error on every start there.
+    cond = vim.fn.executable("fcitx5-remote") == 1,
     config = function()
       require("im_select").setup({
         set_default_events = { "InsertLeave", "CmdlineLeave", "VimEnter", "FocusGained" },

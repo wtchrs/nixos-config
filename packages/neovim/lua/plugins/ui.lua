@@ -1,10 +1,10 @@
-local bufferline = require("bufferline")
-
 return {
   {
     "akinsho/bufferline.nvim",
 
     opts = function(_, opts)
+      local bufferline = require("bufferline")
+
       opts.options.always_show_bufferline = true
 
       opts.options.style_preset = {
