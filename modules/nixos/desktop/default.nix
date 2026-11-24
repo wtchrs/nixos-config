@@ -1,8 +1,4 @@
-{
-  pkgs,
-  username,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -34,11 +30,6 @@
   };
 
   services = {
-    seatd = {
-      enable = true;
-      user = username;
-    };
-
     tumbler.enable = true;
     upower.enable = true;
     playerctld.enable = true;
