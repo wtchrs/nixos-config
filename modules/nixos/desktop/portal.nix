@@ -17,6 +17,9 @@
           "gnome"
           "gtk"
         ];
+        # labwc has no Mutter ScreenCast API, so the wlroots backend handles capture.
+        "org.freedesktop.impl.portal.ScreenCast" = "wlr";
+        "org.freedesktop.impl.portal.Screenshot" = "wlr";
         "org.freedesktop.impl.portal.Access" = "gtk";
         "org.freedesktop.impl.portal.Notification" = "gtk";
         "org.freedesktop.impl.portal.Secret" = "gnome-keyring";
