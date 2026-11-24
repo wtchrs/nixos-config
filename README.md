@@ -79,3 +79,12 @@ nix run github:nix-community/nixos-anywhere -- \
   --generate-hardware-config nixos-generate-config ./configurations/nixos/srv-cloud-2/hardware-configuration.nix \
   --print-build-logs
 ```
+
+Deploy later changes from another machine. The server is `aarch64-linux`, so it builds the configuration itself; sudo asks for the `nixos` password.
+
+```bash
+nixos-rebuild switch --flake .#srv-cloud-2 \
+  --build-host nixos@<server-ip> \
+  --target-host nixos@<server-ip> \
+  --sudo --ask-sudo-password
+```
