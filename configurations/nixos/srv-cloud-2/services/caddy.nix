@@ -48,8 +48,11 @@ in
     };
   };
 
+  # The vhosts bind to the Tailscale IP. tailscaled reports ready before tailscale0
+  # has that IP, and the caddy unit does not restart after a failed bind (exit 1).
+  # tailscale-online.target waits for the IP; nothing else starts it, so want it here.
   systemd.services.caddy = {
-    wants = [ "tailscaled.service" ];
-    after = [ "tailscaled.service" ];
+    wants = [ "tailscale-online.target" ];
+    after = [ "tailscale-online.target" ];
   };
 }
