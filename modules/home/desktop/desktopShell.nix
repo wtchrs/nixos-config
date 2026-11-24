@@ -1,6 +1,16 @@
-{ flake, ... }:
+{
+  flake,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
+  # The HM module comes from the dms input, but the package comes from nixpkgs.
+  dmsInputVersion = flake.inputs.dms.packages.${pkgs.stdenv.hostPlatform.system}.dms-shell.version;
+  dmsInputMinor = lib.versions.majorMinor dmsInputVersion;
+  nixpkgsMinor = lib.versions.majorMinor pkgs.dux-shell.version;
+
   lockScreenWidgets = [
     {
       id = "lock_clock";
@@ -73,9 +83,20 @@ in
     flake.inputs.dms.homeModules.dank-material-shell
   ];
 
+  assertions = [
+    {
+      # Patch versions may differ: the stable branch often runs ahead of nixpkgs.
+      assertion = dmsInputMinor == nixpkgsMinor;
+      message = "The dms input is ${dmsInputVersion}, but nixpkgs dux-shell is ${pkgs.dux-shell.version}. Point the dms input at stable-${nixpkgsMinor} and review the DMS settings.";
+    }
+  ];
+
   programs.dank-material-shell = {
     enable = true;
     systemd.enable = true;
+
+    # Use the nixpkgs build: it has a binary cache and matches the nixpkgs dux-greeter version.
+    package = pkgs.dux-shell;
 
     settings = {
       # Prevent legacy migrations from changing defaults in this sparse config.

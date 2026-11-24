@@ -37,7 +37,7 @@
     };
 
     dms = {
-      url = "github:duxlabs-dev/dux-shell/stable-2.0";
+      url = "github:duxlabs-dev/dux-shell/stable-2.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
