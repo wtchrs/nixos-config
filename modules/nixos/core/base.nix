@@ -7,6 +7,17 @@
     "flakes"
   ];
 
+  # Collect old generations of all profiles, including Home Manager, every week.
+  # --keep-one keeps every live direnv gcroot regardless of age, so the last
+  # environment of each project survives.
+  programs.nh = {
+    enable = true;
+    clean = {
+      enable = true;
+      extraArgs = "--keep-since 14d --keep 5 --keep-one";
+    };
+  };
+
   time.timeZone = lib.mkDefault "Asia/Seoul";
   i18n.defaultLocale = "en_US.UTF-8";
 
