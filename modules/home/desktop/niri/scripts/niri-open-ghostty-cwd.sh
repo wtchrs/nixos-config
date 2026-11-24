@@ -22,7 +22,8 @@ if [[ -z "$focused_pid" ]] || [[ "${app_id,,}" != *"ghostty"* ]]; then
     exit 0
 fi
 
-child_pid=$(pgrep -P "$focused_pid" --oldest)
+# pgrep exits 1 when Ghostty has no child process; fall back to the Ghostty PID.
+child_pid=$(pgrep -P "$focused_pid" --oldest || true)
 target_pid="${child_pid:-$focused_pid}"
 cwd=$(readlink "/proc/${target_pid}/cwd")
 

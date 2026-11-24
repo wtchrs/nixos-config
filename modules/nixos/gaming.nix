@@ -14,11 +14,12 @@ in
 
   environment.systemPackages = with pkgs; [
     mangohud
-    gamemode
     umu-launcher
   ];
 
   programs = {
+    gamemode.enable = true;
+
     steam = {
       enable = true;
       extraCompatPackages = [ proton.package ] ++ proton.extraPackages;
