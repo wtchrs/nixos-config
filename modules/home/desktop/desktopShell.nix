@@ -294,6 +294,7 @@ in
       ];
 
       dashOptions.overview.panelRows = 4;
+      dashOptions.media.cardBackgrounds = true;
       audioWheelScrollAmount = 1;
       appIdSubstitutions = [ ];
       launcherStyle = "island";
