@@ -2,6 +2,14 @@
 vim.schedule(function()
   local ok, err = xpcall(function()
     local external_bin = vim.env.TOOLS_EXTERNAL_BIN
+
+    -- Child processes must read the user's XDG config, not the store config.
+    local child_env = vim.system({ "printenv", "XDG_CONFIG_HOME" }, { text = true }):wait()
+    local child_config_home = vim.trim(child_env.stdout or "")
+    assert(
+      child_config_home == vim.env.TOOLS_PARENT_XDG_CONFIG_HOME,
+      "Child process got XDG_CONFIG_HOME=" .. child_config_home
+    )
     local commands = {
       "git",
       "gcc",

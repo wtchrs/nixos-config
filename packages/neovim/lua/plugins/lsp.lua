@@ -214,7 +214,7 @@ return {
   -- local plugin for custom commands that print linter information
   {
     name = "lintinfo.nvim",
-    dir = vim.fn.stdpath("config") .. "/local/lintinfo.nvim",
+    dir = vim.g.nvim_store_config_dir .. "/local/lintinfo.nvim",
     dependencies = { "mfussenegger/nvim-lint" },
 
     event = "VeryLazy",

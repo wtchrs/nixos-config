@@ -1,4 +1,4 @@
-return function(lazyPath, treesitterRuntime)
+return function(lazyPath, treesitterRuntime, configDir)
   -- lazyvim.json as writable data
   vim.g.lazyvim_json = vim.fn.stdpath("data") .. "/lazyvim.json"
 
@@ -29,6 +29,13 @@ return function(lazyPath, treesitterRuntime)
 
     ui = {
       border = "rounded",
+    },
+
+    performance = {
+      rtp = {
+        -- The rtp reset keeps only stdpath("config"), which -u does not point at the store config.
+        paths = { configDir, configDir .. "/after" },
+      },
     },
 
     spec = {

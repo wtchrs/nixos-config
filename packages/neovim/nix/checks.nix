@@ -16,6 +16,8 @@ in
       export XDG_DATA_HOME="$TMPDIR/$mode/data"
       export XDG_CACHE_HOME="$TMPDIR/$mode/cache"
       export XDG_STATE_HOME="$TMPDIR/$mode/state"
+      export XDG_CONFIG_HOME="$TMPDIR/$mode/config"
+      export TOOLS_PARENT_XDG_CONFIG_HOME="$XDG_CONFIG_HOME"
       export PATH="${pkgs.coreutils}/bin"
       unset JAVA_HOME TOOLS_EXTERNAL_BIN
       mkdir -p "$HOME"
@@ -28,6 +30,8 @@ in
       timeout 90s ${neovim}/bin/nvim --headless -i NONE \
         '+lua dofile("${../tests/tools.lua}")'
     done
+
+    timeout 30s ${neovim}/bin/nvim -l ${../tests/script-mode.lua}
     touch "$out"
   '';
 

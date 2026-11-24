@@ -38,6 +38,16 @@ let
     cp -r ${../local} "$out/${appName}/local"
 
     cat >"$out/${appName}/init.lua" <<EOF
+    -- nvim -l normally skips user config, but the wrapper's -u flag would load it.
+    if vim.tbl_contains(vim.v.argv, "-l") then
+      return
+    end
+
+    local configDir = "$out/${appName}"
+    vim.g.nvim_store_config_dir = configDir
+
+    -- The -u flag skips the default config lookup, so add the config directory explicitly.
+    vim.opt.rtp:prepend(configDir)
     vim.opt.rtp:prepend("${pkgs.vimPlugins.lazy-nvim}")
     vim.g.astro_ts_plugin = "${pkgs.astro-language-server}/lib/node_modules/astro-language-server/packages/language-tools/ts-plugin"
     vim.g.astro_tsdk = "${pkgs.astro-language-server}/lib/node_modules/astro-language-server/packages/language-tools/language-server/node_modules/typescript/lib"
@@ -45,7 +55,7 @@ let
     vim.g.java_debug_dir = "${pkgs.vscode-extensions.vscjava.vscode-java-debug}/share/vscode/extensions/vscjava.vscode-java-debug/server"
     vim.g.java_test_dir = "${pkgs.vscode-extensions.vscjava.vscode-java-test}/share/vscode/extensions/vscjava.vscode-java-test/server"
     local initLazy = require("config.lazy")
-    initLazy("${lazyPath}", "${treesitterRuntime}")
+    initLazy("${lazyPath}", "${treesitterRuntime}", configDir)
     EOF
   '';
 
@@ -123,7 +133,7 @@ pkgs.symlinkJoin {
 
     makeWrapper ${pkgs.neovim-unwrapped}/bin/nvim "$out/bin/nvim" \
       --set NVIM_APPNAME ${appName} \
-      --set XDG_CONFIG_HOME ${configRoot} \
+      --add-flags "-u ${configRoot}/${appName}/init.lua" \
       --set CODEDIFF_WATCHER_NO_AUTO_INSTALL 1 \
       --prefix PATH : ${lib.makeBinPath internalTools} \
       --suffix PATH : ${lib.makeBinPath developmentTools}
