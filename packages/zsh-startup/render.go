@@ -185,25 +185,39 @@ func (r renderer) table(columns []column, rows [][]string) string {
 }
 
 // fitFlexColumns shrinks the flex columns so that the table fits the width.
+// A flex column that is narrower than an equal share keeps its width, and the
+// wider flex columns split the width that it leaves.
 func (r renderer) fitFlexColumns(columns []column, widths []int) {
-	fixed := len(columnGap) * (len(columns) - 1)
-	flexCount := 0
+	available := r.contentWidth() - len(columnGap)*(len(columns)-1)
+	var wide []int
 	for i, column := range columns {
 		if column.flex {
-			flexCount++
+			wide = append(wide, i)
 		} else {
-			fixed += widths[i]
+			available -= widths[i]
 		}
-	}
-	if flexCount == 0 {
-		return
 	}
 
-	available := max(minFlexWidth, (r.contentWidth()-fixed)/flexCount)
-	for i, column := range columns {
-		if column.flex {
-			widths[i] = min(widths[i], available)
+	// Each pass settles the columns that fit an equal share. The share grows
+	// in the next pass, so a settled column stays settled.
+	for len(wide) > 0 {
+		share := available / len(wide)
+		var wider []int
+		for _, i := range wide {
+			if widths[i] <= share {
+				available -= widths[i]
+			} else {
+				wider = append(wider, i)
+			}
 		}
+
+		if len(wider) == len(wide) {
+			for _, i := range wider {
+				widths[i] = min(widths[i], max(minFlexWidth, share))
+			}
+			return
+		}
+		wide = wider
 	}
 }
 
@@ -727,7 +741,8 @@ func renderStateDeltas(r renderer, deltas []StateDelta) string {
 }
 
 // appendNames adds one line that lists names, cut to the width with a count
-// of the names that did not fit.
+// of the names that did not fit. A first name that is wider than the line is
+// cut, so that the line shows at least one name.
 func appendNames(r renderer, lines []string, sign string, style lipgloss.Style, names []string) []string {
 	if len(names) == 0 {
 		return lines
@@ -737,11 +752,21 @@ func appendNames(r renderer, lines []string, sign string, style lipgloss.Style, 
 	var shown []string
 	used := 0
 	for i, name := range names {
-		remaining := len(names) - i
-		suffix := fmt.Sprintf(" … %d more", remaining)
-		if used+lipgloss.Width(name)+1 > available-lipgloss.Width(suffix) && remaining > 1 {
-			shown = append(shown, mutedStyle.Render(suffix[1:]))
-			break
+		hidden := len(names) - i
+
+		// Every name but the last leaves room for "… <hidden> more", so that
+		// the count fits when the next name does not.
+		room := available - used
+		if hidden > 1 {
+			room -= lipgloss.Width(fmt.Sprintf(" … %d more", hidden))
+		}
+
+		if lipgloss.Width(name) > room {
+			if len(shown) > 0 {
+				shown = append(shown, mutedStyle.Render(fmt.Sprintf("… %d more", hidden)))
+				break
+			}
+			name = cut(name, max(room, 1), false)
 		}
 		shown = append(shown, style.Render(name))
 		used += lipgloss.Width(name) + 1

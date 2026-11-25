@@ -60,6 +60,42 @@ func TestCutKeepsTheRequestedWidth(t *testing.T) {
 	}
 }
 
+func TestFitFlexColumnsGivesUnusedWidthToWiderColumns(t *testing.T) {
+	r := renderer{width: 60}
+	columns := []column{{header: "share"}, {header: "location", flex: true}, {header: "command", flex: true}}
+	widths := []int{5, 10, 80}
+
+	r.fitFlexColumns(columns, widths)
+
+	// 58 content columns - 5 fixed - 4 gap = 49; location keeps 10 of them.
+	if widths[1] != 10 || widths[2] != 39 {
+		t.Errorf("widths = %v, want location 10 and command 39", widths)
+	}
+}
+
+func TestAppendNamesFitsTheWidth(t *testing.T) {
+	r := renderer{width: 40}
+	long := strings.Repeat("a", 60)
+
+	cases := map[string][]string{
+		"one long name":        {long},
+		"long name last":       {"short", long},
+		"long name first":      {long, "short", "other"},
+		"many short names":     strings.Fields("aa bb cc dd ee ff gg hh ii jj kk ll mm nn oo pp qq rr"),
+		"names that just miss": {strings.Repeat("b", 20), strings.Repeat("c", 14)},
+	}
+	for name, names := range cases {
+		lines := appendNames(r, nil, "+", textStyle, names)
+		line := ansi.Strip(lines[0])
+		if lipgloss.Width(line) > r.contentWidth() {
+			t.Errorf("%s: width %d > %d: %q", name, lipgloss.Width(line), r.contentWidth(), line)
+		}
+		if !strings.ContainsAny(line, "abcdefghijklmnopqr") {
+			t.Errorf("%s: no name shown: %q", name, line)
+		}
+	}
+}
+
 func TestBarWithoutColorsShowsTheTrack(t *testing.T) {
 	r := renderer{noColor: true, width: 100}
 	got := ansi.Strip(r.bar(0.5))
