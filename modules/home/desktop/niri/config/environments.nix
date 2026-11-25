@@ -1,19 +1,12 @@
 {
+  # These apply only to processes that niri spawns. Variables shared with labwc,
+  # TTY, and SSH sessions are in home.sessionVariables. niri --session and the
+  # login manager already set XDG_CURRENT_DESKTOP and XDG_SESSION_*.
   wayland.windowManager.niri.settings.environment = {
-    XDG_CURRENT_DESKTOP = "niri";
-    XDG_SESSION_TYPE = "wayland";
-    XDG_SESSION_DESKTOP = "niri";
-    TERMINAL = "ghostty";
-    EDITOR = "nvim";
     QT_QPA_PLATFORM = "wayland;xcb";
-    QT_QPA_PLATFORMTHEME = "qt6ct";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
     # Fall back to XWayland for SDL games that lack Wayland support.
     SDL_VIDEODRIVER = "wayland,x11";
-    MOZ_ENABLE_WAYLAND = "1";
     MOZ_DISABLE_RDD_SANDBOX = "1";
-    OZONE_PLATFORM = "wayland";
-    ELECTRON_OZONE_PLATFORM_HINT = "auto";
   };
 }

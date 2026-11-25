@@ -60,9 +60,6 @@
         # path
         path=("$HOME/.local/bin" $path)
 
-        # editor
-        export EDITOR=nvim
-
         # pnpm
         export PNPM_HOME="$HOME/.local/share/pnpm"
         mkdir -p "$PNPM_HOME"

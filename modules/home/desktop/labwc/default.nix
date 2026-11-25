@@ -42,7 +42,7 @@ in
       "${lib.getExe pkgs.wlr-randr} --output eDP-1 --scale 1.25"
       "${lib.getExe pkgs.vesktop} &"
     ]
-    ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.spotify) "NIXOS_OZONE_WL=1 ${lib.getExe pkgs.spotify} --ozone-platform=wayland &";
+    ++ lib.optional (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.spotify) "${lib.getExe pkgs.spotify} --ozone-platform=wayland &";
 
     systemd.variables = [
       "QT_QPA_PLATFORM"

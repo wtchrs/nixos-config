@@ -72,6 +72,12 @@
     "$HOME/.local/share/JetBrains/Toolbox/scripts"
   ];
 
+  home.sessionVariables = {
+    QT_QPA_PLATFORMTHEME = "qt6ct";
+    # nixpkgs Electron and Chromium wrappers read this to enable Wayland and the Wayland IME.
+    NIXOS_OZONE_WL = "1";
+  };
+
   programs = {
     vesktop.enable = true;
   };

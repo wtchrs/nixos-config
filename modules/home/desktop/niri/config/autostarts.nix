@@ -4,9 +4,8 @@
     { spawn-at-startup = [ "niri-float-sticky-launcher" ]; }
     { spawn-at-startup = [ "vesktop" ]; }
     {
+      # The spotify wrapper only unsets DISPLAY under NIXOS_OZONE_WL; it does not select Wayland.
       spawn-at-startup = [
-        "env"
-        "NIXOS_OZONE_WL=1"
         "spotify"
         "--ozone-platform=wayland"
       ];

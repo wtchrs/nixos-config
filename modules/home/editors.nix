@@ -10,4 +10,6 @@ in
     neopane
     vim
   ];
+
+  home.sessionVariables.EDITOR = "nvim";
 }
