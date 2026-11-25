@@ -42,6 +42,16 @@ func TestLatestReportPicksTheNewestFile(t *testing.T) {
 	}
 }
 
+func TestReportFileNamesSortAcrossTimeZones(t *testing.T) {
+	// 10:00 in UTC+9 is 01:00 UTC, so it is earlier than 09:00 UTC.
+	earlier := Report{Meta: Meta{Host: "box", Time: time.Date(2026, 11, 25, 10, 0, 0, 0, time.FixedZone("KST", 9*60*60))}}
+	later := Report{Meta: Meta{Host: "box", Time: time.Date(2026, 11, 25, 9, 0, 0, 0, time.UTC)}}
+
+	if reportFileName(earlier) >= reportFileName(later) {
+		t.Errorf("%s should sort before %s", reportFileName(earlier), reportFileName(later))
+	}
+}
+
 func TestReportJSONMatchesTheSavedFile(t *testing.T) {
 	report := Report{
 		Schema:    schemaVersion,

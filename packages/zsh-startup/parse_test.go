@@ -117,6 +117,9 @@ ll='lsd -l'
 @@bindkeys
 bindkey "^A" beginning-of-line
 bindkey -R "!"-"~" self-insert
+bindkey -s "^Xa" "foo bar"
+bindkey -s "^Xb" "say \"hi\" x"
+bindkey "\" x" self-insert
 @@options
 autocd
 sharehistory
@@ -135,6 +138,15 @@ sharehistory
 	}
 	if got := state["bindkeys"][`-R "!"-"~"`]; got != "self-insert" {
 		t.Errorf("range bindkey = %q", got)
+	}
+	if got := state["bindkeys"][`"^Xa"`]; got != `-s "foo bar"` {
+		t.Errorf(`string bindkey "^Xa" = %q`, got)
+	}
+	if got := state["bindkeys"][`"^Xb"`]; got != `-s "say \"hi\" x"` {
+		t.Errorf(`string bindkey "^Xb" = %q`, got)
+	}
+	if got := state["bindkeys"][`"\" x"`]; got != "self-insert" {
+		t.Errorf(`bindkey "\" x" = %q`, got)
 	}
 	if _, found := state["options"]["sharehistory"]; !found {
 		t.Error("option sharehistory missing")

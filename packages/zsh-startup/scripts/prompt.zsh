@@ -16,8 +16,10 @@ for hook in $hooks; do
   print -r -- "@@${hook}"$'\t'"$(( (EPOCHREALTIME - start) * 1000 ))"
 done
 
+# (%%) expands the prompts as zsh does before it draws them: it follows the
+# prompt_subst, prompt_percent, and prompt_bang options.
 start=$EPOCHREALTIME
 {
-  : ${(%)${(e)PROMPT}} ${(%)${(e)RPROMPT}}
+  : ${(%%)PROMPT} ${(%%)RPROMPT}
 } >/dev/null 2>&1
 print -r -- "@@(prompt)"$'\t'"$(( (EPOCHREALTIME - start) * 1000 ))"

@@ -618,7 +618,12 @@ func renderDelta(delta Delta) string {
 	if delta.Diff < 0 {
 		style = betterStyle
 	}
-	return values + "    " + formatChange(delta.Diff) + "  " + style.Render(percent)
+	change := values + "    " + formatChange(delta.Diff) + "  " + style.Render(percent)
+
+	if !delta.Estimated {
+		return change + "    " + mutedStyle.Render("no noise estimate: a side has fewer than 2 runs")
+	}
+	return change
 }
 
 func optionalMs(value float64, present bool) string {

@@ -38,6 +38,21 @@ func TestCompareStatsTellsNoiseFromChange(t *testing.T) {
 	}
 }
 
+func TestCompareStatsNeedsTwoSamplesForANoiseEstimate(t *testing.T) {
+	old := computeStats([]float64{240})
+	new := computeStats([]float64{239, 241})
+
+	delta := compareStats(old, new)
+	if delta.Estimated || delta.Noise || delta.Threshold != 0 {
+		t.Errorf("one old sample should give no noise estimate: %+v", delta)
+	}
+
+	estimated := compareStats(new, new)
+	if !estimated.Estimated || !estimated.Noise {
+		t.Errorf("two samples on each side should give a noise estimate: %+v", estimated)
+	}
+}
+
 func TestCompareStateFindsAddedRemovedAndChanged(t *testing.T) {
 	old := State{"aliases": {"md": "mkdir", "gst": "git status", "ll": "ls -l"}}
 	new := State{"aliases": {"gst": "git status", "ll": "lsd -l", "zi": "zoxide"}}

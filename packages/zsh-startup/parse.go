@@ -206,13 +206,25 @@ func stateEntry(category, line string) (string, string) {
 		name, value, _ := strings.Cut(line, "=")
 		return name, value
 	case "bindkeys":
-		// bindkey -L prints the binding command; its last word is the widget.
+		// bindkey -L prints `bindkey [-R | -s] "<keys>" <widget or "string">`.
+		// -R binds a range of keys, so the range is the key. -s binds a
+		// string, so the flag belongs to the value: a key that changes from
+		// a widget to a string is a changed entry.
 		binding := strings.TrimPrefix(line, "bindkey ")
-		index := strings.LastIndex(binding, " ")
-		if index < 0 {
-			return binding, ""
+		flag := ""
+		if strings.HasPrefix(binding, "-") {
+			flag, binding = cutUnquoted(binding)
 		}
-		return binding[:index], binding[index+1:]
+		keys, target := cutUnquoted(binding)
+
+		switch flag {
+		case "-R":
+			return "-R " + keys, target
+		case "-s":
+			return keys, "-s " + target
+		default:
+			return keys, target
+		}
 	case "zstyles":
 		// state.zsh prints "<pattern> <style>\t<values>".
 		key, value, _ := strings.Cut(line, "\t")
@@ -221,6 +233,27 @@ func stateEntry(category, line string) (string, string) {
 		// setopt prints the names of the options that differ from the defaults.
 		return line, ""
 	}
+}
+
+// cutUnquoted splits text at the first space outside double quotes. Inside
+// quotes, a backslash escapes the next character, as in bindkey -L output.
+func cutUnquoted(text string) (string, string) {
+	quoted := false
+	for i := 0; i < len(text); i++ {
+		switch text[i] {
+		case '\\':
+			if quoted {
+				i++
+			}
+		case '"':
+			quoted = !quoted
+		case ' ':
+			if !quoted {
+				return text[:i], text[i+1:]
+			}
+		}
+	}
+	return text, ""
 }
 
 // parsePromptRun reads one run of prompt.zsh: "@@<name>\t<milliseconds>" lines

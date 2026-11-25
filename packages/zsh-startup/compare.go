@@ -35,6 +35,9 @@ type Delta struct {
 	Percent   float64 `json:"percent"`
 	Threshold float64 `json:"threshold"`
 	Noise     bool    `json:"noise"`
+	// Estimated is false when a side has fewer than two samples. Such a side
+	// has no spread, so Threshold and Noise stay unset.
+	Estimated bool `json:"estimated"`
 }
 
 type HookDelta struct {
@@ -181,15 +184,20 @@ func compareStats(old, new Stats) Delta {
 		percent = diff / old.Mean * 100
 	}
 
-	threshold := 2 * standardError(old, new)
-	return Delta{
-		Old:       old.Mean,
-		New:       new.Mean,
-		Diff:      diff,
-		Percent:   percent,
-		Threshold: threshold,
-		Noise:     math.Abs(diff) < threshold,
+	delta := Delta{
+		Old:     old.Mean,
+		New:     new.Mean,
+		Diff:    diff,
+		Percent: percent,
 	}
+
+	estimated := len(old.Samples) >= 2 && len(new.Samples) >= 2
+	if estimated {
+		delta.Estimated = true
+		delta.Threshold = 2 * standardError(old, new)
+		delta.Noise = math.Abs(diff) < delta.Threshold
+	}
+	return delta
 }
 
 func standardError(old, new Stats) float64 {

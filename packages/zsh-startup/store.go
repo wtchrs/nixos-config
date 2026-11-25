@@ -20,7 +20,8 @@ func reportDir() (string, error) {
 	return filepath.Join(cache, "zsh-startup"), nil
 }
 
-// reportFileName sorts by time, so the newest report sorts last.
+// reportFileName sorts by time, so the newest report sorts last. The name
+// uses UTC, so that the order holds across time zone and DST changes.
 func reportFileName(report Report) string {
 	host := strings.Map(func(r rune) rune {
 		if r == '/' || r == ' ' {
@@ -28,7 +29,7 @@ func reportFileName(report Report) string {
 		}
 		return r
 	}, report.Meta.Host)
-	return report.Meta.Time.Format("20060102T150405") + "-" + host + ".json"
+	return report.Meta.Time.UTC().Format("20060102T150405Z") + "-" + host + ".json"
 }
 
 // encodeJSON is the one JSON encoding for saved reports and for --json, so
