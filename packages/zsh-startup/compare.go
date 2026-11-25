@@ -157,7 +157,7 @@ func comparisonWarnings(old, new Meta) []string {
 		))
 	}
 	if old.Config == new.Config {
-		warnings = append(warnings, "same configuration ("+new.Config+"): differences are run-to-run variation")
+		warnings = append(warnings, "same configuration ("+new.Config+"): the startup files did not change, so differences are likely run-to-run variation")
 	}
 	return warnings
 }

@@ -121,7 +121,8 @@ bindkey -R "!"-"~" self-insert
 autocd
 sharehistory
 @@zstyles
-zstyle ':completion:*' menu no
+':completion:*' menu` + "\t" + `yes select
+':completion:*:descriptions' format` + "\t" + `'%B%d%b'
 `
 
 	state := parseState(output)
@@ -138,8 +139,11 @@ zstyle ':completion:*' menu no
 	if _, found := state["options"]["sharehistory"]; !found {
 		t.Error("option sharehistory missing")
 	}
-	if len(state["zstyles"]) != 1 {
-		t.Errorf("zstyles = %v, want one entry", state["zstyles"])
+	if got := state["zstyles"]["':completion:*' menu"]; got != "yes select" {
+		t.Errorf("zstyle menu = %q", got)
+	}
+	if len(state["zstyles"]) != 2 {
+		t.Errorf("zstyles = %v, want two entries", state["zstyles"])
 	}
 	for _, category := range stateCategories {
 		if _, found := state[category]; !found {

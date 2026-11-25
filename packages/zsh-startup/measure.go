@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"crypto/sha256"
 	_ "embed"
@@ -114,21 +113,51 @@ func measure(options measureOptions) (Report, error) {
 
 // runZsh runs zsh with the given extra environment and arguments. Standard
 // input is empty, so an interactive shell exits after its -c command.
+//
+// Standard output and standard error go to temporary files, not pipes.
+// Startup files can start background jobs, such as "zcompile ... &!", that
+// inherit both. With pipes, Wait would block until those jobs exit: the
+// timings would include them and zshTimeout could not stop the wait. With
+// files, Wait returns when zsh exits.
 func runZsh(zsh string, extraEnv []string, args ...string) (stdout, stderr string, err error) {
+	outFile, err := os.CreateTemp("", "zsh-startup-stdout-")
+	if err != nil {
+		return "", "", err
+	}
+	defer os.Remove(outFile.Name())
+	defer outFile.Close()
+
+	errFile, err := os.CreateTemp("", "zsh-startup-stderr-")
+	if err != nil {
+		return "", "", err
+	}
+	defer os.Remove(errFile.Name())
+	defer errFile.Close()
+
 	ctx, cancel := context.WithTimeout(context.Background(), zshTimeout)
 	defer cancel()
 
-	var outBuffer, errBuffer bytes.Buffer
 	command := exec.CommandContext(ctx, zsh, args...)
 	command.Env = append(os.Environ(), extraEnv...)
-	command.Stdout = &outBuffer
-	command.Stderr = &errBuffer
+	command.Stdout = outFile
+	command.Stderr = errFile
+	runErr := command.Run()
 
-	err = command.Run()
+	outData, err := os.ReadFile(outFile.Name())
 	if err != nil {
-		return outBuffer.String(), errBuffer.String(), fmt.Errorf("%s %s: %w%s", zsh, strings.Join(args, " "), err, lastLines(errBuffer.String(), 5))
+		return "", "", err
 	}
-	return outBuffer.String(), errBuffer.String(), nil
+	errData, err := os.ReadFile(errFile.Name())
+	if err != nil {
+		return "", "", err
+	}
+
+	stdout = string(outData)
+	stderr = string(errData)
+	if runErr != nil {
+		return stdout, stderr, fmt.Errorf("%s %s: %w%s", zsh, strings.Join(args, " "), runErr, lastLines(stderr, 5))
+	}
+	return stdout, stderr, nil
 }
 
 func lastLines(text string, count int) string {
@@ -183,20 +212,31 @@ func hasControllingTerminal() bool {
 }
 
 // configHash identifies the startup configuration by the contents of the
-// user's .zshenv and .zshrc. Missing files are skipped.
+// zshenv and zshrc files that an interactive shell reads, in the order that
+// zsh reads them. The global files are in /etc on NixOS and in /etc/zsh on
+// Debian-based systems. Missing files are skipped.
 func configHash() string {
 	dotDir := os.Getenv("ZDOTDIR")
 	if dotDir == "" {
 		dotDir, _ = os.UserHomeDir()
 	}
 
+	paths := []string{
+		"/etc/zshenv",
+		"/etc/zsh/zshenv",
+		filepath.Join(dotDir, ".zshenv"),
+		"/etc/zshrc",
+		"/etc/zsh/zshrc",
+		filepath.Join(dotDir, ".zshrc"),
+	}
+
 	hash := sha256.New()
-	for _, name := range []string{".zshenv", ".zshrc"} {
-		content, err := os.ReadFile(filepath.Join(dotDir, name))
+	for _, path := range paths {
+		content, err := os.ReadFile(path)
 		if err != nil {
 			continue
 		}
-		hash.Write([]byte(name))
+		hash.Write([]byte(path))
 		hash.Write(content)
 	}
 	return hex.EncodeToString(hash.Sum(nil))[:8]

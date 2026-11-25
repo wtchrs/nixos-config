@@ -213,8 +213,12 @@ func stateEntry(category, line string) (string, string) {
 			return binding, ""
 		}
 		return binding[:index], binding[index+1:]
+	case "zstyles":
+		// state.zsh prints "<pattern> <style>\t<values>".
+		key, value, _ := strings.Cut(line, "\t")
+		return key, value
 	default:
-		// setopt prints option names; zstyle -L prints one command per style.
+		// setopt prints the names of the options that differ from the defaults.
 		return line, ""
 	}
 }

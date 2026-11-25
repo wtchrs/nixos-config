@@ -1,9 +1,11 @@
 package main
 
 import (
+	"strings"
 	"testing"
 
 	"charm.land/lipgloss/v2"
+	"github.com/charmbracelet/x/ansi"
 )
 
 func TestShortPath(t *testing.T) {
@@ -55,6 +57,16 @@ func TestCutKeepsTheRequestedWidth(t *testing.T) {
 	right := cut(text, 12, false)
 	if lipgloss.Width(right) != 12 || right[:4] != "/etc" {
 		t.Errorf("cut from right = %q (width %d)", right, lipgloss.Width(right))
+	}
+}
+
+func TestBarWithoutColorsShowsTheTrack(t *testing.T) {
+	r := renderer{noColor: true, width: 100}
+	got := ansi.Strip(r.bar(0.5))
+
+	want := strings.Repeat("█", barWidth/2) + strings.Repeat("░", barWidth/2) + " 50%"
+	if got != want {
+		t.Errorf("bar(0.5) = %q, want %q", got, want)
 	}
 }
 

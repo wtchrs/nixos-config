@@ -37,8 +37,9 @@ type Meta struct {
 	// the shells had a controlling terminal.
 	Term     string `json:"term"`
 	Terminal bool   `json:"terminal"`
-	// Config is a short hash of the user's .zshenv and .zshrc contents.
-	// Equal hashes mean the two reports measured the same configuration.
+	// Config is a short hash of the global and user zshenv and zshrc files.
+	// Equal hashes mean that these files did not change. Files that they
+	// source, such as plugins, are not part of the hash.
 	Config     string `json:"config"`
 	Runs       int    `json:"runs"`
 	Warmup     int    `json:"warmup"`

@@ -48,14 +48,17 @@ var (
 
 // renderer lays out the output. In plain mode, when stdout is not a terminal,
 // it drops the header box and draws bars with ASCII characters; the writer
-// in main.go strips the colors.
+// in main.go strips the colors. noColor is set when the writer strips the
+// colors on a terminal too, for example because NO_COLOR is set.
 type renderer struct {
-	plain bool
-	width int
+	plain   bool
+	noColor bool
+	width   int
 }
 
 func newRenderer(profile colorprofile.Profile) renderer {
 	plain := profile <= colorprofile.NoTTY
+	noColor := profile <= colorprofile.ASCII
 
 	width := pipeWidth
 	if !plain {
@@ -64,7 +67,7 @@ func newRenderer(profile colorprofile.Profile) renderer {
 			width = columns
 		}
 	}
-	return renderer{plain: plain, width: min(width, maxWidth)}
+	return renderer{plain: plain, noColor: noColor, width: min(width, maxWidth)}
 }
 
 // contentWidth is the width inside a section, after the indent.
@@ -261,7 +264,13 @@ func (r renderer) bar(share float64) string {
 		builder.WriteString(barStyle.Render(partialBlocks[partial]))
 		rest--
 	}
-	builder.WriteString(trackStyle.Render(strings.Repeat("█", rest)))
+	// The track has the same glyph as the filled part and differs only in
+	// color, so without colors it needs a glyph of its own.
+	track := "█"
+	if r.noColor {
+		track = "░"
+	}
+	builder.WriteString(trackStyle.Render(strings.Repeat(track, rest)))
 	return builder.String() + label
 }
 
