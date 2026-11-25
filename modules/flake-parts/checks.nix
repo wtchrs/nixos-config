@@ -59,6 +59,7 @@ in
         // neovimChecks
         // {
           statix = statixCheck;
+          zsh-startup = self'.packages.zsh-startup;
         }
         // lib.optionalAttrs (system == "x86_64-linux") {
           win-run = winRunCheck;

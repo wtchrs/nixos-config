@@ -10,6 +10,7 @@ Personal Nix flake for NixOS hosts and standalone Home Manager profiles.
 - `homeModules`: reusable Home Manager modules exported from `modules/home`
 - `overlays`: package overlays used by this flake
 - `packages.<system>.neovim`: the configured Neovim; run it with `nix run github:wtchrs/nixos-config#neovim`
+- `packages.<system>.zsh-startup`: measures interactive zsh startup and compares saved reports; run `nix run .#zsh-startup -- --help`
 
 ## Layout
 
