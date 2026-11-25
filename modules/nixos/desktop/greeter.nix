@@ -26,12 +26,7 @@ in
     dux-greeter = {
       enable = true;
       compositor.name = "labwc";
-      # DMS 2.0 stores its configuration under dms instead of DankMaterialShell.
-      configFiles = [
-        "/home/${username}/.config/dms/settings.json"
-        "/home/${username}/.local/state/dms/session.json"
-        "/home/${username}/.cache/dms/dms-colors.json"
-      ];
+      configHome = "/home/${username}";
     };
   };
 }
