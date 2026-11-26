@@ -29,21 +29,20 @@
       share = true;
     };
 
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "sudo"
-      ];
-    };
+    # Enter a directory by typing its name.
+    autocd = true;
 
     setOptions = [
       "HIST_REDUCE_BLANKS"
       "INC_APPEND_HISTORY_TIME"
+      # Show an expanded history reference such as !! before it runs.
+      "HIST_VERIFY"
+      # Keep Ctrl+S and Ctrl+Q from freezing and resuming the terminal.
+      "NO_FLOW_CONTROL"
     ];
 
     initContent = lib.mkMerge [
-      # after compinit
+      # after compinit (570)
       (lib.mkOrder 600 ''
         # fzf-tab
         source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
@@ -54,6 +53,42 @@
         zstyle ':completion:*:descriptions' format '[%d]'
         zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
         zstyle ':completion:*' menu no
+      '')
+
+      # Line editing keys and completion matching that oh-my-zsh used to set.
+      (lib.mkOrder 800 ''
+        # Word motions stop at every non-alphanumeric character, such as / and -.
+        WORDCHARS=""
+
+        # zsh binds none of these keys by default. Home and End send different
+        # sequences in Ghostty (normal and application mode), tmux, and the
+        # Linux console.
+        bindkey '^[[H' beginning-of-line
+        bindkey '^[OH' beginning-of-line
+        bindkey '^[[1~' beginning-of-line
+        bindkey '^[[F' end-of-line
+        bindkey '^[OF' end-of-line
+        bindkey '^[[4~' end-of-line
+        bindkey '^[[3~' delete-char
+        bindkey '^[[1;5C' forward-word   # Ctrl+Right
+        bindkey '^[[1;5D' backward-word  # Ctrl+Left
+
+        autoload -Uz edit-command-line
+        zle -N edit-command-line
+        bindkey '^X^E' edit-command-line
+
+        # Case-insensitive completion. fzf-tab completes from the same matches.
+        zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
+      '')
+
+      # oh-my-zsh plugins without the framework. The git plugin needs
+      # git_current_branch from lib/git.zsh. Its async prompt needs the
+      # framework, so lib/git.zsh uses the synchronous version.
+      (lib.mkOrder 800 ''
+        zstyle ':omz:alpha:lib:git' async-prompt no
+        source ${pkgs.oh-my-zsh}/share/oh-my-zsh/lib/git.zsh
+        source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/git/git.plugin.zsh
+        source ${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/sudo/sudo.plugin.zsh
       '')
 
       (lib.mkOrder 1000 ''

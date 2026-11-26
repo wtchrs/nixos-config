@@ -19,7 +19,11 @@ in
   ];
 
   programs = {
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      # Each user's Home Manager zsh configuration runs compinit. A global run repeats it.
+      enableGlobalCompInit = false;
+    };
     mtr.enable = true;
   };
 }
