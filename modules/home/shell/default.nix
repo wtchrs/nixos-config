@@ -47,10 +47,6 @@
       initExtra = ''
         eval "$(${pkgs.rgrc}/bin/rgrc --aliases --except ls)"
       '';
-
-      shellAliases = {
-        bat = "bat --paging=never";
-      };
     };
   };
 }

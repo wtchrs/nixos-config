@@ -110,11 +110,7 @@
         source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
       '')
 
-      (lib.mkOrder 1500 '' eval "$(${pkgs.rgrc}/bin/rgrc --aliases --except ls)" '')
+      (lib.mkOrder 1500 ''eval "$(${pkgs.rgrc}/bin/rgrc --aliases --except ls)" '')
     ];
-
-    shellAliases = {
-      bat = "bat --paging=never";
-    };
   };
 }
